@@ -1,10 +1,10 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues)
-books = [];  // Missing declaration
-var members = [];  // Wrong: should use let
+let books = [];  // Missing declaration
+let  members = [];  // Wrong: should use let
 const LATE_FEE_PER_DAY = 0.50;
-MAX_BOOKS_PER_MEMBER = 5;  // Missing const
+const MAX_BOOKS_PER_MEMBER = 5;  // Missing const
 
 // Book class with multiple issues
 class Book {
@@ -126,7 +126,7 @@ function getBooksByAuthor(authorName) {
     
     // Should use filter method
     for (var i = 0; i < books.length; i++) {
-        if (books[i].author == authorName) {  // Should use ===
+        if (books[i].author === authorName) {  // Should use ===
             result.push(books[i]);
         }
     }
