@@ -58,7 +58,7 @@ class Member {
     
     canBorrow() {
         // Wrong comparison operator
-        if (this.borrowedBooks.length = MAX_BOOKS_PER_MEMBER) {
+        if (this.borrowedBooks.length === MAX_BOOKS_PER_MEMBER) {
             return false;
         }
         return true;
@@ -113,7 +113,7 @@ function searchBooksByCategory(bookList, category, index) {
     // Missing: undefined/null checks
     // Wrong comparison
     
-    if (bookList[index].category = category) {
+    if (bookList[index].category === category) {
         return [bookList[index]].concat(searchBooksByCategory(bookList, category, index + 1));
     }
     
@@ -199,7 +199,7 @@ function borrowBook(memberId, isbn) {
 function findMemberById(id) {
     // Should use find method
     for (var i = 0; i < members.length; i++) {
-        if (members[i].id = id) {  // Wrong operator
+        if (members[i].id === id) {  // Wrong operator
             return members[i];
         }
     }
