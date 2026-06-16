@@ -1,21 +1,55 @@
 // Library UI - DOM Manipulation with Complex Errors
 
+const books = [
+    {
+        isbn: "9780134685991",
+        title: "Effective JavaScript",
+        author: "David Herman",
+        year: 2012,
+        category: "reference"
+    },
+    {
+        isbn: "9781491950296",
+        title: "Learning React",
+        author: "Alex Banks",
+        year: 2020,
+        category: "non-fiction"
+    }
+];
+
 // Missing: proper initialization with DOMContentLoaded
 var catalogueContainer;
 var searchInput;
 var filterDropdown;
 
 function initializeUI() {
-    // Wrong selector syntax
-    catalogueContainer = document.querySelector("#catalogue-list");
+    // Wrong selector syntax // fix
+    catalogueContainer = document.getElementById("catalogue-list");
     searchInput = document.getElementById("search");
-    filterDropdown = document.querySelector("filter-category");  // Missing #
+    filterDropdown = document.getElementById("filter-category");
     
-    // Missing: null checks
+    // Missing: null checks // fix
+    if (!catalogueContainer) {
+        console.error("Catalogue container not found");
+        return;
+    }
+
+    if (!searchInput) {
+        console.error("Search input not found");
+        return;
+    }
+
+    if (!filterDropdown) {
+        console.error("Filter dropdown not found");
+        return;
+    }
+
     
     setupEventListeners();
     loadCatalogue();
 }
+
+
 
 function setupEventListeners() {
     // Missing: search input event listener
@@ -223,4 +257,6 @@ function createMemberForm() {
 }
 
 // Initialize on wrong event
-initializeUI();  // Wrong: should wait for DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+    initializeUI();
+});  // Wrong: should wait for DOMContentLoaded
