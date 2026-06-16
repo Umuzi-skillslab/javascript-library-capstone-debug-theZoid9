@@ -1,7 +1,7 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { Book } from "../src/library.js";
+import { Book, DigitalBook } from "../src/library.js";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -77,8 +77,43 @@ describe('Book Class', () => {
 
 describe('DigitalBook Class', () => {
     // Missing: test for inheritance
-    // Missing: test for super() call
-    // Missing: test for download method
+    test("inherits from Book class", () => {
+    const book = new DigitalBook(
+        "123",
+        "Clean Code",
+        "Robert Martin",
+        2008,
+        1,
+        5,
+        "PDF"
+    );
+
+    expect(book instanceof DigitalBook).toBe(true);
+    expect(book instanceof Book).toBe(true);
+
+    });
+
+// Missing: test for super() call
+    test("initializes parent class properties via super()", () => {
+        const book = new DigitalBook("123", "Clean Code", "Robert Martin", 2008, 3, 5, "PDF");
+
+        expect(book.isbn).toBe("123");
+        expect(book.title).toBe("Clean Code");
+        expect(book.author).toBe("Robert Martin");
+        expect(book.year).toBe(2008);
+        expect(book.availableCopies).toBe(3);
+    });
+
+// Missing: test for download method
+    test("download method tracks downloads correctly", () => {
+        const book = new DigitalBook("123", "Clean Code", "Robert Martin", 2008, 1, 5, "PDF");
+
+        book.download("user1");
+
+        expect(book.downloads).toBe(1);
+        expect(book.downloadHistory.length).toBe(1);
+    });
+    
 });
 
 describe('Member Class', () => {

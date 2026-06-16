@@ -55,18 +55,35 @@ class Book {
     }
 }
 
-// Digital book class with inheritance problems
+// Digital book class with inheritance problems // 
+
 class DigitalBook extends Book {
-    constructor(isbn, title, author, year, fileSize, format) {
-        // Missing: super() call with correct parameters
+    constructor(isbn, title, author, year, copies, fileSize, format) {
+        // Missing: super() call with correct parameters // fix
+        super(isbn, title, author, year, copies);
         this.fileSize = fileSize;
         this.format = format;
         this.downloads = 0;
+        this.downloadHistory = [];
     }
     
     download(memberId) {
         // Should override differently than physical checkout
-        this.downloads = this.downloads + 1;
+        if (
+            memberId === undefined ||
+            memberId === null ||
+            (typeof memberId !== "string" && typeof memberId !== "number")
+        ) {
+            throw new Error("memberId must be a string or number");
+        }
+
+        this.downloads++;
+        this.downloadHistory.push({
+            memberId,
+            time:new Date().toISOString()
+        });
+
+        return true;
     }
 }
 
@@ -304,18 +321,21 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book};
+export {Book, DigitalBook};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 
 
 
-const book = new Book(
+const book = new DigitalBook(
     "9780134685991",
     "Effective JavaScript",
     "David Herman",
     2012,
-    2
+    2,
+    5,
+    "PDF"
 );
 
-console.log(book.getInfo());
+console.log(book.download("23"));
+console.log(book.downloadHistory.length);
