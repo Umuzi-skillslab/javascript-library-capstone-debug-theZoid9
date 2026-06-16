@@ -1,10 +1,10 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues)
-let books = [];  // Missing declaration
-let  members = [];  // Wrong: should use let
+let books = [];  
+let  members = [];  
 const LATE_FEE_PER_DAY = 0.50;
-const MAX_BOOKS_PER_MEMBER = 5;  // Missing const
+const MAX_BOOKS_PER_MEMBER = 5;  
 
 // Book class with multiple issues
 class Book {
@@ -13,16 +13,42 @@ class Book {
         this.title = title;
         this.author = author;
         this.year = year;
-        // Missing: availableCopies and totalCopies properties
+        // Missing: availableCopies and totalCopies properties // fix
+        this.availableCopies = copies;
+        this.totalCopies = copies;
         this.checkedOut = [];
     }
     
-    // Missing: method to check availability
-    // Missing: method to get book info using template literals
+    // Missing: method to check availability // fix
+    isAvailable(){
+        return this.availableCopies > 0;
+    }
+
+    // Missing: method to get book info using template literals // fix
+    getInfo(){
+        return `${this.title} by ${this.author} (${this.year}) - ISBN: ${this.isbn}`;
+    }
     
     checkOut(memberId) {
         // No validation for available copies
+        if (
+        memberId === undefined ||
+        memberId === null ||
+        (typeof memberId !== "string" && typeof memberId !== "number")
+         ) {
+        throw new Error("memberId must be a string or number");
+         }
+        
+        if (this.availableCopies <= 0) {
+           throw new Error("No available copies to check out");
+        }
+       
+        if (this.checkedOut.includes(memberId)) {
+            throw new Error("Member already checked out this book");
+        }
+
         this.checkedOut.push(memberId);
+        this.availableCopies--;
         return true;
     }
 }
@@ -275,5 +301,19 @@ function calculateFineAmount(daysLate) {
     return fine;
 }
 
-// Missing: module exports
-// Missing: proper data structure for ISBN lookups (Map/Set)
+// Missing: module exports 
+export {Book};
+
+// Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
+
+
+
+const book = new Book(
+    "9780134685991",
+    "Effective JavaScript",
+    "David Herman",
+    2012,
+    2
+);
+
+console.log(book.getInfo());

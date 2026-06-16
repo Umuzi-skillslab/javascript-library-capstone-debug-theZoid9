@@ -1,19 +1,78 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
+import { Book } from "../src/library.js";
+
 describe('Book Class', () => {
     test('should create a book instance', () => {
-        var book = new Book('978-0-123', 'Test Book', 'Author Name', 2020, 5);
+        const book = new Book('978-0-123', 'Test Book', 'Author Name', 2020, 5);
         
         expect(book.isbn).toBe('978-0-123');
         expect(book.title).toBe('Test Book');
+        expect(book.author).toBe('Author Name');
+        expect(book.year).toBe(2020);
+        expect(book.availableCopies).toBe(5);
         // Missing: tests for other properties
         // Missing: test for availableCopies
     });
-    
-    // Missing: test for checkOut method
-    // Missing: test for availability checking
-    // Missing: test for template literal methods
+
+// Missing: test for checkOut method
+    test("should checkout book",() => {
+          const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
+
+          expect(book.checkOut(2)).toBe(true);
+    })
+
+    test("checkOut decreases availableCopies and stores memberId", () => {
+        const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
+
+        book.checkOut("user1");
+        expect(book.availableCopies).toBe(1);
+        expect(book.checkedOut).toContain("user1");
+    });
+
+    test("rejects invalid memberId types", () => {
+        const book = new Book("123", "Title", "Author", 2024, 1);
+
+        expect(() => book.checkOut()).toThrow();
+        expect(() => book.checkOut({})).toThrow();
+        expect(() => book.checkOut(true)).toThrow();
+    });
+
+    test("checkOut throws error when no copies available", () => {
+        const book = new Book("123", "Clean Code", "Robert Martin", 2008, 1);
+
+        book.checkOut("user1");
+
+        expect(() => {
+            book.checkOut("user2");
+        }).toThrow("No available copies to check out");
+    });
+
+ // Missing: test for availability checking
+    test("isAvailable returns true when copies exist", () => {
+        const book = new Book("123", "Clean Code", "Robert Martin", 2008, 3);
+
+        expect(book.isAvailable()).toBe(true);
+    });
+
+    test("isAvailable returns false when no copies left", () => {
+        const book = new Book("123", "Clean Code", "Robert Martin", 2008, 1);
+
+        book.checkOut("user1");
+
+        expect(book.isAvailable()).toBe(false);
+    });
+
+// Missing: test for template literal methods
+    test("getInfo returns formatted string", () => {
+        const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
+
+        expect(book.getInfo()).toBe(
+            "Clean Code by Robert Martin (2008) - ISBN: 123"
+        );
+    });
+
 });
 
 describe('DigitalBook Class', () => {
