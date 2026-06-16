@@ -1,19 +1,21 @@
 // Library Management System - Starter Code with Complex Errors
 
-// Global state management (scoping issues)
+// Global state management (scoping issues) // fix
+
 let books = [];  
 let  members = [];  
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;  
 
-// Book class with multiple issues
+// Book class with multiple issues // fix
+
 class Book {
     constructor(isbn, title, author, year, copies) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.year = year;
-        // Missing: availableCopies and totalCopies properties // fix
+    // Missing: availableCopies and totalCopies properties // fix
         this.availableCopies = copies;
         this.totalCopies = copies;
         this.checkedOut = [];
@@ -30,7 +32,7 @@ class Book {
     }
     
     checkOut(memberId) {
-        // No validation for available copies
+    // No validation for available copies // fix
         if (
         memberId === undefined ||
         memberId === null ||
