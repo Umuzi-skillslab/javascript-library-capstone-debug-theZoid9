@@ -146,8 +146,7 @@ describe('Member Class', () => {
 });
 
 describe('PremiumMember Class', () => {
-    // Missing: all tests for premium member
-    
+    // Missing: all tests for premium member // 3 + tests fix
     // Missing: test for inheritance // fix
     test('PremiumMember is instance of Member', () => {
         const premium = new PremiumMember(
@@ -169,7 +168,19 @@ describe('PremiumMember Class', () => {
         expect(premium.membershipType).toBe('premium');
     })
 
-    
+    test('sets more book for premium members',() => {
+        const premium = new PremiumMember(
+            1,
+            "Uncle",
+            "sarah@example.com"
+        );
+
+        premium.borrowedBooks = [
+            '1','2','3','4','5','6'
+        ]
+
+        expect(premium.canBorrow()).toBe(true);
+    })
     
 });
 
