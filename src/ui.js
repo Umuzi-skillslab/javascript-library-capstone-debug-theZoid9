@@ -6,6 +6,7 @@ const books = [
         title: "Effective JavaScript",
         author: "David Herman",
         year: 2012,
+        availableCopies:"2",
         category: "reference"
     },
     {
@@ -13,6 +14,7 @@ const books = [
         title: "Learning React",
         author: "Alex Banks",
         year: 2020,
+        availableCopies:"1",
         category: "non-fiction"
     }
 ];
@@ -55,7 +57,7 @@ function setupEventListeners() {
     // Missing: search input event listener
     
     // Wrong event type
-    filterDropdown.addEventListener("click", handleFilterChange);
+    filterDropdown.addEventListener("change", handleFilterChange);
     
     // Missing: form submission prevention
     var borrowForm = document.getElementById("borrow-form");
@@ -137,14 +139,14 @@ function handleSearch(event) {
 
 // Function with filter errors
 function handleFilterChange() {
-    var selectedCategory = filterDropdown.value;
+    const selectedCategory = filterDropdown.value;
     
     // Missing: "all" option handling
     // Should use array filter method
     
-    var filtered = [];
-    for (var i = 0; i < books.length; i++) {
-        if (books[i].category = selectedCategory) {  // Wrong operator
+    let filtered = [];
+    for (let i = 0; i < books.length; i++) {
+        if (books[i].category == selectedCategory) {  // Wrong operator
             filtered.push(books[i]);
         }
     }

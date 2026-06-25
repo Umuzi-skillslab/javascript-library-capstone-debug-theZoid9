@@ -1,7 +1,7 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { Book, DigitalBook } from "../src/library.js";
+import { Book, DigitalBook, Member } from "../src/library.js";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -118,15 +118,30 @@ describe('DigitalBook Class', () => {
 
 describe('Member Class', () => {
     test('canBorrow returns boolean', () => {
-        var member = new Member(1, 'John Doe', 'john@example.com', 'standard');
-        var result = member.canBorrow();
+        const member = new Member(1, 'John Doe', 'john@example.com', 'standard');
+        const result = member.canBorrow();
         
         // Wrong assertion type
-        expect(typeof result).toBe('boolean');
+        expect(typeof result).toBe("boolean");
     });
     
     // Missing: test for borrow limit
+    test('returns false when member reaches limit', () => {
+        const member = new Member(1, 'John', 'john@example.com', 'standard');
+
+        member.borrowedBooks = ["1", "2", "3", "4", "5"];
+
+        expect(member.canBorrow()).toBe(false);
+    });
+    
     // Missing: test for membership duration calculation
+    test('returns true when under limit', () => {
+        const member = new Member(1, 'John', 'john@example.com', 'standard');
+
+        member.borrowedBooks = ["1", "2"];
+
+        expect(member.canBorrow()).toBe(true);
+});
 });
 
 describe('PremiumMember Class', () => {

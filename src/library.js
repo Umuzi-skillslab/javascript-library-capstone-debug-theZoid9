@@ -87,7 +87,8 @@ class DigitalBook extends Book {
     }
 }
 
-// Member class with errors
+// Member class with errors // fix
+
 class Member {
     constructor(id, name, email, membershipType) {
         this.id = id;
@@ -95,29 +96,53 @@ class Member {
         this.email = email;
         this.membershipType = membershipType;
         this.borrowedBooks = [];
-        // Missing: joinDate property
+        this.joinDate = new Date();
+        // Missing: joinDate property // fix
     }
     
-    // Missing: method to calculate membership duration
-    // Missing: method using destructuring
+    // Missing: method to calculate membership duration // fix
+
+    getMembershipDuration() {
+        const today = new Date();
+        const diff = today - this.joinDate;
+
+        return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
+
+    // Missing: method using destructuring //  fix
+
+    getMemberInfo() {
+        const { id, name, email, membershipType } = this;
+
+        return {
+            id,
+            name,
+            email,
+            membershipType
+        };
+    }
     
+         
     canBorrow() {
-        // Wrong comparison operator
-        if (this.borrowedBooks.length === MAX_BOOKS_PER_MEMBER) {
-            return false;
-        }
-        return true;
+        return this.borrowedBooks.length < MAX_BOOKS_PER_MEMBER;
     }
+
 }
 
 // Premium member with inheritance issues
 class PremiumMember extends Member {
     constructor(id, name, email) {
         super(id, name, email, "premium");
-        // Missing: additional premium benefits properties
+        // Missing: additional premium benefits properties // fix
+        this.maxBooks = 10;
+        this.priorityReservations = true;
+        this.lateFeeDiscount = 0.25;
     }
     
     // Should override canBorrow to allow more books
+        canBorrow() {
+           return this.borrowedBooks.length < this.maxBooks;
+    }
 }
 
 // Complex function with nested loops and errors
@@ -321,7 +346,7 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book, DigitalBook};
+export {Book, DigitalBook, Member};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 
@@ -337,5 +362,18 @@ const book = new DigitalBook(
     "PDF"
 );
 
-console.log(book.download("23"));
-console.log(book.downloadHistory.length);
+const member1 = new Member(
+    1,
+    "John Smith",
+    "john@gmail.com",
+    "standard"
+);
+
+const premium1 = new PremiumMember(
+    2,
+    "Sarah Khan",
+    "sarah@gmail.com"
+);
+
+console.log(typeof member1.canBorrow());
+console.log(premium1);
