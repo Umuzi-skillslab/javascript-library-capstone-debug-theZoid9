@@ -346,7 +346,7 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book, DigitalBook, Member};
+export {Book, DigitalBook, Member, PremiumMember};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 

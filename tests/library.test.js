@@ -1,7 +1,7 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { Book, DigitalBook, Member } from "../src/library.js";
+import { Book, DigitalBook, Member, PremiumMember } from "../src/library.js";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -121,8 +121,9 @@ describe('Member Class', () => {
         const member = new Member(1, 'John Doe', 'john@example.com', 'standard');
         const result = member.canBorrow();
         
-        // Wrong assertion type
-        expect(typeof result).toBe("boolean");
+        // Wrong assertion type // fix was a weak test
+
+        expect(result).toBe(true);
     });
     
     // Missing: test for borrow limit
@@ -146,8 +147,30 @@ describe('Member Class', () => {
 
 describe('PremiumMember Class', () => {
     // Missing: all tests for premium member
-    // Missing: test for inheritance
-    // Missing: test for overridden methods
+    
+    // Missing: test for inheritance // fix
+    test('PremiumMember is instance of Member', () => {
+        const premium = new PremiumMember(
+            1,
+            'Sarah',
+            'sarah@example.com'
+        );
+
+        expect(premium instanceof PremiumMember).toBe(true);
+        expect(premium instanceof Member).toBe(true);
+});
+    // Missing: test for overridden methods // fix 
+    test('sets membership type to premium', () => {
+        const premium = new PremiumMember(
+            1,
+            "Uncle",
+            "sarah@example.com"
+        );
+        expect(premium.membershipType).toBe('premium');
+    })
+
+    
+    
 });
 
 describe('Library Functions', () => {
