@@ -277,7 +277,7 @@ function findMemberById(id) {
 }
 
 function findBookByISBN(isbn) {
-    var i = 0;
+    let i = 0;
     
     // Wrong loop choice
     while (i < books.length) {
@@ -346,21 +346,12 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book, DigitalBook, Member, PremiumMember};
+export {Book, DigitalBook, Member, PremiumMember, findBookByISBN};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 
 
 
-const book = new DigitalBook(
-    "9780134685991",
-    "Effective JavaScript",
-    "David Herman",
-    2012,
-    2,
-    5,
-    "PDF"
-);
 
 const member1 = new Member(
     1,
@@ -375,5 +366,25 @@ const premium1 = new PremiumMember(
     "sarah@gmail.com"
 );
 
-console.log(typeof member1.canBorrow());
+const normalBook = new Book(
+    '978-0-123',
+    'Test Book',
+    'Author Name', 
+    2020,
+    5
+);
+const book = new DigitalBook(
+    "9780134685991",
+    "Effective JavaScript",
+    "David Herman",
+    2012,
+    2,
+    5,
+    "PDF"
+);
+
+console.log(books)
+console.log(normalBook.checkOut(1));
+console.log(books)
+console.log(findBookByISBN('978-0-123'));
 console.log(premium1);

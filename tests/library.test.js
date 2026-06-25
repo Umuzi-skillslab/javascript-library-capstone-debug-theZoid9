@@ -1,7 +1,7 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { Book, DigitalBook, Member, PremiumMember } from "../src/library.js";
+import { Book, DigitalBook, Member, PremiumMember,findBookByISBN } from "../src/library.js";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -189,7 +189,7 @@ describe('Library Functions', () => {
     
     test('findBookByISBN returns book', () => {
         // Test data not set up properly
-        var book = findBookByISBN('978-0-123');
+        const book = findBookByISBN('978-0-123');
         
         // Will fail - no books in array
         expect(book).toBeDefined();

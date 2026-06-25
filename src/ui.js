@@ -6,7 +6,7 @@ const books = [
         title: "Effective JavaScript",
         author: "David Herman",
         year: 2012,
-        availableCopies:"2",
+        availableCopies:2,
         category: "reference"
     },
     {
@@ -14,15 +14,15 @@ const books = [
         title: "Learning React",
         author: "Alex Banks",
         year: 2020,
-        availableCopies:"1",
+        availableCopies:1,
         category: "non-fiction"
     }
 ];
 
 // Missing: proper initialization with DOMContentLoaded
-var catalogueContainer;
-var searchInput;
-var filterDropdown;
+let catalogueContainer;
+let searchInput;
+let filterDropdown;
 
 function initializeUI() {
     // Wrong selector syntax // fix
@@ -32,7 +32,7 @@ function initializeUI() {
     
     // Missing: null checks // fix
     if (!catalogueContainer) {
-        console.error("Catalogue container not found");
+        console.error("Catalogue container not found"); 
         return;
     }
 
@@ -51,46 +51,67 @@ function initializeUI() {
     loadCatalogue();
 }
 
-
+function loadCatalogue() {
+    renderBookCatalogue(books);
+}
 
 function setupEventListeners() {
-    // Missing: search input event listener
+    // Missing: search input event listener // fix
     
-    // Wrong event type
-    filterDropdown.addEventListener("change", handleFilterChange);
+    // Wrong event type // fix
+    if (searchInput) {
+        searchInput.addEventListener("input", handleSearch);
+    }
+
+    if (filterDropdown) {
+        filterDropdown.addEventListener("change", handleFilterChange);
+    }
     
     // Missing: form submission prevention
-    var borrowForm = document.getElementById("borrow-form");
-    borrowForm.addEventListener("submit", handleBorrowSubmit);
+    const borrowForm = document.getElementById("borrow-form");
+
+    if (borrowForm) {
+        borrowForm.addEventListener("submit", handleBorrowSubmit);
+    }
+
+    if (catalogueContainer) {
+        catalogueContainer.addEventListener("click", handleBookClick);
+    }
     
     // Missing: event delegation for dynamic elements
 }
 
-// Complex DOM rendering with errors
+// Complex DOM rendering with errors // fix 
 function renderBookCatalogue(bookList) {
-    // Should clear container first
-    
+    // Should clear container first // fix
+    catalogueContainer.innerHTML = "";
+
     // Inefficient - should use DocumentFragment or template literals
-    for (var i = 0; i < bookList.length; i++) {
-        var bookCard = document.createElement("div");
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < bookList.length; i++) {
+        const bookCard = document.createElement("div");
         bookCard.className = "book-card";
         
         // Should use template literals and data attributes
-        bookCard.innerHTML = "<h3>" + bookList[i].title + "</h3>";
-        bookCard.innerHTML = bookCard.innerHTML + "<p>Author: " + bookList[i].author + "</p>";
-        bookCard.innerHTML = bookCard.innerHTML + "<p>Available: " + bookList[i].availableCopies + "</p>";
+        bookCard.innerHTML = `
+            <h3>${bookList[i].title}</h3>
+            <p>Author: ${bookList[i].author}</p>
+            <p>Available: ${bookList[i].availableCopies}</p>
+        `;
         
         // Missing: unique ID or data attribute for book
         // Missing: event listener for book selection
-        
-        catalogueContainer.appendChild(bookCard);
+        fragment.appendChild(bookCard);
+       
     }
+     catalogueContainer.appendChild(fragment);
 }
 
-// Function with event handling errors
+// Function with event handling errors // fix
 function handleBorrowSubmit(event) {
     // Missing: event.preventDefault()
-    
+    event.preventDefault();
     var memberIdInput = document.getElementById("member-id");
     var isbnInput = document.getElementById("isbn");
     
@@ -110,13 +131,13 @@ function handleBorrowSubmit(event) {
     // Missing: form reset
 }
 
-// Function missing event delegation
+// Function missing event delegation // fix
 function handleBookClick(event) {
     // Should use event.target properly
     // Missing: closest() for event delegation
-    
-    var bookElement = event.target;
-    var bookId = bookElement.id;
+    const bookCard = event.target.closest(".book-card");
+    if (!bookCard) return;
+    const bookId = bookCard.dataset.isbn;
     
     displayBookDetails(bookId);
 }
@@ -146,7 +167,7 @@ function handleFilterChange() {
     
     let filtered = [];
     for (let i = 0; i < books.length; i++) {
-        if (books[i].category == selectedCategory) {  // Wrong operator
+        if (books[i].category === selectedCategory) {  // Wrong operator
             filtered.push(books[i]);
         }
     }
@@ -200,22 +221,31 @@ function loadFromLocalStorage() {
     members = membersData;
 }
 
-// Display function with template issues
+// Display function with template issues // fix 
 function displayBookDetails(isbn) {
-    var book = findBookByISBN(isbn);
-    
-    // Missing: null check
-    
-    var detailsContainer = document.getElementById("book-details");
-    
-    // Should use template literals
-    var html = "<div class='book-details'>";
-    html = html + "<h2>" + book.title + "</h2>";
-    html = html + "<p><strong>Author:</strong> " + book.author + "</p>";
-    html = html + "<p><strong>ISBN:</strong> " + book.isbn + "</p>";
-    html = html + "<p><strong>Year:</strong> " + book.year + "</p>";
-    html = html + "</div>";
-    
+    const book = findBookByISBN(isbn);
+
+    if (!book) {
+        console.error("Book not found for ISBN:", isbn);
+        return;
+    }
+
+    const detailsContainer = document.getElementById("book-details");
+
+    if (!detailsContainer) {
+        console.error("Details container not found");
+        return;
+    }
+
+    const html = `
+        <div class="book-details">
+            <h2>${book.title}</h2>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>ISBN:</strong> ${book.isbn}</p>
+            <p><strong>Year:</strong> ${book.year}</p>
+        </div>
+    `;
+
     detailsContainer.innerHTML = html;
 }
 
