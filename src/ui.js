@@ -166,13 +166,7 @@ function handleFilterChange() {
     
     // Missing: "all" option handling
     // Should use array filter method
-    
-    let filtered = [];
-    for (let i = 0; i < books.length; i++) {
-        if (books[i].category === selectedCategory || selectedCategory === "all") {  // Wrong operator
-            filtered.push(books[i]);
-        }
-    }
+    const filtered = books.filter(books => books.category === selectedCategory || selectedCategory === "all");
     
     renderBookCatalogue(filtered);
 }
