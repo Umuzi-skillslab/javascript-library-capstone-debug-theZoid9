@@ -1,5 +1,5 @@
 // Library UI - DOM Manipulation with Complex Errors
-
+import {findBookByISBN } from "../src/library.js";
 const books = [
     {
         isbn: "9780134685991",
@@ -19,7 +19,7 @@ const books = [
     }
 ];
 
-// Missing: proper initialization with DOMContentLoaded
+// Missing: proper initialization with DOMContentLoaded // fix
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
@@ -46,7 +46,6 @@ function initializeUI() {
         return;
     }
 
-    
     setupEventListeners();
     loadCatalogue();
 }
@@ -77,7 +76,7 @@ function setupEventListeners() {
     if (catalogueContainer) {
         catalogueContainer.addEventListener("click", handleBookClick);
     }
-    
+     console.log("Setting up listeners");
     // Missing: event delegation for dynamic elements
 }
 
@@ -86,22 +85,22 @@ function renderBookCatalogue(bookList) {
     // Should clear container first // fix
     catalogueContainer.innerHTML = "";
 
-    // Inefficient - should use DocumentFragment or template literals
+    // Inefficient - should use DocumentFragment or template literals // fix
     const fragment = document.createDocumentFragment();
 
     for (let i = 0; i < bookList.length; i++) {
         const bookCard = document.createElement("div");
         bookCard.className = "book-card";
         
-        // Should use template literals and data attributes
+        // Should use template literals and data attributes // fix
         bookCard.innerHTML = `
             <h3>${bookList[i].title}</h3>
             <p>Author: ${bookList[i].author}</p>
             <p>Available: ${bookList[i].availableCopies}</p>
         `;
         
-        // Missing: unique ID or data attribute for book
-        // Missing: event listener for book selection
+        // Missing: unique ID or data attribute for book // fix
+        // Missing: event listener for book selection   // fix
         fragment.appendChild(bookCard);
        
     }
@@ -133,8 +132,9 @@ function handleBorrowSubmit(event) {
 
 // Function missing event delegation // fix
 function handleBookClick(event) {
-    // Should use event.target properly
-    // Missing: closest() for event delegation
+    console.log(event.target);
+    // Should use event.target properly // fix
+    // Missing: closest() for event delegation // fix 
     const bookCard = event.target.closest(".book-card");
     if (!bookCard) return;
     const bookId = bookCard.dataset.isbn;
@@ -144,6 +144,8 @@ function handleBookClick(event) {
 
 // Search function with errors
 function handleSearch(event) {
+    console.log("handleSearch fired");
+     console.log(event.target);
     var searchTerm = event.target.value;
     
     // Case-sensitive search - should use toLowerCase()
@@ -154,7 +156,7 @@ function handleSearch(event) {
             results.push(books[i]);
         }
     }
-    
+    console.log(results);
     renderBookCatalogue(results);
 }
 
@@ -167,7 +169,7 @@ function handleFilterChange() {
     
     let filtered = [];
     for (let i = 0; i < books.length; i++) {
-        if (books[i].category === selectedCategory) {  // Wrong operator
+        if (books[i].category === selectedCategory || selectedCategory === "all") {  // Wrong operator
             filtered.push(books[i]);
         }
     }

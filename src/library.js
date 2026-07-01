@@ -278,7 +278,7 @@ function findMemberById(id) {
 
 function findBookByISBN(isbn) {
     let i = 0;
-    
+    console.log(books)
     // Wrong loop choice
     while (i < books.length) {
         if (books[i].isbn === isbn) {
