@@ -361,13 +361,17 @@ const LibraryStats = {
 // Function with string manipulation errors
 function formatBookInfo(book) {
     // Should use template literals
-    var info = "Title: " + book.title + "\n";
-    info = info + "Author: " + book.author + "\n";
-    info = info + "Year: " + book.year;
-    
+
+    // add validation 
+    return `
+            <h3>${book.title}</h3>
+            <p>Author: ${book.author}</p>
+            <p>Year: ${book.year}</p>
+
+            `;
     // Missing: proper string methods (trim, toUpperCase, etc.)
     
-    return info;
+   
 }
 
 // Function with number/type issues
@@ -383,7 +387,7 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book, DigitalBook, Member, PremiumMember, findBookByISBN, borrowBook};
+export {Book, DigitalBook, Member, PremiumMember, findBookByISBN, borrowBook,formatBookInfo};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 

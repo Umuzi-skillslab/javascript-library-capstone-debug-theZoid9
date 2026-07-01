@@ -1,5 +1,5 @@
 // Library UI - DOM Manipulation with Complex Errors
-import {findBookByISBN, borrowBook } from "../src/library.js";
+import {findBookByISBN, borrowBook, formatBookInfo } from "../src/library.js";
 const books = [
     {
         isbn: "9780134685991",
@@ -102,6 +102,7 @@ function renderBookCatalogue(bookList) {
             <p>Available: ${bookList[i].availableCopies}</p>
            
         `;
+        
         bookCard.dataset.isbn = bookList[i].isbn;
         // Missing: unique ID or data attribute for book // fix
         // Missing: event listener for book selection   // fix
