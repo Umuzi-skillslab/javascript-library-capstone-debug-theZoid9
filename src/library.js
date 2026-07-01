@@ -209,15 +209,16 @@ function searchBooksByCategory(bookList, category, index) {
 }
 
 // Function missing array methods
-// Fix
+// Fix - filter
 function getBooksByAuthor(authorName) {
-    // Should use filter method
+  
+    console.log("hit get author!!")
     const result = books.filter( book => book.author === authorName);
     return result;
 }
 
 // Function that should use reduce
-// fix
+// fix - reduce 
 function calculateTotalLateFees(memberRecord) {
     return memberRecord.overdueBooks.reduce((total, book) => {
         return total + book.daysLate * LATE_FEE_PER_DAY;
@@ -255,7 +256,7 @@ function updateMemberInfo(member, updates) {
 }
 
 // Function with no error handling 
-// fix
+// fix - try and catch + type of checks
 function borrowBook(memberId, isbn) {
     // Missing: try-catch block
     // Missing: validation for undefined/null
@@ -314,22 +315,20 @@ function findMemberById(id) {
     // Returns undefined implicitly - should handle explicitly
 }
 
+// Fix - find()
 function findBookByISBN(isbn) {
-    let i = 0;
-    console.log(books)
-    // Wrong loop choice
-    while (i < books.length) {
-        if (books[i].isbn === isbn) {
-            return books[i];
-        }
-        i = i + 1;
-    }
-    
-    return null;
+    console.log("hit get book isbn!")
+
+    if (isbn === undefined || isbn === null) return null;
+    if (typeof isbn !== 'string') return null;
+    console
+    return books.find(books => books.isbn === isbn);
+
+
 }
 
 // Statistics object with missing methods
-var LibraryStats = {
+const LibraryStats = {
     totalBooks: 0,
     totalMembers: 0,
     totalBorrowings: 0,
@@ -421,9 +420,8 @@ const book = new DigitalBook(
     "PDF"
 );
 
-console.log(books)
 console.log(normalBook.checkOut(1));
-console.log(books)
-console.log(findBookByISBN('978-0-123'));
-console.log(premium1);
+
+console.log(findBookByISBN("9781491950296"));
 console.log(getBooksByAuthor("David Herman"));
+console.log(findMemberById("David Herman"));

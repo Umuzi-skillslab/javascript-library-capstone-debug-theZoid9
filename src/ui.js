@@ -83,7 +83,7 @@ function setupEventListeners() {
 }
 
 // Complex DOM rendering with errors 
-// // fix 
+// // fix - template literals 
 function renderBookCatalogue(bookList) {
     // Should clear container first // fix
     catalogueContainer.innerHTML = "";
@@ -100,8 +100,9 @@ function renderBookCatalogue(bookList) {
             <h3>${bookList[i].title}</h3>
             <p>Author: ${bookList[i].author}</p>
             <p>Available: ${bookList[i].availableCopies}</p>
+           
         `;
-        
+        bookCard.dataset.isbn = bookList[i].isbn;
         // Missing: unique ID or data attribute for book // fix
         // Missing: event listener for book selection   // fix
         fragment.appendChild(bookCard);
@@ -153,18 +154,21 @@ function handleBorrowSubmit(event) {
 // Function missing event delegation
 //  // fix
 function handleBookClick(event) {
-    console.log(event.target);
+    console.log("Hit book btn")
+    console.log(event);
     // Should use event.target properly // fix
     // Missing: closest() for event delegation // fix 
     const bookCard = event.target.closest(".book-card");
+
     if (!bookCard) return;
     const bookId = bookCard.dataset.isbn;
+    console.log(bookId)
     
     displayBookDetails(bookId);
 }
 
 // Search function with errors
-// fix
+// fix - filter()
 function handleSearch(event) {
     console.log("handleSearch fired");
     console.log(event.target);
@@ -177,7 +181,7 @@ function handleSearch(event) {
 }
 
 // Function with filter errors
-// Fix
+// Fix - filter()
 function handleFilterChange() {
     console.log("We filtering BABY!!!")
     const selectedCategory = filterDropdown.value;
@@ -235,10 +239,10 @@ function loadFromLocalStorage() {
 }
 
 // Display function with template issues
-//  fix 
+//  fix - template literals 
 function displayBookDetails(isbn) {
     const book = findBookByISBN(isbn);
-
+    console.log(book)
     if (!book) {
         console.error("Book not found for ISBN:", isbn);
         return;
@@ -280,25 +284,48 @@ function updateStatisticsDisplay() {
 
 // Dynamic form generation with errors
 function createMemberForm() {
-    var formContainer = document.getElementById("member-form");
-    
-    // Inefficient DOM manipulation
-    var form = document.createElement("form");
-    
-    var nameInput = document.createElement("input");
+    const formContainer = document.getElementById("member-form");
+
+    const form = document.createElement("form");
+    form.id = "create-member-form";
+
+    // --- Name Field ---
+    const nameLabel = document.createElement("label");
+    nameLabel.textContent = "Full Name";
+    nameLabel.setAttribute("for", "name");
+
+    const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.id = "name";
-    // Missing: label, placeholder, required attribute
-    
-    var emailInput = document.createElement("input");
-    emailInput.type = "text";  // Should be "email"
+    nameInput.placeholder = "Enter full name";
+    nameInput.required = true;
+
+    // --- Email Field ---
+    const emailLabel = document.createElement("label");
+    emailLabel.textContent = "Email";
+    emailLabel.setAttribute("for", "email");
+
+    const emailInput = document.createElement("input");
+    emailInput.type = "email";
     emailInput.id = "email";
-    
-    // Missing: other form fields
-    
+    emailInput.placeholder = "Enter email address";
+    emailInput.required = true;
+
+    // --- Submit Button ---
+    const submitBtn = document.createElement("button");
+    submitBtn.type = "submit";
+    submitBtn.textContent = "Create Member";
+
+    // --- Assemble form ---
+    form.appendChild(nameLabel);
     form.appendChild(nameInput);
+
+    form.appendChild(emailLabel);
     form.appendChild(emailInput);
-    
+
+    form.appendChild(submitBtn);
+
+    // --- Mount to DOM ---
     formContainer.appendChild(form);
 }
 
