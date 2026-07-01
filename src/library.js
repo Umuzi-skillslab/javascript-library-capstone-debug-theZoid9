@@ -209,29 +209,19 @@ function searchBooksByCategory(bookList, category, index) {
 }
 
 // Function missing array methods
+// Fix
 function getBooksByAuthor(authorName) {
-    var result = [];
-    
     // Should use filter method
-    for (var i = 0; i < books.length; i++) {
-        if (books[i].author === authorName) {  // Should use ===
-            result.push(books[i]);
-        }
-    }
-    
+    const result = books.filter( book => book.author === authorName);
     return result;
 }
 
 // Function that should use reduce
+// fix
 function calculateTotalLateFees(memberRecord) {
-    var total = 0;
-    
-    // Should use reduce on array
-    for (var i = 0; i < memberRecord.overdueBooks.length; i++) {
-        total = total + memberRecord.overdueBooks[i].daysLate * LATE_FEE_PER_DAY;
-    }
-    
-    return total;
+    return memberRecord.overdueBooks.reduce((total, book) => {
+        return total + book.daysLate * LATE_FEE_PER_DAY;
+    }, 0);
 }
 
 // Function missing spread operator
@@ -264,7 +254,8 @@ function updateMemberInfo(member, updates) {
     return member;
 }
 
-// Function with no error handling
+// Function with no error handling 
+// fix
 function borrowBook(memberId, isbn) {
     // Missing: try-catch block
     // Missing: validation for undefined/null
@@ -435,3 +426,4 @@ console.log(normalBook.checkOut(1));
 console.log(books)
 console.log(findBookByISBN('978-0-123'));
 console.log(premium1);
+console.log(getBooksByAuthor("David Herman"));

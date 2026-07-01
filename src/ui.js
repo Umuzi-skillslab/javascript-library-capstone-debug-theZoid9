@@ -19,11 +19,13 @@ const books = [
     }
 ];
 
-// Missing: proper initialization with DOMContentLoaded // fix
+// Missing: proper initialization with DOMContentLoaded 
+// // fix
 let catalogueContainer;
 let searchInput;
 let filterDropdown;
 
+// fix
 function initializeUI() {
     // Wrong selector syntax // fix
     catalogueContainer = document.getElementById("catalogue-list");
@@ -49,11 +51,11 @@ function initializeUI() {
     setupEventListeners();
     loadCatalogue();
 }
-
+// fix
 function loadCatalogue() {
     renderBookCatalogue(books);
 }
-
+// fix
 function setupEventListeners() {
     // Missing: search input event listener // fix
     
@@ -80,7 +82,8 @@ function setupEventListeners() {
     // Missing: event delegation for dynamic elements
 }
 
-// Complex DOM rendering with errors // fix 
+// Complex DOM rendering with errors 
+// // fix 
 function renderBookCatalogue(bookList) {
     // Should clear container first // fix
     catalogueContainer.innerHTML = "";
@@ -107,7 +110,8 @@ function renderBookCatalogue(bookList) {
      catalogueContainer.appendChild(fragment);
 }
 
-// Function with event handling errors // fix
+// Function with event handling errors 
+// // fix
 function handleBorrowSubmit(event) {
     // Missing: event.preventDefault()  // fix
     console.log("Press borrow button!!")
@@ -146,7 +150,8 @@ function handleBorrowSubmit(event) {
     // Missing: form reset
 }
 
-// Function missing event delegation // fix
+// Function missing event delegation
+//  // fix
 function handleBookClick(event) {
     console.log(event.target);
     // Should use event.target properly // fix
@@ -159,6 +164,7 @@ function handleBookClick(event) {
 }
 
 // Search function with errors
+// fix
 function handleSearch(event) {
     console.log("handleSearch fired");
     console.log(event.target);
@@ -228,7 +234,8 @@ function loadFromLocalStorage() {
     members = membersData;
 }
 
-// Display function with template issues // fix 
+// Display function with template issues
+//  fix 
 function displayBookDetails(isbn) {
     const book = findBookByISBN(isbn);
 
