@@ -1,5 +1,5 @@
 // Library UI - DOM Manipulation with Complex Errors
-import {findBookByISBN } from "../src/library.js";
+import {findBookByISBN, borrowBook } from "../src/library.js";
 const books = [
     {
         isbn: "9780134685991",
@@ -109,22 +109,38 @@ function renderBookCatalogue(bookList) {
 
 // Function with event handling errors // fix
 function handleBorrowSubmit(event) {
-    // Missing: event.preventDefault()
+    // Missing: event.preventDefault()  // fix
+    console.log("Press borrow button!!")
+    console.log(event.target);
     event.preventDefault();
-    var memberIdInput = document.getElementById("member-id");
-    var isbnInput = document.getElementById("isbn");
+    const memberIdInput = document.getElementById("member-id");
+    const isbnInput = document.getElementById("isbn");
     
-    var memberId = memberIdInput.value;
-    var isbn = isbnInput.value;
-    
+    const memberId = memberIdInput.value;
+    const isbn = isbnInput.value;
+
+    if (!memberId || !isbn) {
+        console.log("!!!NOTHING4")
+        alert("Please fill in all fields.");
+        
+        return;
+    }
     // Missing: input validation
     // Missing: error handling
     
-    var success = borrowBook(memberId, isbn);
-    
-    // Poor user feedback
-    if (success) {
-        alert("Book borrowed successfully");
+    try {
+        const success = borrowBook(memberId, isbn);
+
+        if (success) {
+            alert("Book borrowed successfully.");
+            event.target.reset(); // Clear the form
+        } else {
+            console.log("!!!else hit")
+            alert("Borrowing failed. Check the member ID or ISBN.");
+        }
+    } catch (error) {
+        console.log("!!!NOTHING")
+        alert(error.message);
     }
     
     // Missing: form reset
@@ -147,9 +163,9 @@ function handleSearch(event) {
     console.log("handleSearch fired");
     console.log(event.target);
     const searchTerm = event.target.value;
-    // Case-sensitive search - should use toLowerCase()
-    // Inefficient filtering
-    const results = books.filter(books => books.title.includes(searchTerm))
+    // Case-sensitive search - should use toLowerCase() // Fix
+    // Inefficient filtering  // Fix
+    const results = books.filter(books => books.title.toLowerCase().includes(searchTerm))
 
     renderBookCatalogue(results);
 }

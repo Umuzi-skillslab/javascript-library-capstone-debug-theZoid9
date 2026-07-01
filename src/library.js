@@ -1,8 +1,26 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues) // fix
+let books = [
+    {
+        isbn: "9780134685991",
+        title: "Effective JavaScript",
+        author: "David Herman",
+        year: 2012,
+        availableCopies:2,
+        category: "reference"
+    },
+    {
+        isbn: "9781491950296",
+        title: "Learning React",
+        author: "Alex Banks",
+        year: 2020,
+        availableCopies:1,
+        category: "non-fiction"
+    }
+];
 
-let books = [];  
+//let books = [];  
 let  members = [];  
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;  
@@ -251,23 +269,52 @@ function borrowBook(memberId, isbn) {
     // Missing: try-catch block
     // Missing: validation for undefined/null
     // Missing: typeof checks
-    
-    var member = findMemberById(memberId);
-    var book = findBookByISBN(isbn);
-    
-    // No check if member or book exists
-    if (member.canBorrow()) {
+    try {
+        if (!memberId || !isbn){
+            throw new Error("Member ID and ISBN are required");
+        }
+        if (typeof memberId !== "string" || typeof isbn !== "string") {
+            throw new Error("Member ID and ISBN must be strings");
+        }
+
+        const member = findMemberById(memberId);
+        const book = findBookByISBN(isbn);
+        // No check if member or book exists  // fix
+        if(!member){
+            throw new Error("Member not found");
+        }
+
+        if(!book){
+            throw new Error("Book not found");
+        }
+
+        if(!member.canBorrow()){
+            return false;
+        }
+
         book.checkOut(memberId);
-        member.borrowedBooks.push(isbn);
+
+        if(!Array.isArray(member.borrowedBooks)){
+            member.borrowBooks = [];
+        }
+
+        member.borrowBooks.push(isbn);
+
         return true;
+
+    }catch(error){
+        console.error("borrowBook error:", error.message);
+        throw error;
     }
-    
-    return false;
+
+   
+
 }
 
 // Helper functions with errors
 function findMemberById(id) {
     // Should use find method
+    console.log("find member by id HIT!")
     for (var i = 0; i < members.length; i++) {
         if (members[i].id === id) {  // Wrong operator
             return members[i];
@@ -346,7 +393,7 @@ function calculateFineAmount(daysLate) {
 }
 
 // Missing: module exports 
-export {Book, DigitalBook, Member, PremiumMember, findBookByISBN};
+export {Book, DigitalBook, Member, PremiumMember, findBookByISBN, borrowBook};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 
