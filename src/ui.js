@@ -145,27 +145,22 @@ function handleBookClick(event) {
 // Search function with errors
 function handleSearch(event) {
     console.log("handleSearch fired");
-     console.log(event.target);
-    var searchTerm = event.target.value;
-    
+    console.log(event.target);
+    const searchTerm = event.target.value;
     // Case-sensitive search - should use toLowerCase()
     // Inefficient filtering
-    var results = [];
-    for (var i = 0; i < books.length; i++) {
-        if (books[i].title.includes(searchTerm)) {
-            results.push(books[i]);
-        }
-    }
-    console.log(results);
+    const results = books.filter(books => books.title.includes(searchTerm))
+
     renderBookCatalogue(results);
 }
 
 // Function with filter errors
+// Fix
 function handleFilterChange() {
+    console.log("We filtering BABY!!!")
     const selectedCategory = filterDropdown.value;
-    
-    // Missing: "all" option handling
-    // Should use array filter method
+    // Missing: "all" option handling // fix
+    // Should use array filter method // fix
     const filtered = books.filter(books => books.category === selectedCategory || selectedCategory === "all");
     
     renderBookCatalogue(filtered);
