@@ -1,23 +1,6 @@
 // Library UI - DOM Manipulation with Complex Errors
-import {findBookByISBN, borrowBook, formatBookInfo } from "../src/library.js";
-const books = [
-    {
-        isbn: "9780134685991",
-        title: "Effective JavaScript",
-        author: "David Herman",
-        year: 2012,
-        availableCopies:2,
-        category: "reference"
-    },
-    {
-        isbn: "9781491950296",
-        title: "Learning React",
-        author: "Alex Banks",
-        year: 2020,
-        availableCopies:1,
-        category: "non-fiction"
-    }
-];
+import {findBookByISBN, borrowBook, formatBookInfo, books } from "../src/library.js";
+import { loadFromLocalStorage } from "../src/storage.js";
 
 // Missing: proper initialization with DOMContentLoaded 
 // // fix
@@ -85,13 +68,17 @@ function initializeUI() {
         console.error("Filter dropdown not found");
         return;
     }
-
+    
     setupEventListeners();
+    
+    loadFromLocalStorage();
+    
     loadCatalogue();
    
 }
 // fix
 function loadCatalogue() {
+   
     renderBookCatalogue(books);
 }
 // fix
@@ -142,7 +129,7 @@ function setupEventListeners() {
         statisticsSection.style.display = "block";
     });
 
-     console.log("Setting up listeners");
+    console.log("Setting up listeners");
     // Missing: event delegation for dynamic elements
 }
 
@@ -181,7 +168,7 @@ function renderBookCatalogue(bookList) {
 function handleBorrowSubmit(event) {
     // Missing: event.preventDefault()  // fix
     console.log("Press borrow button!!")
-    console.log(event.target);
+   
     event.preventDefault();
     const memberIdInput = document.getElementById("member-id");
     const isbnInput = document.getElementById("isbn");
@@ -261,127 +248,6 @@ function handleFilterChange() {
     renderBookCatalogue(filtered);
 }
 
-// Function missing JSON operations
-function exportLibraryData1() {
-    // Should convert to JSON
-    // Missing: error handling
-    
-    var data = {
-        books: books,
-        members: members
-    };
-    
-    // Missing: JSON.stringify
-    return data;
-}
-
-function exportLibraryData() {
-    try {
-        const data = {
-            books: books,
-            members: members
-        };
-
-        return JSON.stringify(data, null, 2); // Pretty-printed JSON
-    } catch (error) {
-        console.error("Error exporting library data:", error);
-        return null;
-    }
-}
-
-// Function missing JSON parsing
-function importLibraryData(jsonString) {
-    // Missing: try-catch for JSON.parse
-    // Missing: validation of parsed data
-    
-    var data = JSON.parse(jsonString);
-    
-    books = data.books;
-    members = data.members;
-}
-
-function importLibraryData1(jsonString) {
-    try {
-        const data = JSON.parse(jsonString);
-
-        // Validate parsed data
-        if (!data.books || !data.members) {
-            throw new Error("Invalid library data format.");
-        }
-
-        if (!Array.isArray(data.books) || !Array.isArray(data.members)) {
-            throw new Error("Books and members must be arrays.");
-        }
-
-        books = data.books;
-        members = data.members;
-
-        console.log("Library data imported successfully.");
-    } catch (error) {
-        console.error("Error importing library data:", error);
-    }
-}
-
-// LocalStorage functions with errors
-function saveToLocalStorage() {
-    // Missing: error handling for localStorage
-    // Missing: JSON.stringify
-    
-    localStorage.setItem("libraryBooks", books);
-    localStorage.setItem("libraryMembers", members);
-}
-
-function saveToLocalStorage2() {
-    try {
-        localStorage.setItem("libraryBooks", JSON.stringify(books));
-        localStorage.setItem("libraryMembers", JSON.stringify(members));
-
-        console.log("Library data saved.");
-    } catch (error) {
-        console.error("Error saving to localStorage:", error);
-    }
-}
-
-function loadFromLocalStorage() {
-    // Missing: null check
-    // Missing: JSON.parse
-    // Missing: error handling
-    
-    var booksData = localStorage.getItem("libraryBooks");
-    var membersData = localStorage.getItem("libraryMembers");
-    
-    books = booksData;
-    members = membersData;
-}
-
-function loadFromLocalStorage1() {
-    try {
-        const booksData = localStorage.getItem("libraryBooks");
-        const membersData = localStorage.getItem("libraryMembers");
-
-        // Check if data exists
-        if (booksData !== null) {
-            books = JSON.parse(booksData);
-        } else {
-            books = [];
-        }
-
-        if (membersData !== null) {
-            members = JSON.parse(membersData);
-        } else {
-            members = [];
-        }
-
-        console.log("Library data loaded.");
-    } catch (error) {
-        console.error("Error loading from localStorage:", error);
-
-        // Reset if parsing fails
-        books = [];
-        members = [];
-    }
-}
-
 // Display function with template issues
 //  fix - template literals 
 function displayBookDetails(isbn) {
@@ -412,117 +278,75 @@ function displayBookDetails(isbn) {
 }
 
 // Statistics display with errors
+// fix
 function updateStatisticsDisplay() {
     // Wrong selector methods
-    var totalBooksEl = document.querySelector(".total-books");
-    var totalMembersEl = document.querySelector(".total-members");
+    const totalBooksEl = document.querySelector(".total-books");
+    const totalMembersEl = document.querySelector(".total-members");
     
     // Missing: null checks
     // Should use textContent instead of innerHTML for text
-    
-    totalBooksEl.innerHTML = books.length;
-    totalMembersEl.innerHTML = members.length;
-    
+    if (totalBooksEl) {
+        totalBooksEl.textContent = books.length;
+    }
+
+    if (totalMembersEl) {
+        totalMembersEl.textContent = members.length;
+    }
     // Missing: update other statistics
 }
 
 // Dynamic form generation with errors
-function createMemberForm() {
-
-    const formContainer = document.getElementById("member-form");
-
-    const form = document.createElement("form");
-    form.id = "create-member-form";
-
-    // --- Name Field ---
-    const nameLabel = document.createElement("label");
-    nameLabel.textContent = "Full Name";
-    nameLabel.setAttribute("for", "name");
-
-    const nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.id = "name";
-    nameInput.placeholder = "Enter full name";
-    nameInput.required = true;
-
-    // --- Email Field ---
-    const emailLabel = document.createElement("label");
-    emailLabel.textContent = "Email";
-    emailLabel.setAttribute("for", "email");
-
-    const emailInput = document.createElement("input");
-    emailInput.type = "email";
-    emailInput.id = "email";
-    emailInput.placeholder = "Enter email address";
-    emailInput.required = true;
-
-    // --- Submit Button ---
-    const submitBtn = document.createElement("button");
-    submitBtn.type = "submit";
-    submitBtn.textContent = "Create Member";
-
-    // --- Assemble form ---
-    form.appendChild(nameLabel);
-    form.appendChild(nameInput);
-
-    form.appendChild(emailLabel);
-    form.appendChild(emailInput);
-
-    form.appendChild(submitBtn);
-
-    // --- Mount to DOM ---
-    formContainer.appendChild(form);
-}
-
+// fix
 function createMemberForm1() {
         console.log("createMemberForm called");
-    var formContainer = document.getElementById("member-form");
+    const formContainer = document.getElementById("member-form");
 
     // Clear any existing form
     formContainer.innerHTML = "";
 
     // Create form
-    var form = document.createElement("form");
+    const form = document.createElement("form");
     form.id = "member-registration-form";
 
     // Name label
-    var nameLabel = document.createElement("label");
+    const nameLabel = document.createElement("label");
     nameLabel.htmlFor = "name";
     nameLabel.textContent = "Name";
 
     // Name input
-    var nameInput = document.createElement("input");
+    const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.id = "name";
     nameInput.placeholder = "Enter member name";
     nameInput.required = true;
 
     // Email label
-    var emailLabel = document.createElement("label");
+    const emailLabel = document.createElement("label");
     emailLabel.htmlFor = "email";
     emailLabel.textContent = "Email";
 
     // Email input
-    var emailInput = document.createElement("input");
+    const emailInput = document.createElement("input");
     emailInput.type = "email";      // Fixed
     emailInput.id = "email";
     emailInput.placeholder = "Enter email address";
     emailInput.required = true;
 
     // Member ID label
-    var idLabel = document.createElement("label");
+    const idLabel = document.createElement("label");
     idLabel.htmlFor = "member-id";
     idLabel.textContent = "Member ID";
 
     // Member ID input
-    var idInput = document.createElement("input");
+    const idInput = document.createElement("input");
     idInput.type = "text";
     idInput.id = "member-id";
     idInput.placeholder = "Enter member ID";
     idInput.required = true;
 
     // Submit button
-    var submitButton = document.createElement("button");
+    const submitButton = document.createElement("button");
     submitButton.type = "submit";
     submitButton.textContent = "Add Member";
 
@@ -540,8 +364,31 @@ function createMemberForm1() {
 
     // Add form to page
     formContainer.appendChild(form);
+    form.addEventListener("submit", handleMemberSubmit);
 }
 
+// helper function
+function handleMemberSubmit(event) {
+    event.preventDefault();
+
+    const member = {
+        id: document.getElementById("member-id").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+    };
+
+    members.push(member);
+
+    localStorage.setItem(
+        "libraryMembers",
+        JSON.stringify(members)
+    );
+
+    console.log("Member saved:", member);
+
+    event.target.reset();
+}
+    
 // Initialize on wrong event
 document.addEventListener("DOMContentLoaded", () => {
     initializeUI();

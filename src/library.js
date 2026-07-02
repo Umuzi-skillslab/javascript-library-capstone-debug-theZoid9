@@ -1,7 +1,7 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues) // fix
-let books = [
+export let books = [
     {
         isbn: "9780134685991",
         title: "Effective JavaScript",
@@ -21,7 +21,8 @@ let books = [
 ];
 
 //let books = [];  
-let  members = [];  
+export let  members = [{ "id": "M001", "name": "John Smith", "email": "john@gmail.com" }];  
+
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;  
 
@@ -422,8 +423,3 @@ const book = new DigitalBook(
     "PDF"
 );
 
-console.log(normalBook.checkOut(1));
-
-console.log(findBookByISBN("9781491950296"));
-console.log(getBooksByAuthor("David Herman"));
-console.log(findMemberById("David Herman"));
