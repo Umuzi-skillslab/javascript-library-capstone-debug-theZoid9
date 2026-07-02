@@ -321,10 +321,8 @@ function findBookByISBN(isbn) {
 
     if (isbn === undefined || isbn === null) return null;
     if (typeof isbn !== 'string') return null;
-    console
+
     return books.find(books => books.isbn === isbn);
-
-
 }
 
 // Statistics object with missing methods
