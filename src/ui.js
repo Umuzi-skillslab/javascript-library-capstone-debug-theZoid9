@@ -109,7 +109,6 @@ function setupEventListeners() {
      // Catalogue button
     catalogueTab.addEventListener("click", function () {
         hideAllSections();
-
         catalogueSection.style.display = "block";
         borrowSection.style.display = "block"; // Borrow belongs with catalogue
     });
@@ -117,7 +116,6 @@ function setupEventListeners() {
     // Members button
     membersTab.addEventListener("click", function () {
         hideAllSections();
-
         memberSection.style.display = "block";
         createMemberForm1();
     });
@@ -125,7 +123,6 @@ function setupEventListeners() {
     // Statistics button
     statisticsTab.addEventListener("click", function () {
         hideAllSections();
-
         statisticsSection.style.display = "block";
     });
 
@@ -208,8 +205,7 @@ function handleBorrowSubmit(event) {
 function handleBookClick(event) {
     console.log("Hit book btn")
     console.log(event);
-    const detailsContainer = document.getElementById("book-details");
-    detailsContainer.classList.remove("hidden");
+  
     // Should use event.target properly // fix
     // Missing: closest() for event delegation // fix 
     const bookCard = event.target.closest(".book-card");
@@ -243,16 +239,17 @@ function handleFilterChange() {
     // Missing: "all" option handling // fix
     // Should use array filter method // fix
     const filtered = books.filter(books => books.category === selectedCategory || selectedCategory === "all");
-    const detailsContainer = document.getElementById("book-details");
-    detailsContainer.classList.add("hidden"); // Hide
+       console.log(document.getElementById("book-details"));
+    document.getElementById("book-details").classList.add("hidden");
     renderBookCatalogue(filtered);
+ 
 }
 
 // Display function with template issues
 //  fix - template literals 
 function displayBookDetails(isbn) {
     const book = findBookByISBN(isbn);
-    console.log(book)
+     document.getElementById("book-details").classList.remove("hidden");
     if (!book) {
         console.error("Book not found for ISBN:", isbn);
         return;
