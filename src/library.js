@@ -299,21 +299,28 @@ function combineBookCollections(
 }
 
 // Function missing rest parameters
-function addMultipleBooks(book1, book2, book3) {
+function addMultipleBooks(...newBooks) {
     // Should use rest parameters to accept unlimited books
-    books.push(book1);
-    books.push(book2);
-    books.push(book3);
+    books.push(...newBooks);
 }
 
 // Function missing destructuring
 function updateMemberInfo(member, updates) {
-    // Should destructure updates object
-    member.name = updates.name;
-    member.email = updates.email;
-    member.membershipType = updates.membershipType;
-    
+
+    const {
+        name,
+        email,
+        membershipType
+    } = updates;
+
+    if (name) member.name = name;
+    if (email) member.email = email;
+    if (membershipType) {
+        member.membershipType = membershipType;
+    }
+
     return member;
+
 }
 
 // Function with no error handling 
@@ -366,14 +373,11 @@ function borrowBook(memberId, isbn) {
 
 // Helper functions with errors
 function findMemberById(id) {
-    // Should use find method
-    console.log("find member by id HIT!")
-    for (var i = 0; i < members.length; i++) {
-        if (members[i].id === id) {  // Wrong operator
-            return members[i];
-        }
-    }
-    // Returns undefined implicitly - should handle explicitly
+
+    return members.find(
+        member => member.id === id
+    ) || null;
+
 }
 
 // Fix - find()
@@ -386,41 +390,79 @@ function findBookByISBN(isbn) {
     return books.find(books => books.isbn === isbn);
 }
 
+// Library Statistics
+// Maintains statistics for the library.
+//
+// Stores:
+//
+// • Total books
+// • Total members
+// • Total borrowings
+//
+// Provides helper methods.
+// ========================================
+
 // Statistics object with missing methods
 const LibraryStats = {
+
     totalBooks: 0,
     totalMembers: 0,
     totalBorrowings: 0,
-    
-    // Missing: method using Math object for calculations
-    // Missing: method using for-of loop
-    // Missing: method returning object with destructuring
-    
-    updateStats: function() {
+
+    updateStats() {
+
         this.totalBooks = books.length;
         this.totalMembers = members.length;
+
     },
-    
-    getMostPopularBook: function() {
-        // Inefficient implementation - should use reduce
-        var maxCheckouts = 0;
-        var popularBook = null;
-        
-        for (var i = 0; i < books.length; i++) {
-            if (books[i].checkedOut.length > maxCheckouts) {
-                maxCheckouts = books[i].checkedOut.length;
-                popularBook = books[i];
-            }
+
+    getMostPopularBook() {
+
+        if (books.length === 0) {
+            return null;
         }
-        
-        return popularBook;
+
+        return books.reduce(
+
+            (popular, current) =>
+
+                current.checkedOut.length >
+                popular.checkedOut.length
+
+                    ? current
+
+                    : popular
+
+        );
+
+    },
+
+    getStatistics() {
+
+        this.updateStats();
+
+        return {
+
+            totalBooks: this.totalBooks,
+            totalMembers: this.totalMembers,
+            totalBorrowings: this.totalBorrowings
+
+        };
+
     }
+
 };
+
 
 // Function with string manipulation errors
 function formatBookInfo(book) {
     // Should use template literals
 
+    if (!book) {
+
+        return "<p>No book selected.</p>";
+
+    }
     // add validation 
     return `
             <h3>${book.title}</h3>
