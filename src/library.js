@@ -1,24 +1,7 @@
 // Library Management System - Starter Code with Complex Errors
 
 // Global state management (scoping issues) // fix
-export let books = [
-    {
-        isbn: "9780134685991",
-        title: "Effective JavaScript",
-        author: "David Herman",
-        year: 2012,
-        availableCopies:2,
-        category: "reference"
-    },
-    {
-        isbn: "9781491950296",
-        title: "Learning React",
-        author: "Alex Banks",
-        year: 2020,
-        availableCopies:1,
-        category: "non-fiction"
-    }
-];
+export let books = [];
 
 //let books = [];  
 export let  members = [{ "id": "M001", "name": "John Smith", "email": "john@gmail.com" }];  
@@ -355,10 +338,10 @@ function borrowBook(memberId, isbn) {
         book.checkOut(memberId);
 
         if(!Array.isArray(member.borrowedBooks)){
-            member.borrowBooks = [];
+            member.borrowedBooks = [];
         }
 
-        member.borrowBooks.push(isbn);
+        member.borrowedBooks.push(isbn);
 
         return true;
 
@@ -498,6 +481,41 @@ function calculateFineAmount(daysLate) {
     );
 
 }
+
+export function initializeLibrary() {
+
+    if (books.length > 0) return;
+
+    books.push(
+        new Book(
+            "9780134685991",
+            "Effective JavaScript",
+            "David Herman",
+            2012,
+            2,
+            "reference"
+        ),
+        new Book(
+            "9781491950296",
+            "Learning React",
+            "Alex Banks",
+            2020,
+            1,
+            "non-fiction"
+        )
+    );
+
+    members.push(
+        new Member(
+            "M001",
+            "John Smith",
+            "john@gmail.com",
+            "standard"
+        )
+    );
+
+}
+
 
 
 export {

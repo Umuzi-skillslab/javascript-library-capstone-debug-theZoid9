@@ -1,6 +1,7 @@
 // Library UI - DOM Manipulation with Complex Errors
-import {findBookByISBN, borrowBook, formatBookInfo, books, members } from "../src/library.js";
+import {findBookByISBN, borrowBook, formatBookInfo, books, members, initializeLibrary } from "../src/library.js";
 import { loadFromLocalStorage } from "../src/storage.js";
+
 
 // Missing: proper initialization with DOMContentLoaded 
 // // fix
@@ -72,9 +73,11 @@ function initializeUI() {
     setupEventListeners();
     
     loadFromLocalStorage();
-    
+    if (books.length === 0) {
+        initializeLibrary();
+    }
     loadCatalogue();
-   
+    
 }
 // fix
 function loadCatalogue() {
