@@ -454,7 +454,7 @@ const LibraryStats = {
 };
 
 
-// Function with string manipulation errors
+// Function with string manipulation errors // fix
 function formatBookInfo(book) {
     // Should use template literals
 
@@ -477,18 +477,60 @@ function formatBookInfo(book) {
 
 // Function with number/type issues
 function calculateFineAmount(daysLate) {
-    // Missing: typeof check
-    // Missing: NaN handling
-    // Missing: null/undefined check
-    
-    var fine = daysLate * LATE_FEE_PER_DAY;
-    
-    // Should use toFixed for currency
-    return fine;
+
+    if (
+        daysLate === undefined ||
+        daysLate === null
+    ) {
+        return 0;
+    }
+
+    if (
+        typeof daysLate !== "number" ||
+        Number.isNaN(daysLate)
+    ) {
+        return 0;
+    }
+
+    return Number(
+        (daysLate * LATE_FEE_PER_DAY)
+        .toFixed(2)
+    );
+
 }
 
-// Missing: module exports 
-export {Book, DigitalBook, Member, PremiumMember, findBookByISBN, borrowBook,formatBookInfo};
+export {
+
+    Book,
+    DigitalBook,
+
+    Member,
+    PremiumMember,
+
+    borrowBook,
+
+    findBookByISBN,
+    findMemberById,
+
+    searchBooksByCategory,
+    getBooksByAuthor,
+
+    combineBookCollections,
+    addMultipleBooks,
+
+    updateMemberInfo,
+
+    calculateFineAmount,
+    calculateTotalLateFees,
+
+    processReturnQueue,
+    findOverdueBooks,
+
+    formatBookInfo,
+
+    LibraryStats
+
+};
 
 // Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
 
