@@ -164,49 +164,106 @@ class PremiumMember extends Member {
     }
 }
 
+
+// Find Overdue Books
+// Searches every book in the library for
+// checkout records that are overdue.
+//
+// Parameters:
+// daysOverdue - Number of days a book
+// must be overdue.
+//
+// Returns:
+// An array containing overdue checkout
+// records.
+// ========================================
+
 // Complex function with nested loops and errors
 function findOverdueBooks(daysOverdue) {
-    var overdue = [];
-    
-    // Inefficient nested loops - should be optimized
-    for (var i = 0; i < books.length; i++) {
-        for (var j = 0; j < books[i].checkedOut.length; j++) {
-            // Missing: actual date checking logic
-            // Wrong variable scoping
-            var checkoutRecord = books[i].checkedOut[j];
-            overdue.push(checkoutRecord);
-        }
+
+    const overdue = [];
+
+    if (typeof daysOverdue !== "number" || daysOverdue < 0) {
+        return overdue;
     }
-    
+
+    for (const book of books) {
+
+        if (!Array.isArray(book.checkedOut)) {
+            continue;
+        }
+
+        for (const record of book.checkedOut) {
+
+            if (
+                record &&
+                record.daysLate !== undefined &&
+                record.daysLate >= daysOverdue
+            ) {
+                overdue.push({
+                    ...record,
+                    isbn: book.isbn,
+                    title: book.title
+                });
+            }
+
+        }
+
+    }
+
     return overdue;
+
 }
+    
 
 // Function with while loop error
 function processReturnQueue(queue) {
-    var index = 0;
+    let index = 0;
     
     // Infinite loop potential
     while (index < queue.length) {
-        var item = queue[index];
+        const item = queue[index];
         
         // Process item
-        console.log("Processing return: " + item);
+        console.log(`Processing return: ${item}`);
         
         // Missing: index increment
+        index++
     }
 }
 
+// Returns:
+// Array of matching books.
+// ========================================
+
 // Recursive function with multiple errors
-function searchBooksByCategory(bookList, category, index) {
-    // Missing: base case
-    // Missing: undefined/null checks
-    // Wrong comparison
-    
-    if (bookList[index].category === category) {
-        return [bookList[index]].concat(searchBooksByCategory(bookList, category, index + 1));
+function searchBooksByCategory(
+    bookList,
+    category,
+    index = 0
+) {
+
+    if (!Array.isArray(bookList)) {
+        return [];
     }
-    
-    return searchBooksByCategory(bookList, category, index + 1);
+
+    if (index >= bookList.length) {
+        return [];
+    }
+
+    const matches =
+        bookList[index].category === category
+            ? [bookList[index]]
+            : [];
+
+    return matches.concat(
+        searchBooksByCategory(
+            bookList,
+            category,
+            index + 1
+        )
+    );
+
 }
 
 // Function missing array methods
@@ -227,15 +284,18 @@ function calculateTotalLateFees(memberRecord) {
 }
 
 // Function missing spread operator
-function combineBookCollections(fiction, nonFiction, reference) {
-    // Should use spread operator
-    var combined = [];
-    
-    for (var i = 0; i < fiction.length; i++) combined.push(fiction[i]);
-    for (var i = 0; i < nonFiction.length; i++) combined.push(nonFiction[i]);
-    for (var i = 0; i < reference.length; i++) combined.push(reference[i]);
-    
-    return combined;
+function combineBookCollections(
+    fiction,
+    nonFiction,
+    reference
+) {
+
+    return [
+        ...fiction,
+        ...nonFiction,
+        ...reference
+    ];
+
 }
 
 // Function missing rest parameters

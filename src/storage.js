@@ -26,7 +26,7 @@ export function loadFromLocalStorage() {
         // Replace contents of the existing arrays
        // books.length = 0;
         books.push(...booksData);
-console.log(books)
+        console.log(books)
         members.length = 0;
         members.push(...membersData);
          console.log(books)
