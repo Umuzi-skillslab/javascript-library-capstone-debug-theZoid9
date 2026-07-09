@@ -4,7 +4,7 @@
 export let books = [];
 
 //let books = [];  
-export let  members = [{ "id": "M001", "name": "John Smith", "email": "john@gmail.com" }];  
+export let  members = [];  
 
 const LATE_FEE_PER_DAY = 0.50;
 const MAX_BOOKS_PER_MEMBER = 5;  
@@ -12,7 +12,7 @@ const MAX_BOOKS_PER_MEMBER = 5;
 // Book class with multiple issues // fix
 
 class Book {
-    constructor(isbn, title, author, year, copies) {
+    constructor(isbn, title, author, year, copies, category) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -20,6 +20,7 @@ class Book {
     // Missing: availableCopies and totalCopies properties // fix
         this.availableCopies = copies;
         this.totalCopies = copies;
+        this.category = category;
         this.checkedOut = [];
     }
     
@@ -323,6 +324,21 @@ function borrowBook(memberId, isbn) {
         const member = findMemberById(memberId);
         const book = findBookByISBN(isbn);
         // No check if member or book exists  // fix
+
+        console.log("books === imported books?", books);
+        console.log("member constructor:", member?.constructor?.name);
+        console.log("book constructor:", book?.constructor?.name);
+
+
+        console.log("Member:", member);
+        console.log("Book:", book);
+
+        console.log("member instanceof Member:", member instanceof Member);
+        console.log("book instanceof Book:", book instanceof Book);
+
+        console.log("member.canBorrow:", member.canBorrow);
+        console.log("book.checkOut:", book.checkOut);
+
         if(!member){
             throw new Error("Member not found");
         }
@@ -513,6 +529,14 @@ export function initializeLibrary() {
             "standard"
         )
     );
+
+        console.log("Books after load:", books);
+    console.log("Members after load:", members);
+
+    console.log(
+        books[0] instanceof Book,
+        members[0] instanceof Member
+);
 
 }
 
