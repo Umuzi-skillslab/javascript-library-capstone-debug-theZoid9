@@ -9,7 +9,8 @@ import {
     Member,
     Book,
      findMemberById,
-     updateMemberInfo
+     updateMemberInfo,
+     findOverdueBooks
 } from "./library.js";
 
 import {
@@ -101,14 +102,13 @@ function initializeUI() {
         saveToLocalStorage();
     }
 
-    
-    loadFromLocalStorage();
 
     loadCatalogue();
     renderMemberList();
+    renderOverdueBooks()
     updateStatisticsDisplay();
     setupEventListeners();
-
+    
 }
 
 // fix - dom
@@ -641,6 +641,56 @@ function handleEditMemberSubmit(event, id) {
     createMemberForm1();
 
     alert("Member updated.");
+
+}
+
+function renderOverdueBooks() {
+
+    const overdue = findOverdueBooks();
+
+    const container =
+        document.getElementById("overdue-list");
+
+    container.innerHTML = "";
+
+    overdue.forEach(book => {
+
+        container.innerHTML += `
+            <p>
+                ${book.memberId}
+                -
+                ${book.title}
+                (${book.daysLate} days)
+            </p>
+        `;
+
+    });
+
+}
+
+function handleReturnSubmit(event) {
+
+    event.preventDefault();
+
+    processReturnQueue([
+        {
+            memberId:
+                document
+                .getElementById("return-member")
+                .value,
+
+            isbn:
+                document
+                .getElementById("return-isbn")
+                .value
+        }
+    ]);
+
+    saveToLocalStorage();
+
+    renderBookCatalogue(books);
+
+    renderMemberList();
 
 }
 // Initialize on DOMContentLoaded
