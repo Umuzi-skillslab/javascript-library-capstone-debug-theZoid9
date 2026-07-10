@@ -329,8 +329,12 @@ function borrowBook(memberId, isbn) {
             throw new Error("Book not found");
         }
 
-        if(!member.canBorrow()){
-            return false;
+        if (!book.isAvailable()) {
+            throw new Error("No copies of this book are currently available.");
+        }
+
+        if (!member.canBorrow()) {
+            throw new Error("Member has reached the borrowing limit.");
         }
 
         book.checkOut(member.id);
@@ -351,9 +355,6 @@ function borrowBook(memberId, isbn) {
         console.error("borrowBook error:", error.message);
         throw error;
     }
-
-   
-
 }
 
 // Helper functions with errors
