@@ -291,8 +291,7 @@ function addMultipleBooks(...newBooks) {
 // Function missing destructuring
 function updateMemberInfo(member, updates) {
 
-    const {
-        name,
+    const { name,
         email,
         membershipType
     } = updates;
@@ -310,9 +309,14 @@ function updateMemberInfo(member, updates) {
 // Function with no error handling 
 // fix - try and catch + type of checks
 function borrowBook(memberId, isbn) {
-    // Missing: try-catch block
-    // Missing: validation for undefined/null
-    // Missing: typeof checks
+    console.log(
+    members.map(member => ({
+        id: member.id,
+        constructor: member.constructor.name,
+        canBorrow: typeof member.canBorrow
+    }))
+);
+
     try {
         if (!memberId || !isbn){
             throw new Error("Member ID and ISBN are required");
@@ -324,20 +328,6 @@ function borrowBook(memberId, isbn) {
         const member = findMemberById(memberId);
         const book = findBookByISBN(isbn);
         // No check if member or book exists  // fix
-
-        console.log("books === imported books?", books);
-        console.log("member constructor:", member?.constructor?.name);
-        console.log("book constructor:", book?.constructor?.name);
-
-
-        console.log("Member:", member);
-        console.log("Book:", book);
-
-        console.log("member instanceof Member:", member instanceof Member);
-        console.log("book instanceof Book:", book instanceof Book);
-
-        console.log("member.canBorrow:", member.canBorrow);
-        console.log("book.checkOut:", book.checkOut);
 
         if(!member){
             throw new Error("Member not found");
@@ -352,6 +342,10 @@ function borrowBook(memberId, isbn) {
         }
 
         book.checkOut(memberId);
+
+        console.log("checkedOut =", book.checkedOut);
+        console.log("available =", book.availableCopies);
+        console.log("books =", books);
 
         if(!Array.isArray(member.borrowedBooks)){
             member.borrowedBooks = [];
@@ -508,7 +502,7 @@ export function initializeLibrary() {
             "Effective JavaScript",
             "David Herman",
             2012,
-            2,
+            1,
             "reference"
         ),
         new Book(
@@ -575,38 +569,4 @@ export {
 
 };
 
-// Missing: proper data structure for ISBN lookups (Map/Set)   <=== why is this here?
-
-
-
-
-const member1 = new Member(
-    1,
-    "John Smith",
-    "john@gmail.com",
-    "standard"
-);
-
-const premium1 = new PremiumMember(
-    2,
-    "Sarah Khan",
-    "sarah@gmail.com"
-);
-
-const normalBook = new Book(
-    '978-0-123',
-    'Test Book',
-    'Author Name', 
-    2020,
-    5
-);
-const book = new DigitalBook(
-    "9780134685991",
-    "Effective JavaScript",
-    "David Herman",
-    2012,
-    2,
-    5,
-    "PDF"
-);
 

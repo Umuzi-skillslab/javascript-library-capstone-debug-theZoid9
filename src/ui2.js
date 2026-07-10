@@ -1,0 +1,750 @@
+// Library UI - DOM Manipulation with Complex Errors
+
+import {
+    findBookByISBN,
+    borrowBook,
+    formatBookInfo,
+    books,
+    members,
+    initializeLibrary,
+
+    Member
+} from "../src/library.js";
+
+import {
+    loadFromLocalStorage,
+    saveToLocalStorage
+} from "../src/storage.js";
+
+// Missing: proper initialization with DOMContentLoaded
+// fix
+
+// ========================================
+// Global DOM References
+// These variables store references to the
+// HTML elements used throughout the UI.
+// ========================================
+
+// Sections
+let borrowSection;
+let memberSection;
+let statisticsSection;
+let catalogueSection;
+let catalogueContainer;
+
+// Navigation Tabs
+let catalogueTab;
+let membersTab;
+let statisticsTab;
+
+// Form Controls
+let searchInput;
+let filterDropdown;
+let borrowForm;
+
+// ========================================
+// Hide All Sections
+// Hides every page section before another
+// section is displayed.
+// ========================================
+
+// helper function - hides all sections
+function hideAllSections() {
+
+    if (catalogueSection)
+        catalogueSection.style.display = "none";
+
+    if (borrowSection)
+        borrowSection.style.display = "none";
+
+    if (memberSection)
+        memberSection.style.display = "none";
+
+    if (statisticsSection)
+        statisticsSection.style.display = "none";
+
+}
+
+// ========================================
+// Initialize User Interface
+//
+// Loads every DOM element,
+// restores saved library data,
+// attaches event listeners,
+// and renders the catalogue.
+//
+// Called once after the page finishes
+// loading.
+// ========================================
+
+// fix
+function initializeUI() {
+
+    // Forms
+    borrowForm = document.getElementById("borrow-form");
+
+    // Inputs
+    searchInput = document.getElementById("search");
+    filterDropdown = document.getElementById("filter-category");
+
+    // Navigation
+    catalogueTab = document.getElementById("catalogue-tab");
+    membersTab = document.getElementById("members-tab");
+    statisticsTab = document.getElementById("statistics-tab");
+
+    // Sections
+    catalogueSection = document.getElementById("catalogue-section");
+    borrowSection = document.getElementById("borrow-section");
+    memberSection = document.getElementById("member-section");
+    statisticsSection = document.getElementById("statistics-section");
+
+    // Catalogue Container
+    catalogueContainer =
+        document.getElementById("catalogue-list");
+
+    // Validation
+
+    if (!catalogueContainer) {
+
+        console.error("Catalogue container not found.");
+
+        return;
+
+    }
+
+    if (!searchInput) {
+
+        console.error("Search input not found.");
+
+        return;
+
+    }
+
+    if (!filterDropdown) {
+        console.error("Filter dropdown not found.");
+        return;
+
+    }
+
+    // Load saved data
+
+    loadFromLocalStorage();
+
+    // Display books
+       if (books.length === 0) {
+            initializeLibrary();
+     }
+     console.log(books)
+
+
+    loadCatalogue();
+
+    // Display statistics
+
+    updateStatisticsDisplay();
+ 
+    // Register events
+
+    setupEventListeners();
+
+}
+
+// ========================================
+// Load Catalogue
+//
+// Displays every book currently stored
+// in the books array.
+//
+// ========================================
+
+// fix
+function loadCatalogue() {
+
+    renderBookCatalogue(books);
+
+}
+
+// ========================================
+// Setup Event Listeners
+//
+// Connects user actions to JavaScript
+// functions.
+//
+// Handles:
+//
+// • Searching
+// • Filtering
+// • Borrow form
+// • Book clicks
+// • Navigation tabs
+//
+// ========================================
+
+// fix
+function setupEventListeners() {
+
+    // Search
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            handleSearch
+        );
+
+    }
+
+    // Category Filter
+
+    if (filterDropdown) {
+
+        filterDropdown.addEventListener(
+            "change",
+            handleFilterChange
+        );
+
+    }
+
+    // Borrow Form
+
+    if (borrowForm) {
+
+        borrowForm.addEventListener(
+            "submit",
+            handleBorrowSubmit
+        );
+
+    }
+
+    // Event Delegation
+
+    if (catalogueContainer) {
+
+        catalogueContainer.addEventListener(
+            "click",
+            handleBookClick
+        );
+
+    }
+
+    // ========================
+    // Navigation Tabs
+    // ========================
+
+    if (catalogueTab) {
+        catalogueTab.addEventListener(
+            "click",
+            () => {
+                hideAllSections();
+                catalogueSection.style.display = "block";
+                borrowSection.style.display = "block";
+            }
+        );
+    }
+
+    if (membersTab) {
+        membersTab.addEventListener(
+            "click",
+            () => {
+                hideAllSections();
+                memberSection.style.display = "block";
+                createMemberForm1();
+            }
+        );
+    }
+
+    if (statisticsTab) {
+        statisticsTab.addEventListener(
+            "click",
+            () => {
+                hideAllSections();
+                statisticsSection.style.display = "block";
+                updateStatisticsDisplay();
+            }
+        );
+    }
+
+    console.log("Event listeners loaded.");
+
+}
+
+
+// ========================================
+// Render Book Catalogue
+//
+// Displays every book inside the catalogue
+// section using dynamically created HTML.
+//
+// Parameters:
+// bookList - Array of books to display.
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// Complex DOM rendering with errors
+// fix - template literals
+function renderBookCatalogue(bookList) {
+
+    // Clear previous books
+    catalogueContainer.innerHTML = "";
+
+    // Display a message if there are no books
+    if (!Array.isArray(bookList) || bookList.length === 0) {
+
+        catalogueContainer.innerHTML = `
+            <p class="empty-message">
+                No books found.
+            </p>
+        `;
+
+        return;
+
+    }
+
+    // Improves performance by updating the DOM only once
+    const fragment = document.createDocumentFragment();
+
+    // Create one card for each book
+    for (const book of bookList) {
+
+        const bookCard = document.createElement("div");
+
+        bookCard.className = "book-card";
+
+        // Store the ISBN for event delegation
+        bookCard.dataset.isbn = book.isbn;
+
+        // Display book information
+        bookCard.innerHTML = `
+
+            <h3>${book.title}</h3>
+
+            <p><strong>Author:</strong> ${book.author}</p>
+
+            <p><strong>Category:</strong> ${book.category}</p>
+
+            <p><strong>Year:</strong> ${book.year}</p>
+
+            <p><strong>Available:</strong> ${book.availableCopies}</p>
+
+        `;
+
+        fragment.appendChild(bookCard);
+
+    }
+
+    catalogueContainer.appendChild(fragment);
+
+}
+
+
+// Parameters:
+// event - Mouse click event.
+
+
+// Function missing event delegation
+// fix
+function handleBookClick(event) {
+
+    // Find the nearest book card
+    const bookCard = event.target.closest(".book-card");
+
+    if (!bookCard) {
+        return;
+    }
+
+    // Read the stored ISBN
+    const isbn = bookCard.dataset.isbn;
+
+    displayBookDetails(isbn);
+
+}
+
+// ========================================
+// Display Book Details
+//
+// Finds the selected book and displays
+// all of its information in the details
+// panel.
+//
+// Parameters:
+// isbn - ISBN of the selected book.
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// Display function with template issues
+// fix - template literals
+function displayBookDetails(isbn) {
+
+    const detailsContainer =
+        document.getElementById("book-details");
+
+    if (!detailsContainer) {
+
+        console.error("Book details container not found.");
+
+        return;
+
+    }
+
+    const book = findBookByISBN(isbn);
+
+    if (!book) {
+
+        detailsContainer.innerHTML = `
+            <p>Book not found.</p>
+        `;
+
+        return;
+
+    }
+
+    // Show hidden panel
+    detailsContainer.classList.remove("hidden");
+
+    // Uses helper function from library.js
+    detailsContainer.innerHTML = formatBookInfo(book);
+
+}
+
+// ========================================
+// Handle Borrow Form Submission
+//
+// Prevents the page from refreshing,
+// validates user input,
+// attempts to borrow the selected book,
+// updates storage,
+// refreshes the catalogue and statistics.
+//
+// Parameters:
+// event - Form submit event.
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// Function with event handling errors
+// fix
+function handleBorrowSubmit(event) {
+
+    event.preventDefault();
+
+    const memberIdInput = document.getElementById("member-id");
+    const isbnInput = document.getElementById("isbn");
+
+    const memberId = memberIdInput.value.trim();
+    const isbn = isbnInput.value.trim();
+
+    if (!memberId || !isbn) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    try {
+
+        const success = borrowBook(memberId, isbn);
+        console.log(books);
+        if (success) {
+            alert("Book borrowed successfully.");
+            saveToLocalStorage();
+            renderBookCatalogue(books);
+            updateStatisticsDisplay();
+            event.target.reset();
+
+        }
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+}
+
+// Search function with errors
+// fix - filter()
+function handleSearch(event) {
+
+    const searchTerm =
+        event.target.value
+            .trim()
+            .toLowerCase();
+
+    const filteredBooks = books.filter(book =>
+
+        book.title
+            .toLowerCase()
+            .includes(searchTerm)
+
+        ||
+
+        book.author
+            .toLowerCase()
+            .includes(searchTerm)
+
+    );
+
+    renderBookCatalogue(filteredBooks);
+
+}
+
+// ========================================
+// Handle Category Filter
+//
+// Displays only books belonging
+// to the selected category.
+//
+// Parameters:
+// None.
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// Function with filter errors
+// Fix - filter()
+function handleFilterChange() {
+
+    const selectedCategory =
+        filterDropdown.value;
+
+    const details =
+        document.getElementById("book-details");
+
+    if (details) {
+
+        details.classList.add("hidden");
+
+    }
+
+    if (selectedCategory === "all") {
+
+        renderBookCatalogue(books);
+
+        return;
+
+    }
+
+    const filteredBooks = books.filter(book =>
+
+        book.category === selectedCategory
+
+    );
+
+    renderBookCatalogue(filteredBooks);
+
+}
+
+
+// Statistics display with errors
+// fix
+function updateStatisticsDisplay() {
+        console.log("Updating statistics...");
+    const totalBooks =
+        document.querySelector(".total-books");
+
+    const totalMembers =
+        document.querySelector(".total-members");
+
+    const availableBooks =
+        document.querySelector(".available-books");
+
+    const borrowedBooks =
+        document.querySelector(".books-borrowed");
+    console.log("Borrowed =", borrowedBooks);
+    if (totalBooks) {
+        totalBooks.textContent =
+            books.length;
+    }
+
+    if (totalMembers) {
+        totalMembers.textContent =
+            members.length;
+    }
+
+    console.log(
+    books.map(book => ({
+        title: book.title,
+        checkedOut: book.checkedOut,
+        length: book.checkedOut.length
+    }))
+);
+    if (availableBooks) {
+
+        const available = books.reduce((total, book) =>
+                total + book.availableCopies,
+            0
+        );
+
+        availableBooks.textContent =
+            available;
+
+    }
+
+    if (borrowedBooks) {
+        const borrowed = books.reduce(
+            (total, book) =>
+                total + book.checkedOut.length,0
+        );
+
+        borrowedBooks.textContent =
+            borrowed;
+
+    }
+
+
+}
+
+// Create Member Form
+// Dynamic form generation with errors
+// fix
+function createMemberForm1() {
+        console.log("createMemberForm called");
+    const formContainer = document.getElementById("member-form");
+
+    // Clear any existing form
+    formContainer.innerHTML = "";
+
+    // Create form
+    const form = document.createElement("form");
+    form.id = "member-registration-form";
+
+    // Name label
+    const nameLabel = document.createElement("label");
+    nameLabel.htmlFor = "name";
+    nameLabel.textContent = "Name";
+
+    // Name input
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.id = "name";
+    nameInput.placeholder = "Enter member name";
+    nameInput.required = true;
+
+    // Email label
+    const emailLabel = document.createElement("label");
+    emailLabel.htmlFor = "email";
+    emailLabel.textContent = "Email";
+
+    // Email input
+    const emailInput = document.createElement("input");
+    emailInput.type = "email";      // Fixed
+    emailInput.id = "email";
+    emailInput.placeholder = "Enter email address";
+    emailInput.required = true;
+
+    // Member ID label
+    const idLabel = document.createElement("label");
+    idLabel.htmlFor = "member-id";
+    idLabel.textContent = "Member ID";
+
+    // Member ID input
+    const idInput = document.createElement("input");
+    idInput.type = "text";
+    idInput.id = "member-id";
+    idInput.placeholder = "Enter member ID";
+    idInput.required = true;
+
+    // Submit button
+    const submitButton = document.createElement("button");
+    submitButton.type = "submit";
+    submitButton.textContent = "Add Member";
+
+    // Add everything to the form
+    form.appendChild(nameLabel);
+    form.appendChild(nameInput);
+
+    form.appendChild(emailLabel);
+    form.appendChild(emailInput);
+
+    form.appendChild(idLabel);
+    form.appendChild(idInput);
+
+    form.appendChild(submitButton);
+
+    // Add form to page
+    formContainer.appendChild(form);
+    form.addEventListener("submit", handleMemberSubmit);
+}
+
+
+// Reads information from the form,
+// validates the input,
+// prevents duplicate IDs,
+// stores the new member,
+// saves to localStorage,
+// refreshes statistics.
+//
+// Parameters:
+// event
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// helper function
+function handleMemberSubmit(event) {
+
+    event.preventDefault();
+
+     const form = event.target;
+
+        const id = form.querySelector("#member-id").value.trim();
+        const name = form.querySelector("#name").value.trim();
+        const email = form.querySelector("#email").value.trim();
+
+    if (!id || !name || !email) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    // Prevent duplicate IDs
+
+    const exists = members.some(
+        member => member.id === id
+    );
+
+    if (exists) {
+        alert("Member ID already exists.");
+        return;
+    }
+
+    const newMember = new Member(
+
+        id,
+        name,
+        email,
+        "standard"
+
+    );
+
+    members.push(newMember);
+    saveToLocalStorage();
+    updateStatisticsDisplay();
+    alert("Member registered successfully.");
+    event.target.reset();
+
+}
+
+// ========================================
+// Start Application
+//
+// Waits until the HTML document
+// has finished loading before
+// initializing the UI.
+//
+// Returns:
+// Nothing.
+// ========================================
+
+// Initialize on DOMContentLoaded
+document.addEventListener(
+
+    "DOMContentLoaded", () => { initializeUI();
+
+    }
+
+);
