@@ -416,7 +416,7 @@ function updateStatisticsDisplay() {
 
 // Create Member Form
 // Dynamic form generation with errors
-// fix - Template Literals
+// fix - use Template Literals
 function createMemberForm1() {
         console.log("createMemberForm called");
     const formContainer = document.getElementById("member-form");
@@ -503,6 +503,8 @@ function hideAllSections() {
 
 }
 
+
+// fix - Template Literals
 function renderMemberList() {
     const container = document.getElementById("member-list");
 
@@ -554,6 +556,7 @@ function handleMemberClick(event) {
 
 }
 
+// fix - Template Literals
 function showEditMemberForm(id) {
 
     const member = findMemberById(id);

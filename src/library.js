@@ -154,32 +154,29 @@ class PremiumMember extends Member {
 }
 
 // Complex function with nested loops and errors
-function findOverdueBooks(daysOverdue) {
+function findOverdueBooks() {
 
     const overdue = [];
-
-    if (typeof daysOverdue !== "number" || daysOverdue < 0) {
-        return overdue;
-    }
+    const today = new Date();
 
     for (const book of books) {
 
-        if (!Array.isArray(book.checkedOut)) {
-            continue;
-        }
-
         for (const record of book.checkedOut) {
 
-            if (
-                record &&
-                record.daysLate !== undefined &&
-                record.daysLate >= daysOverdue
-            ) {
+            if (today > new Date(record.dueDate)) {
+
+                const daysLate = Math.floor(
+                    (today - new Date(record.dueDate))
+                    / (1000 * 60 * 60 * 24)
+                );
+
                 overdue.push({
-                    ...record,
+                    memberId: record.memberId,
                     isbn: book.isbn,
-                    title: book.title
+                    title: book.title,
+                    daysLate
                 });
+
             }
 
         }
@@ -192,18 +189,46 @@ function findOverdueBooks(daysOverdue) {
     
 // Function with while loop error
 function processReturnQueue(queue) {
+
     let index = 0;
-    
-    // Infinite loop potential
+
     while (index < queue.length) {
+
         const item = queue[index];
-        
-        // Process item
-        console.log(`Processing return: ${item}`);
-        
-        // Missing: index increment
-        index++
+
+        const book =
+            findBookByISBN(item.isbn);
+
+        const member =
+            findMemberById(item.memberId);
+
+        if (book && member) {
+
+            book.availableCopies++;
+
+            book.checkedOut =
+                book.checkedOut.filter(
+
+                    checkout =>
+                        checkout.memberId !==
+                        item.memberId
+
+                );
+
+            member.borrowedBooks =
+                member.borrowedBooks.filter(
+
+                    isbn =>
+                        isbn !== item.isbn
+
+                );
+
+        }
+
+        index++;
+
     }
+
 }
 
 // Recursive function with multiple errors
@@ -308,7 +333,7 @@ function borrowBook(memberId, isbn) {
             return false;
         }
 
-        book.checkOut(memberId);
+        book.checkOut(member.id);
 
         console.log("checkedOut =", book.checkedOut);
         console.log("available =", book.availableCopies);
@@ -318,7 +343,7 @@ function borrowBook(memberId, isbn) {
             member.borrowedBooks = [];
         }
 
-        member.borrowedBooks.push(isbn);
+        member.borrowedBooks.push(book.isbn);
        
         return true;
 
@@ -362,9 +387,19 @@ const LibraryStats = {
     totalBorrowings: 0,
 
     updateStats() {
+        this.totalBooks =
+        books.length;
 
-        this.totalBooks = books.length;
-        this.totalMembers = members.length;
+        this.totalMembers =
+            members.length;
+
+        this.totalBorrowings =
+            books.reduce(
+                (total, book) =>
+                    total +
+                    book.checkedOut.length,
+                0
+            );
 
     },
 
@@ -476,5 +511,4 @@ export {
     LibraryStats
 
 };
-
 
