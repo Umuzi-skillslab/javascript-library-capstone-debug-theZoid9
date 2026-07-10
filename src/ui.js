@@ -188,7 +188,6 @@ function setupEventListeners() {
 
 }
 
-// Complex DOM rendering with errors - dom
 // fix - template literals
 function renderBookCatalogue(bookList) {
 
@@ -242,7 +241,6 @@ function renderBookCatalogue(bookList) {
 
 }
 
-// Function missing event delegation
 //dom
 // fix
 function handleBookClick(event) {
