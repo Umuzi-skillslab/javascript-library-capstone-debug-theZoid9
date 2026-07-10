@@ -61,9 +61,9 @@ class Book {
 // Digital book class with inheritance problems // 
 
 class DigitalBook extends Book {
-    constructor(isbn, title, author, year, copies, fileSize, format) {
+    constructor(isbn, title, author, year, copies, category, fileSize, format) {
         // Missing: super() call with correct parameters // fix
-        super(isbn, title, author, year, copies);
+        super(isbn, title, author, year, copies, category);
         this.fileSize = fileSize;
         this.format = format;
         this.downloads = 0;
@@ -113,7 +113,7 @@ class Member {
     }
 
     // Missing: method using destructuring //  fix
-
+   // destructuring
     getMemberInfo() {
         const { id, name, email, membershipType } = this;
 
@@ -124,8 +124,7 @@ class Member {
             membershipType
         };
     }
-    
-         
+        
     canBorrow() {
         return this.borrowedBooks.length < MAX_BOOKS_PER_MEMBER;
     }
@@ -244,12 +243,7 @@ function calculateTotalLateFees(memberRecord) {
 }
 
 // fix - spread operator
-function combineBookCollections(
-    fiction,
-    nonFiction,
-    reference
-) {
-
+function combineBookCollections(fiction, nonFiction, reference ) {
     return [
         ...fiction,
         ...nonFiction,
@@ -265,12 +259,10 @@ function addMultipleBooks(...newBooks) {
 }
 
 // Function missing destructuring
+// fix - destructuring
 function updateMemberInfo(member, updates) {
 
-    const { name,
-        email,
-        membershipType
-    } = updates;
+    const { name, email, membershipType } = updates;
 
     if (name) member.name = name;
     if (email) member.email = email;
@@ -321,7 +313,7 @@ function borrowBook(memberId, isbn) {
         }
 
         member.borrowedBooks.push(isbn);
-
+       
         return true;
 
     }catch(error){
@@ -345,6 +337,7 @@ function findMemberById(id) {
 }
 
 // Fix - find()
+// pure
 function findBookByISBN(isbn) {
     console.log("hit get book isbn!")
 
@@ -426,10 +419,7 @@ function formatBookInfo(book) {
 // Function with number/type issues
 function calculateFineAmount(daysLate) {
 
-    if (
-        daysLate === undefined ||
-        daysLate === null
-    ) {
+    if (daysLate === undefined || daysLate === null) {
         return 0;
     }
 
@@ -446,9 +436,6 @@ function calculateFineAmount(daysLate) {
     );
 
 }
-
-
-
 
 
 export {

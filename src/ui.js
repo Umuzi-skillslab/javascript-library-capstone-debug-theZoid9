@@ -7,7 +7,9 @@ import {
     books,
     members,
     Member,
-    Book
+    Book,
+     findMemberById,
+     updateMemberInfo
 } from "./library.js";
 
 import {
@@ -17,12 +19,7 @@ import {
 
 import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "./utils.js"
 
-
-// ========================================
 // Global DOM References
-// These variables store references to the
-// HTML elements used throughout the UI.
-// ========================================
 
 // Sections
 let borrowSection;
@@ -41,8 +38,8 @@ let searchInput;
 let filterDropdown;
 let borrowForm;
 
-
-
+// Members
+let memberList = document.getElementById("member-list");
 
 // fix - dom
 function initializeUI() {
@@ -67,6 +64,10 @@ function initializeUI() {
 
     // Catalogue Container
     catalogueContainer = document.getElementById("catalogue-list");
+
+    // Members
+
+    memberList = document.getElementById("member-list");
 
     // Validation
 
@@ -95,12 +96,16 @@ function initializeUI() {
     const loaded = loadFromLocalStorage();
    
     if (!loaded) {
+
         initializeLibrary();
         saveToLocalStorage();
     }
 
+    
     loadFromLocalStorage();
+
     loadCatalogue();
+    renderMemberList();
     updateStatisticsDisplay();
     setupEventListeners();
 
@@ -145,6 +150,10 @@ function setupEventListeners() {
                 borrowSection.style.display = "block";
             }
         );
+    }
+
+    if( memberList){
+        memberList.addEventListener("click", handleMemberClick);
     }
 
     if (membersTab) {
@@ -334,6 +343,7 @@ function handleFilterChange() {
 }
 
 // helper function -  Event function
+// some()
 function handleMemberSubmit(event) {
 
     event.preventDefault();
@@ -359,16 +369,15 @@ function handleMemberSubmit(event) {
     }
 
     const newMember = new Member(
-
         id,
         name,
         email,
         "standard"
-
     );
 
     members.push(newMember);
     saveToLocalStorage();
+    renderMemberList();
     updateStatisticsDisplay();
     alert("Member registered successfully.");
     event.target.reset();
@@ -376,10 +385,12 @@ function handleMemberSubmit(event) {
 }
 
 // Statistics display dataq
-// fix - dom 
+// fix - dom  - use Template Literals
 function updateStatisticsDisplay() {
     console.log("Updating statistics...");
+
     const stats = getLibraryStatistics(books, members);
+
     const totalBooks = document.querySelector(".total-books");
     const totalMembers = document.querySelector(".total-members");
     const availableBooks = document.querySelector(".available-books");
@@ -405,7 +416,7 @@ function updateStatisticsDisplay() {
 
 // Create Member Form
 // Dynamic form generation with errors
-// fix
+// fix - Template Literals
 function createMemberForm1() {
         console.log("createMemberForm called");
     const formContainer = document.getElementById("member-form");
@@ -492,6 +503,143 @@ function hideAllSections() {
 
 }
 
+function renderMemberList() {
+    const container = document.getElementById("member-list");
+
+    container.innerHTML = "";
+   
+    members.forEach(member => {
+       
+        const card = document.createElement("div");
+
+        card.className = "member-card";
+
+        card.innerHTML = `
+            <h3>${member.name}</h3>
+
+            <p>${member.id}</p>
+
+            <p>${member.email}</p>
+
+            <p>${member.membershipType}</p>
+
+            <p>
+                Borrowed:
+                ${member.borrowedBooks.length}
+            </p>
+
+            <button class="edit-member"
+                data-id="${member.id}">
+                Edit
+            </button>
+
+        `;
+       
+        container.appendChild(card);
+
+    });
+}
+
+function handleMemberClick(event) {
+
+    const button = event.target.closest(".edit-member");
+
+    if (!button) {
+        return;
+    }
+
+    const id = button.dataset.id;
+
+    showEditMemberForm(id);
+
+}
+
+function showEditMemberForm(id) {
+
+    const member = findMemberById(id);
+
+    if (!member) {
+        alert("Member not found.");
+        return;
+    }
+
+    const formContainer =
+        document.getElementById("member-form");
+
+    formContainer.innerHTML = `
+        <form id="edit-member-form">
+
+            <input
+                id="name"
+                value="${member.name}"
+                required
+            >
+
+            <input
+                id="email"
+                value="${member.email}"
+                required
+            >
+
+            <select id="membership-type">
+
+                <option value="standard"
+                    ${member.membershipType === "standard" ? "selected" : ""}>
+                    Standard
+                </option>
+
+                <option value="premium"
+                    ${member.membershipType === "premium" ? "selected" : ""}>
+                    Premium
+                </option>
+
+            </select>
+
+            <button type="submit">
+                Save Changes
+            </button>
+
+        </form>
+    `;
+
+    document
+        .getElementById("edit-member-form")
+        .addEventListener(
+            "submit",
+            event => handleEditMemberSubmit(event, id)
+        );
+
+}
+
+function handleEditMemberSubmit(event, id) {
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const membershipType =
+        document.getElementById("membership-type").value;
+
+    const member = findMemberById(id);
+
+    updateMemberInfo(member, {
+        name,
+        email,
+        membershipType
+    });
+
+    saveToLocalStorage();
+
+    renderMemberList();
+    createMemberForm1();
+
+    alert("Member updated.");
+
+}
 // Initialize on DOMContentLoaded
 document.addEventListener(
 
