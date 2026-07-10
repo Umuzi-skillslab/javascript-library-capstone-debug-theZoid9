@@ -648,19 +648,37 @@ function renderOverdueBooks() {
 
     const overdue = findOverdueBooks();
 
-    const container =
+    const count =
+        document.getElementById("overdue-count");
+
+    const list =
         document.getElementById("overdue-list");
 
-    container.innerHTML = "";
+    if (!count || !list) {
+        return;
+    }
+
+    count.textContent = overdue.length;
+
+    list.innerHTML = "";
+
+    if (overdue.length === 0) {
+
+        list.innerHTML = `
+            <p>No overdue books.</p>
+        `;
+
+        return;
+    }
 
     overdue.forEach(book => {
 
-        container.innerHTML += `
+        list.innerHTML += `
             <p>
-                ${book.memberId}
-                -
                 ${book.title}
-                (${book.daysLate} days)
+                -
+                ${book.memberId}
+                (${book.daysLate} days late)
             </p>
         `;
 
