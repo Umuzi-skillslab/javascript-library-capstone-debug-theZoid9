@@ -797,11 +797,133 @@ button.btn-danger:hover {
     background: var(--muted);
 }
 
+
+
 /* --- Selection --- */
 ::selection {
     background: rgba(201,168,76,0.3);
     color: var(--fg);
 }
+#member-form form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#member-form input,
+#member-form select {
+    flex: 1;
+    min-width: 160px;
+}
+
+/* Edit Member heading */
+#member-form h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    color: var(--fg);
+}
+
+/* Description under heading */
+.form-description {
+    margin-bottom: 1.75rem;
+    padding: 1rem 1.25rem;
+
+    color: var(--fg-dim);
+    line-height: 1.6;
+
+    background: var(--card);
+   
+    border-radius: var(--radius-sm);
+}
+
+/* Edit form layout */
+#edit-member-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+#edit-member-form input,
+#edit-member-form select {
+    width: 50%;
+    height: 52px;
+    padding: 6px;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+}
+/* Buttons row */
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Keep all buttons the same size */
+.form-buttons button {
+    flex: 1;
+    min-width: 170px;
+
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+/* Save Changes */
+.form-buttons button[type="submit"] {
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+}
+
+.form-buttons button[type="submit"]:hover {
+    background: #d4b45a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(201,168,76,0.3);
+}
+
+/* Cancel */
+#cancel-edit {
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+}
+
+#cancel-edit:hover {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+}
+
+/* Delete */
+#delete-member {
+    color: #d97b7b;
+    background: transparent;
+    border: 1px solid rgba(217,123,123,0.3);
+}
+
+#delete-member:hover {
+    background: rgba(217,123,123,0.12);
+    border-color: rgba(217,123,123,0.6);
+    transform: translateY(-2px);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .form-buttons button {
+        width: 100%;
+    }
+}
+
 
 /* --- Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {

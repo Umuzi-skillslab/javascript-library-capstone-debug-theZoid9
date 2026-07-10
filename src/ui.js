@@ -184,7 +184,34 @@ function setupEventListeners() {
         );
     }
 
+    // members buttons  rework later
+    document
+    .getElementById("cancel-edit")
+    .addEventListener("click", () => {
+
+        renderMemberMessage(
+            "Member editing cancelled. You can register a new member.",
+            "info"
+        );
+
+        createMemberForm1();
+
+    });
+
     console.log("Event listeners loaded.");
+
+    document
+    .getElementById("delete-member")
+    .addEventListener("click", () => {
+
+        deleteMember(id);
+
+        renderMemberMessage(
+            "🗑️ Member deleted successfully.",
+            "success"
+        );
+
+    });
 
 }
 
@@ -557,6 +584,7 @@ function handleMemberClick(event) {
     }
 
     const id = button.dataset.id;
+    const form = document.getElementById("edit-member-form");
 
     showEditMemberForm(id);
 
@@ -575,48 +603,94 @@ function showEditMemberForm(id) {
     const formContainer =
         document.getElementById("member-form");
 
-    formContainer.innerHTML = `
-        <form id="edit-member-form">
+        formContainer.innerHTML = `
+            <h2>Edit Member</h2>
 
-            <input
-                id="name"
-                value="${member.name}"
-                required
-            >
+            <p class="form-description">
+                Update this member's information below.
+            </p>
 
-            <input
-                id="email"
-                value="${member.email}"
-                required
-            >
+            <form id="edit-member-form">
 
-            <select id="membership-type">
+                <input
+                    id="name"
+                    value="${member.name}"
+                    required
+                >
 
-                <option value="standard"
-                    ${member.membershipType === "standard" ? "selected" : ""}>
-                    Standard
-                </option>
+                <input
+                    id="email"
+                    value="${member.email}"
+                    required
+                >
 
-                <option value="premium"
-                    ${member.membershipType === "premium" ? "selected" : ""}>
-                    Premium
-                </option>
+                <select id="membership-type">
 
-            </select>
+                    <option
+                        value="standard"
+                        ${member.membershipType === "standard" ? "selected" : ""}>
+                        Standard
+                    </option>
 
-            <button type="submit">
-                Save Changes
-            </button>
+                    <option
+                        value="premium"
+                        ${member.membershipType === "premium" ? "selected" : ""}>
+                        Premium
+                    </option>
 
-        </form>
-    `;
+                </select>
 
+                <div class="form-buttons">
+
+                    <button type="submit">
+                        Save Changes
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancel-edit">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="delete-member">
+                        Delete Member
+                    </button>
+
+                </div>
+
+            </form>
+        `;
     document
         .getElementById("edit-member-form")
         .addEventListener(
             "submit",
             event => handleEditMemberSubmit(event, id)
         );
+
+    const form = document.getElementById("member-form");
+
+    form.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    document.getElementById("name").focus();
+}
+
+
+// Help funtion for form 
+function renderMemberMessage(message, type = "success") {
+
+    const container =
+        document.getElementById("member-message");
+
+    container.innerHTML = `
+        <div class="member-message ${type}">
+            ${message}
+        </div>
+    `;
 
 }
 
