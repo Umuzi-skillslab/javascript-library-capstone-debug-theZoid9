@@ -52,7 +52,13 @@ class Book {
             throw new Error("Member already checked out this book");
         }
 
-        this.checkedOut.push(memberId);
+        this.checkedOut.push({
+            memberId,
+            borrowDate: new Date(),
+            dueDate: new Date(
+                Date.now() + 14 * 24 * 60 * 60 * 1000
+            )
+        });
         this.availableCopies--;
         return true;
     }

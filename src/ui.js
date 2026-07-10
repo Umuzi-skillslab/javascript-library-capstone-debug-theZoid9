@@ -39,7 +39,7 @@ let filterDropdown;
 let borrowForm;
 
 // Members
-let memberList = document.getElementById("member-list");
+let memberList;
 
 // fix - dom
 function initializeUI() {
