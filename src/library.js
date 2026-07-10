@@ -185,7 +185,6 @@ function findOverdueBooks(daysOverdue) {
 
 }
     
-
 // Function with while loop error
 function processReturnQueue(queue) {
     let index = 0;
@@ -244,7 +243,7 @@ function calculateTotalLateFees(memberRecord) {
     }, 0);
 }
 
-// Function missing spread operator
+// fix - spread operator
 function combineBookCollections(
     fiction,
     nonFiction,
@@ -259,7 +258,7 @@ function combineBookCollections(
 
 }
 
-// Function missing rest parameters
+// fix - spread operator
 function addMultipleBooks(...newBooks) {
     // Should use rest parameters to accept unlimited books
     books.push(...newBooks);
@@ -286,13 +285,6 @@ function updateMemberInfo(member, updates) {
 // Function with no error handling 
 // fix - try and catch + type of checks
 function borrowBook(memberId, isbn) {
-    console.log(
-    members.map(member => ({
-        id: member.id,
-        constructor: member.constructor.name,
-        canBorrow: typeof member.canBorrow
-    }))
-);
 
     try {
         if (!memberId || !isbn){
@@ -342,6 +334,8 @@ function borrowBook(memberId, isbn) {
 }
 
 // Helper functions with errors
+// fix - Find()
+// Pure
 function findMemberById(id) {
 
     return members.find(
@@ -361,9 +355,6 @@ function findBookByISBN(isbn) {
 }
 
 // Library Statistics
-// Maintains statistics for the library.
-// ========================================
-
 // Statistics object with missing methods
 const LibraryStats = {
 
@@ -412,15 +403,13 @@ const LibraryStats = {
 
 };
 
-
 // Function with string manipulation errors // fix
+// Template Literals
 function formatBookInfo(book) {
     // Should use template literals
 
     if (!book) {
-
-        return "<p>No book selected.</p>";
-
+         return "<p>No book selected.</p>";
     }
     // add validation 
     return `

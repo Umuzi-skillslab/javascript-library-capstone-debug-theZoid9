@@ -17,8 +17,6 @@ import {
 
 import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "./utils.js"
 
-// Missing: proper initialization with DOMContentLoaded
-// fix
 
 // ========================================
 // Global DOM References
@@ -83,8 +81,7 @@ function initializeUI() {
     statisticsSection = document.getElementById("statistics-section");
 
     // Catalogue Container
-    catalogueContainer =
-        document.getElementById("catalogue-list");
+    catalogueContainer = document.getElementById("catalogue-list");
 
     // Validation
 
@@ -110,21 +107,16 @@ function initializeUI() {
 
     }
 
-    // Load saved data
     const loaded = loadFromLocalStorage();
-    console.log(loaded)
+   
     if (!loaded) {
         initializeLibrary();
         saveToLocalStorage();
     }
 
     loadFromLocalStorage();
-    // Display books
     loadCatalogue();
-    // Display statistics
-    console.log("this went off!!!")
     updateStatisticsDisplay();
-    // Register events
     setupEventListeners();
 
 }
@@ -134,7 +126,7 @@ function loadCatalogue() {
   renderBookCatalogue(books);
 }
 
-// fix
+// fix - dom
 function setupEventListeners() {
     // Search
     if (searchInput) {
@@ -196,8 +188,7 @@ function setupEventListeners() {
 
 }
 
-
-// Complex DOM rendering with errors
+// Complex DOM rendering with errors - dom
 // fix - template literals
 function renderBookCatalogue(bookList) {
 
@@ -251,12 +242,8 @@ function renderBookCatalogue(bookList) {
 
 }
 
-
-// Parameters:
-// event - Mouse click event.
-
-
 // Function missing event delegation
+//dom
 // fix
 function handleBookClick(event) {
 
@@ -274,9 +261,8 @@ function handleBookClick(event) {
 
 }
 
-
-
 // Display function with template issues
+//dom
 // fix - template literals
 function displayBookDetails(isbn) {
 
@@ -284,23 +270,17 @@ function displayBookDetails(isbn) {
         document.getElementById("book-details");
 
     if (!detailsContainer) {
-
         console.error("Book details container not found.");
-
         return;
-
     }
 
     const book = findBookByISBN(isbn);
 
     if (!book) {
-
         detailsContainer.innerHTML = `
             <p>Book not found.</p>
         `;
-
         return;
-
     }
 
     // Show hidden panel
@@ -312,7 +292,7 @@ function displayBookDetails(isbn) {
 }
 
 // Function with event handling errors
-// fix
+// fix - dom
 function handleBorrowSubmit(event) {
 
     event.preventDefault();
@@ -338,28 +318,24 @@ function handleBorrowSubmit(event) {
             renderBookCatalogue(books);
             updateStatisticsDisplay();
             event.target.reset();
-
         }
 
     } catch (error) {
-
         alert(error.message);
-
     }
 
 }
 
 // Search function with errors
-// fix - filter()
+// fix - filter() - Event fdunction
 function handleSearch(event) {
     const searchValue = event.target.value.trim().toLowerCase();
     const filteredBooks = searchBooks( books, searchValue)
     renderBookCatalogue(filteredBooks);
 }
 
-
 // Function with filter errors
-// Fix - filter() maybe add hide book details in helper function
+// Fix - filter() - Event function
 function handleFilterChange() {
     const details = document.getElementById("book-details");
 
@@ -372,9 +348,50 @@ function handleFilterChange() {
 
 }
 
+// helper function -  Event function
+function handleMemberSubmit(event) {
+
+    event.preventDefault();
+
+     const form = event.target;
+
+        const id = form.querySelector("#member-id").value.trim();
+        const name = form.querySelector("#name").value.trim();
+        const email = form.querySelector("#email").value.trim();
+
+    if (!id || !name || !email) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    // Prevent duplicate IDs
+
+    const exists = members.some(member => member.id === id );
+
+    if (exists) {
+        alert("Member ID already exists.");
+        return;
+    }
+
+    const newMember = new Member(
+
+        id,
+        name,
+        email,
+        "standard"
+
+    );
+
+    members.push(newMember);
+    saveToLocalStorage();
+    updateStatisticsDisplay();
+    alert("Member registered successfully.");
+    event.target.reset();
+
+}
 
 // Statistics display dataq
-// fix
+// fix - dom 
 function updateStatisticsDisplay() {
     console.log("Updating statistics...");
     const stats = getLibraryStatistics(books, members);
@@ -400,7 +417,6 @@ function updateStatisticsDisplay() {
     }
     console.log("Updating statistics.done!");
 }
-
 
 // Create Member Form
 // Dynamic form generation with errors
@@ -474,47 +490,6 @@ function createMemberForm1() {
     form.addEventListener("submit", handleMemberSubmit);
 }
 
-// helper function
-function handleMemberSubmit(event) {
-
-    event.preventDefault();
-
-     const form = event.target;
-
-        const id = form.querySelector("#member-id").value.trim();
-        const name = form.querySelector("#name").value.trim();
-        const email = form.querySelector("#email").value.trim();
-
-    if (!id || !name || !email) {
-        alert("Please complete all fields.");
-        return;
-    }
-
-    // Prevent duplicate IDs
-
-    const exists = members.some(member => member.id === id );
-
-    if (exists) {
-        alert("Member ID already exists.");
-        return;
-    }
-
-    const newMember = new Member(
-
-        id,
-        name,
-        email,
-        "standard"
-
-    );
-
-    members.push(newMember);
-    saveToLocalStorage();
-    updateStatisticsDisplay();
-    alert("Member registered successfully.");
-    event.target.reset();
-
-}
 
 
 // Initialize on DOMContentLoaded

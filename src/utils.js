@@ -38,27 +38,27 @@ export function initializeLibrary() {
 
 }
 
-// Pure Helper functions
-
-// fix - filter()
+// Pure function
+// filter()
 export function searchBooks(books, searchValue) {
     return books.filter(book =>
-        book.title.toLowerCase().includes(searchTerm) ||
-        book.author.toLowerCase().includes(searchTerm)
+        book.title.toLowerCase().includes(searchValue) ||
+        book.author.toLowerCase().includes(searchValue)
     );
 }   
 
-
+// Pure function
+// Filter()
 export function filterBooksByCategory(books, category){
     if(category == "all"){
         return books;
     }
-
     return books.filter(book => book.category === category);
 
 }
 
-
+// Pure function
+// reduce() X2
 export function getLibraryStatistics(books, members) {
     return {
         totalBooks: books.length,
