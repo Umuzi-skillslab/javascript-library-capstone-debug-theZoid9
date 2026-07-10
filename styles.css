@@ -424,6 +424,16 @@ form input::placeholder {
     min-width: 160px;
 }
 
+#return-section {
+    margin-top: 40px;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
 /* --- Buttons --- */
 button[type="submit"],
 button.btn-primary {
@@ -643,6 +653,74 @@ button.btn-danger:hover {
     line-height: 1;
 }
 
+.overdue-section {
+    margin-top: 2rem;
+}
+
+.overdue-section h2 {
+    margin: 0 0 1rem;
+}
+
+
+#overdue-list {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#overdue-list h2 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.overdue-book {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    padding: 1rem 1.25rem;
+
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.75);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.overdue-book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.overdue-book strong {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.overdue-book p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.overdue-book span {
+    font-weight: 600;
+}
+
+#overdue-list .empty-message {
+    text-align: center;
+    padding: 1.5rem;
+    font-style: italic;
+}
 /* --- Toast / Notification (for JS use) --- */
 .toast {
     position: fixed;

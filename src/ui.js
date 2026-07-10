@@ -674,7 +674,9 @@ function renderOverdueBooks() {
     if (overdue.length === 0) {
 
         list.innerHTML = `
-            <p>No overdue books.</p>
+            <p class="empty-message">
+                No overdue books
+            </p>
         `;
 
         return;
@@ -682,17 +684,23 @@ function renderOverdueBooks() {
 
     overdue.forEach(book => {
 
-        list.innerHTML += `
-            <div class="overdue-book">
+            list.innerHTML += `
+                <div class="overdue-book">
 
-                <strong>${book.title}</strong>
+                    <strong>${book.title}</strong>
 
-                <p>Member: ${book.memberId}</p>
+                    <p>
+                        <span>Member:</span>
+                        ${book.memberId}
+                    </p>
 
-                <p>Days Late: ${book.daysLate}</p>
+                    <p>
+                        <span>Days Late:</span>
+                        ${book.daysLate}
+                    </p>
 
-            </div>
-        `;
+                </div>
+            `;
 
     });
 
