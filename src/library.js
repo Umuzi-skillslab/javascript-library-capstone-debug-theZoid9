@@ -52,6 +52,8 @@ class Book {
             throw new Error("Member already checked out this book");
         }
 
+
+
         this.checkedOut.push({
             memberId,
             borrowDate: new Date(),
@@ -337,6 +339,10 @@ function borrowBook(memberId, isbn) {
             throw new Error("Member has reached the borrowing limit.");
         }
 
+        if (member.borrowedBooks.includes(book.isbn)) {
+            throw new Error("Member has already borrowed this book.");
+        }
+        
         book.checkOut(member.id);
 
         console.log("checkedOut =", book.checkedOut);
