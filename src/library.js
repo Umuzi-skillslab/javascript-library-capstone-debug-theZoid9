@@ -156,6 +156,7 @@ class PremiumMember extends Member {
 }
 
 // Complex function with nested loops and errors
+// fix - Redo Maybe
 function findOverdueBooks() {
 
     const overdue = [];
@@ -184,12 +185,11 @@ function findOverdueBooks() {
         }
 
     }
-
     return overdue;
-
 }
     
 // Function with while loop error
+// fix
 function processReturnQueue(queue) {
 
     let index = 0;
@@ -342,7 +342,7 @@ function borrowBook(memberId, isbn) {
         if (member.borrowedBooks.includes(book.isbn)) {
             throw new Error("Member has already borrowed this book.");
         }
-        
+
         book.checkOut(member.id);
 
         console.log("checkedOut =", book.checkedOut);
@@ -363,7 +363,7 @@ function borrowBook(memberId, isbn) {
     }
 }
 
-// Helper functions with errors
+
 // fix - Find()
 // Pure
 function findMemberById(id) {
