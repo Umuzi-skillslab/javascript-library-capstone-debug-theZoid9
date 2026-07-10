@@ -42,22 +42,7 @@ let filterDropdown;
 let borrowForm;
 
 
-// helper function - hides all sections but dom
-function hideAllSections() {
 
-    if (catalogueSection)
-        catalogueSection.style.display = "none";
-
-    if (borrowSection)
-        borrowSection.style.display = "none";
-
-    if (memberSection)
-        memberSection.style.display = "none";
-
-    if (statisticsSection)
-        statisticsSection.style.display = "none";
-
-}
 
 // fix - dom
 function initializeUI() {
@@ -490,7 +475,22 @@ function createMemberForm1() {
     form.addEventListener("submit", handleMemberSubmit);
 }
 
+// helper function - hides all sections but dom
+function hideAllSections() {
 
+    if (catalogueSection)
+        catalogueSection.style.display = "none";
+
+    if (borrowSection)
+        borrowSection.style.display = "none";
+
+    if (memberSection)
+        memberSection.style.display = "none";
+
+    if (statisticsSection)
+        statisticsSection.style.display = "none";
+
+}
 
 // Initialize on DOMContentLoaded
 document.addEventListener(
