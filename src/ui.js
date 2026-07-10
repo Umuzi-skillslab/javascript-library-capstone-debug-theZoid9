@@ -28,6 +28,7 @@ let memberSection;
 let statisticsSection;
 let catalogueSection;
 let catalogueContainer;
+let returnSection;
 
 // Navigation Tabs
 let catalogueTab;
@@ -70,6 +71,8 @@ function initializeUI() {
 
     memberList = document.getElementById("member-list");
 
+    // return section
+   returnSection = document.getElementById("return-section");
     // Validation
 
     if (!catalogueContainer) {
@@ -106,6 +109,7 @@ function initializeUI() {
     loadCatalogue();
     renderMemberList();
     renderOverdueBooks()
+    createReturnForm();
     updateStatisticsDisplay();
     setupEventListeners();
     
@@ -148,6 +152,7 @@ function setupEventListeners() {
                 hideAllSections();
                 catalogueSection.style.display = "block";
                 borrowSection.style.display = "block";
+                returnSection.style.display = "block";
             }
         );
     }
@@ -501,6 +506,8 @@ function hideAllSections() {
     if (statisticsSection)
         statisticsSection.style.display = "none";
 
+    if (returnSection)
+        returnSection.style.display = "none";
 }
 
 
@@ -644,6 +651,7 @@ function handleEditMemberSubmit(event, id) {
 
 }
 
+// fix - Template Literals
 function renderOverdueBooks() {
 
     const overdue = findOverdueBooks();
@@ -686,29 +694,138 @@ function renderOverdueBooks() {
 
 }
 
+// fix - Template Literals
+function createReturnForm() {
+
+    const container = document.getElementById("return-section");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <h2>Return Book</h2>
+
+        <form id="return-form">
+
+            <input
+                type="text"
+                id="return-member-id"
+                placeholder="Member ID"
+                required
+            >
+
+            <input
+                type="text"
+                id="return-isbn"
+                placeholder="ISBN"
+                required
+            >
+
+            <button type="submit">
+                Return Book
+            </button>
+
+        </form>
+    `;
+
+    document
+        .getElementById("return-form")
+        .addEventListener(
+            "submit",
+            handleReturnSubmit
+        );
+
+}
+
 function handleReturnSubmit(event) {
 
     event.preventDefault();
 
-    processReturnQueue([
-        {
-            memberId:
-                document
-                .getElementById("return-member")
-                .value,
+    const memberId = document
+        .getElementById("return-member-id")
+        .value
+        .trim();
 
-            isbn:
-                document
-                .getElementById("return-isbn")
-                .value
+    const isbn = document
+        .getElementById("return-isbn")
+        .value
+        .trim();
+
+    if (!memberId || !isbn) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    try {
+
+        processReturnQueue([
+            {
+                memberId,
+                isbn
+            }
+        ]);
+
+        saveToLocalStorage();
+
+        renderBookCatalogue(books);
+        renderMemberList();
+        updateStatisticsDisplay();
+        renderOverdueBooks();
+
+        event.target.reset();
+
+        alert("Book returned successfully.");
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+}
+
+
+// helper for handleReturnSubmit
+function processReturnQueue(queue) {
+
+    let index = 0;
+
+    while (index < queue.length) {
+
+        const item = queue[index];
+
+        const book = findBookByISBN(item.isbn);
+        const member = findMemberById(item.memberId);
+
+        if (!book) {
+            throw new Error("Book not found.");
         }
-    ]);
 
-    saveToLocalStorage();
+        if (!member) {
+            throw new Error("Member not found.");
+        }
 
-    renderBookCatalogue(books);
+        const checkoutIndex = book.checkedOut.findIndex(
+            checkout => checkout.memberId === item.memberId
+        );
 
-    renderMemberList();
+        if (checkoutIndex === -1) {
+            throw new Error("This member did not borrow this book.");
+        }
+
+        book.availableCopies++;
+
+        book.checkedOut.splice(checkoutIndex, 1);
+
+        member.borrowedBooks =
+            member.borrowedBooks.filter(
+                borrowedIsbn => borrowedIsbn !== item.isbn
+            );
+
+        index++;
+
+    }
 
 }
 // Initialize on DOMContentLoaded
