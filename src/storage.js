@@ -1,4 +1,5 @@
 import { books, Member, members } from "../src/library.js";
+import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "./utils.js"
 
 const jsonString = JSON.stringify({
     books,
@@ -7,6 +8,7 @@ const jsonString = JSON.stringify({
 
 
 export function saveToLocalStorage() {
+
     try {
         localStorage.setItem("libraryBooks", JSON.stringify(books));
         localStorage.setItem("libraryMembers", JSON.stringify(members));
@@ -22,11 +24,14 @@ export function loadFromLocalStorage() {
         const booksData = JSON.parse(localStorage.getItem("libraryBooks")) || [];
     
         const membersData = JSON.parse(localStorage.getItem("libraryMembers")) || [];
-  
+        if(!booksData || membersData){
+            return false;
+        }
         // Replace contents of the existing arrays
         books.push(...booksData);
         members.push(...membersData);
-        
+
+        return true;
         console.log("Library data loaded.");
     } catch (error) {
         console.error("Error loading from localStorage:", error);

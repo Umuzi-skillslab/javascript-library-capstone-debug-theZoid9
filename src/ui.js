@@ -8,14 +8,14 @@ import {
     members,
     Member,
     Book
-} from "../src/library.js";
+} from "./library.js";
 
 import {
     loadFromLocalStorage,
     saveToLocalStorage
-} from "../src/storage.js";
+} from "./storage.js";
 
-import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "../src/utils.js"
+import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "./utils.js"
 
 // Missing: proper initialization with DOMContentLoaded
 // fix
@@ -111,9 +111,12 @@ function initializeUI() {
     }
 
     // Load saved data
-    if (books.length === 0) {
+    const loaded = loadFromLocalStorage();
+    console.log(loaded)
+    if (!loaded) {
         initializeLibrary();
-     }
+        saveToLocalStorage();
+    }
 
     loadFromLocalStorage();
     // Display books
@@ -131,13 +134,9 @@ function loadCatalogue() {
   renderBookCatalogue(books);
 }
 
-
-
 // fix
 function setupEventListeners() {
-
     // Search
-
     if (searchInput) {
             searchInput.addEventListener("input", handleSearch
         );
@@ -213,9 +212,7 @@ function renderBookCatalogue(bookList) {
                 No books found.
             </p>
         `;
-
         return;
-
     }
 
     // Improves performance by updating the DOM only once

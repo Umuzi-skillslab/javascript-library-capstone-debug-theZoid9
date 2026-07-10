@@ -148,20 +148,6 @@ class PremiumMember extends Member {
     }
 }
 
-
-// Find Overdue Books
-// Searches every book in the library for
-// checkout records that are overdue.
-//
-// Parameters:
-// daysOverdue - Number of days a book
-// must be overdue.
-//
-// Returns:
-// An array containing overdue checkout
-// records.
-// ========================================
-
 // Complex function with nested loops and errors
 function findOverdueBooks(daysOverdue) {
 
@@ -216,17 +202,8 @@ function processReturnQueue(queue) {
     }
 }
 
-// Returns:
-// Array of matching books.
-// ========================================
-
 // Recursive function with multiple errors
-function searchBooksByCategory(
-    bookList,
-    category,
-    index = 0
-) {
-
+function searchBooksByCategory(bookList, category, index = 0 ) {
     if (!Array.isArray(bookList)) {
         return [];
     }
@@ -385,14 +362,6 @@ function findBookByISBN(isbn) {
 
 // Library Statistics
 // Maintains statistics for the library.
-//
-// Stores:
-//
-// • Total books
-// • Total members
-// • Total borrowings
-//
-// Provides helper methods.
 // ========================================
 
 // Statistics object with missing methods
@@ -431,15 +400,12 @@ const LibraryStats = {
     },
 
     getStatistics() {
-
         this.updateStats();
 
         return {
-
             totalBooks: this.totalBooks,
             totalMembers: this.totalMembers,
             totalBorrowings: this.totalBorrowings
-
         };
 
     }
