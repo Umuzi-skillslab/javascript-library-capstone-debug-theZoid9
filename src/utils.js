@@ -1,5 +1,8 @@
 import { books, members, Member, Book } from "../src/library.js";
 
+
+
+// Pre Loaded data
 export function initializeLibrary() {
 
     if (books.length > 0) return;
@@ -10,7 +13,7 @@ export function initializeLibrary() {
             "Effective JavaScript",
             "David Herman",
             2012,
-            2,
+            6,
             "reference"
         ),
         new Book(
@@ -32,4 +35,40 @@ export function initializeLibrary() {
         )
     );
 
+}
+
+// Pure Helper functions
+
+// fix - filter()
+export function searchBooks(books, searchValue) {
+    return books.filter(book =>
+        book.title.toLowerCase().includes(searchTerm) ||
+        book.author.toLowerCase().includes(searchTerm)
+    );
+}   
+
+
+export function filterBooksByCategory(books, category){
+    if(category == "all"){
+        return books;
+    }
+
+    return books.filter(book => book.category === category);
+
+}
+
+
+export function getLibraryStatistics(books, members) {
+    return {
+        totalBooks: books.length,
+        totalMembers: members.length,
+        availableBooks: books.reduce(
+            (sum, book) => sum + book.availableCopies,
+            0
+        ),
+        borrowedBooks: books.reduce(
+            (sum, book) => sum + book.checkedOut.length,
+            0
+        )
+    };
 }

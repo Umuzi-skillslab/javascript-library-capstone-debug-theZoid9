@@ -492,47 +492,7 @@ function calculateFineAmount(daysLate) {
 
 }
 
-export function initializeLibrary() {
 
-    if (books.length > 0) return;
-
-    books.push(
-        new Book(
-            "9780134685991",
-            "Effective JavaScript",
-            "David Herman",
-            2012,
-            1,
-            "reference"
-        ),
-        new Book(
-            "9781491950296",
-            "Learning React",
-            "Alex Banks",
-            2020,
-            1,
-            "non-fiction"
-        )
-    );
-
-    members.push(
-        new Member(
-            "M001",
-            "John Smith",
-            "john@gmail.com",
-            "standard"
-        )
-    );
-
-        console.log("Books after load:", books);
-    console.log("Members after load:", members);
-
-    console.log(
-        books[0] instanceof Book,
-        members[0] instanceof Member
-);
-
-}
 
 
 
