@@ -108,7 +108,7 @@ function initializeUI() {
 
     loadCatalogue();
     renderMemberList();
-    renderOverdueBooks()
+   
     createReturnForm();
     updateStatisticsDisplay();
     setupEventListeners();
@@ -179,6 +179,7 @@ function setupEventListeners() {
                 hideAllSections();
                 statisticsSection.style.display = "block";
                 updateStatisticsDisplay();
+                 renderOverdueBooks();
             }
         );
     }
@@ -682,12 +683,15 @@ function renderOverdueBooks() {
     overdue.forEach(book => {
 
         list.innerHTML += `
-            <p>
-                ${book.title}
-                -
-                ${book.memberId}
-                (${book.daysLate} days late)
-            </p>
+            <div class="overdue-book">
+
+                <strong>${book.title}</strong>
+
+                <p>Member: ${book.memberId}</p>
+
+                <p>Days Late: ${book.daysLate}</p>
+
+            </div>
         `;
 
     });
