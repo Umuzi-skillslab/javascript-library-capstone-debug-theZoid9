@@ -519,6 +519,14 @@ function renderMemberList() {
     const container = document.getElementById("member-list");
 
     container.innerHTML = "";
+    if (members.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <p>No members found.</p>
+            </div>
+        `;
+        return;
+    }
    
     members.forEach(member => {
        
@@ -661,7 +669,7 @@ function showEditMemberForm(id) {
 
              console.log("Delete clicked", member.id);
                 deleteMember(member.id);
-
+                saveToLocalStorage(); 
                 renderMemberList();
                 createMemberForm1();
         });
