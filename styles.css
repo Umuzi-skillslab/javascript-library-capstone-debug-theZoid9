@@ -804,6 +804,26 @@ button.btn-danger:hover {
     background: rgba(201,168,76,0.3);
     color: var(--fg);
 }
+
+.member-message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.member-message.success {
+    background: rgba(92, 184, 122, 0.15);
+    border: 1px solid rgba(92, 184, 122, 0.4);
+    color: #5cb87a;
+}
+
+.member-message.error {
+    background: rgba(217, 123, 123, 0.15);
+    border: 1px solid rgba(217, 123, 123, 0.4);
+    color: #d97b7b;
+}
+
 #member-form form {
     display: flex;
     gap: 12px;

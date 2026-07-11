@@ -356,6 +356,19 @@ function handleFilterChange() {
 
 }
 
+// helper message
+function renderMemberMessage(message, type = "success") {
+    const container = document.getElementById("member-message");
+
+    container.innerHTML = `
+        <div class="member-message ${type}">
+            ${message}
+        </div>
+    `;
+    setTimeout(() => {
+        container.innerHTML = "";
+    }, 3000); 
+}
 // helper function -  Event function
 // some()
 function handleMemberSubmit(event) {
@@ -369,7 +382,7 @@ function handleMemberSubmit(event) {
         const email = form.querySelector("#email").value.trim();
 
     if (!id || !name || !email) {
-        alert("Please complete all fields.");
+        renderMemberMessage("Please complete all fields.", "error");
         return;
     }
 
@@ -378,7 +391,7 @@ function handleMemberSubmit(event) {
     const exists = members.some(member => member.id === id );
 
     if (exists) {
-        alert("Member ID already exists.");
+        renderMemberMessage("Member ID already exists.", "error");
         return;
     }
 
@@ -393,7 +406,7 @@ function handleMemberSubmit(event) {
     saveToLocalStorage();
     renderMemberList();
     updateStatisticsDisplay();
-    alert("Member registered successfully.");
+    renderMemberMessage("Member registered successfully.", "success");
     event.target.reset();
 
 }
@@ -430,7 +443,7 @@ function updateStatisticsDisplay() {
 
 // Create Member Form
 // Dynamic form generation with errors
-// fix - use Template Literals
+// fix - Template Literals - move event listener
 function createMemberForm1() {
         
     console.log("createMemberForm called");
@@ -672,20 +685,6 @@ function showEditMemberForm(id) {
     document.getElementById("name").focus();
 }
 
-
-// Help funtion for form 
-function renderMemberMessage(message, type = "success") {
-
-    const container =
-        document.getElementById("member-message");
-
-    container.innerHTML = `
-        <div class="member-message ${type}">
-            ${message}
-        </div>
-    `;
-
-}
 
 function handleEditMemberSubmit(event, id) {
 
