@@ -167,6 +167,14 @@ function setupEventListeners() {
     console.log("Event listeners loaded.");
 }
 
+function setupEditMemberEventListeners() {
+
+    editMemberForm?.addEventListener("submit", handleEditMemberSubmit);
+
+    cancelEditButton?.addEventListener("click", handleCancelEdit);
+
+    deleteMemberButton?.addEventListener("click", handleDeleteMember);
+}
 // ======================================================
 // NAVIGATION
 // ======================================================
@@ -714,8 +722,11 @@ function handleEditMemberSubmit(event, id) {
     const membershipType =
         document.getElementById("membership-type").value;
 
-    const member = findMemberById(id);
+    const member = findMemberById(editingMemberId);
 
+
+console.log(id);
+console.log(member);
     updateMemberInfo(member, {
         name,
         email,
@@ -731,6 +742,23 @@ function handleEditMemberSubmit(event, id) {
 
 }
 
+function handleCancelEdit() {
+    createMemberForm1();
+}
+
+function handleDeleteMember(event) {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    deleteMember(editingMemberId);
+
+    saveToLocalStorage();
+
+    renderMemberList();
+
+    createMemberForm1();
+}
 // ======================================================
 // STATISTICS
 // ======================================================
