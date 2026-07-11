@@ -135,7 +135,9 @@ function setupEventListeners() {
     }
     // Borrow Form
     if (borrowForm) {
-        borrowForm.addEventListener("submit", handleBorrowSubmit
+        borrowForm.addEventListener("submit", (event) => {
+            handleBorrowSubmit(event);
+            saveToLocalStorage(); }
         );
     }
     // Event Delegation
@@ -313,6 +315,10 @@ function handleBorrowSubmit(event) {
     try {
 
         const success = borrowBook(memberId, isbn);
+        console.log(
+    books.find(book => book.isbn === isbn).availableCopies
+);
+
         console.log(books);
         if (success) {
             alert("Book borrowed successfully.");
