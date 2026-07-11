@@ -1,7 +1,7 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { Book, DigitalBook, Member, PremiumMember,findBookByISBN } from "../src/library.js";
+import { borrowBook,Book, DigitalBook, Member,members, PremiumMember,findBookByISBN,books,calculateFineAmount } from "../src/library.js";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -28,7 +28,11 @@ describe('Book Class', () => {
 
         book.checkOut("user1");
         expect(book.availableCopies).toBe(1);
-        expect(book.checkedOut).toContain("user1");
+        expect(book.checkedOut).toContainEqual(
+        expect.objectContaining({
+            memberId: "user1"
+        })
+);
     });
 
     test("rejects invalid memberId types", () => {
@@ -184,28 +188,110 @@ describe('PremiumMember Class', () => {
     
 });
 
-describe('Library Functions', () => {
-    // Missing: beforeEach to initialize test data
-    
-    test('findBookByISBN returns book', () => {
-        // Test data not set up properly
-        const book = findBookByISBN('978-0-123');
-        
-        // Will fail - no books in array
-        expect(book).toBeDefined();
+describe("Library Functions", () => {
+
+    beforeEach(() => {
+        books.length = 0;
+
+        books.push(
+            new Book(
+                "978-0-123",
+                "JavaScript Basics",
+                "John Doe",
+                2024,
+                "Programming",
+                5
+            )
+        );
     });
-    
-    // Missing: test for getBooksByAuthor
-    // Missing: test with empty arrays
-    // Missing: test with null/undefined inputs
+
+    test("findBookByISBN returns the correct book", () => {
+
+        const book = findBookByISBN("978-0-123");
+
+        expect(book).not.toBeUndefined();
+        expect(book.isbn).toBe("978-0-123");
+        expect(book.title).toBe("JavaScript Basics");
+        expect(book.author).toBe("John Doe");
+    });
+
+    test("findBookByISBN returns undefined for unknown ISBN", () => {
+
+        const book = findBookByISBN("999");
+
+        expect(book).toBeUndefined();
+    });
+
+    test("findBookByISBN returns undefined when books array is empty", () => {
+
+        books.length = 0;
+
+        expect(findBookByISBN("978-0-123")).toBeUndefined();
+    });
+
 });
 
-describe('Array Operations', () => {
-    // Missing: tests for filter operations
-    // Missing: tests for map operations
-    // Missing: tests for reduce operations
-    // Missing: tests for spread operator
-    // Missing: tests for rest parameters
+
+describe("Array Operations", () => {
+
+    beforeEach(() => {
+        books.length = 0;
+
+        books.push(
+            new Book("1", "JavaScript", "John", 2020, "Programming", 2),
+            new Book("2", "CSS", "Jane", 2021, "Web", 3),
+            new Book("3", "React", "John", 2022, "Programming", 1)
+        );
+    });
+
+    test("filterBooksByCategory filters books correctly", () => {
+        const result = filterBooksByCategory(books, "Programming");
+
+        expect(result).toHaveLength(2);
+    });
+
+    test("searchBooks filters using title", () => {
+        const result = searchBooks(books, "java");
+
+        expect(result).toHaveLength(1);
+        expect(result[0].title).toBe("JavaScript");
+    });
+
+    test("map returns all book titles", () => {
+        const titles = books.map(book => book.title);
+
+        expect(titles).toEqual([
+            "JavaScript",
+            "CSS",
+            "React"
+        ]);
+    });
+
+    test("reduce calculates total available copies", () => {
+        const total = books.reduce(
+            (sum, book) => sum + book.availableCopies,
+            0
+        );
+
+        expect(total).toBe(6);
+    });
+
+    test("spread creates a copy of books array", () => {
+        const copy = [...books];
+
+        expect(copy).toEqual(books);
+        expect(copy).not.toBe(books);
+    });
+
+    test("rest parameter collects arguments", () => {
+
+        function total(...numbers) {
+            return numbers.reduce((sum, value) => sum + value, 0);
+        }
+
+        expect(total(1, 2, 3, 4)).toBe(10);
+    });
+
 });
 
 describe('Recursive Functions', () => {
@@ -218,12 +304,76 @@ describe('Error Handling', () => {
     // Missing: tests for try-catch blocks
     // Missing: tests for undefined/null handling
     // Missing: tests for type checking
+       beforeEach(() => {
+        books.length = 0;
+        members.length = 0;
+    });
+
+    test("borrowBook throws when member does not exist", () => {
+
+        expect(() => {
+            borrowBook("M001", "123");
+        }).toThrow("Member not found");
+
+    });
+
+    test("findBookByISBN returns null for undefined", () => {
+
+        expect(
+            findBookByISBN(undefined)
+        ).toBeNull();
+
+    });
+
+    test("findBookByISBN returns null for wrong type", () => {
+
+        expect(
+            findBookByISBN(123)
+        ).toBeNull();
+
+    });
 });
 
 describe('String Operations', () => {
     // Missing: tests for formatBookInfo
     // Missing: tests for template literals
     // Missing: tests for string methods
+    test("formatBookInfo returns HTML string", () => {
+
+        const book = new Book(
+            "1",
+            "JavaScript",
+            "John",
+            2024,
+            "Programming",
+            5
+        );
+
+        const html = formatBookInfo(book);
+
+        expect(typeof html).toBe("string");
+        expect(html).toContain("JavaScript");
+        expect(html).toContain("John");
+    });
+
+    test("formatBookInfo uses template literals", () => {
+
+        const book = new Book(
+            "1",
+            "CSS",
+            "Jane",
+            2024,
+            "Web",
+            3
+        );
+
+        const html = formatBookInfo(book);
+
+        expect(html).toContain("CSS");
+        expect(html).toContain("Jane");
+        expect(html).toContain("Web");
+    });
+    
 });
 
 describe('Math Operations', () => {
@@ -233,6 +383,30 @@ describe('Math Operations', () => {
         expect(typeof fine).toBe('number');
         // Missing: test for correct calculation
         // Missing: test for toFixed/rounding
+    });
+    
+    test("calculateFineAmount returns correct amount", () => {
+
+        expect(
+            calculateFineAmount(5)
+        ).toBe(2.5);
+
+    });
+
+    test("returns zero for NaN", () => {
+
+        expect(
+            calculateFineAmount(NaN)
+        ).toBe(0);
+
+    });
+
+    test("returns negative value for negative days", () => {
+
+        expect(
+            calculateFineAmount(-2)
+        ).toBe(-1);
+
     });
     
     // Missing: test for NaN handling
@@ -246,10 +420,37 @@ describe('DOM Manipulation', () => {
     // Missing: tests for search functionality
 });
 
-describe('JSON Operations', () => {
-    // Missing: tests for JSON.stringify
-    // Missing: tests for JSON.parse
-    // Missing: tests for error handling in JSON operations
+describe("JSON Operations", () => {
+
+    test("JSON.stringify converts object to string", () => {
+
+        const member = {
+            id: "M1",
+            name: "John"
+        };
+
+        const json = JSON.stringify(member);
+
+        expect(typeof json).toBe("string");
+    });
+
+    test("JSON.parse converts string to object", () => {
+
+        const json = '{"id":"M1","name":"John"}';
+
+        const member = JSON.parse(json);
+
+        expect(member.id).toBe("M1");
+    });
+
+    test("JSON.parse throws on invalid JSON", () => {
+
+        expect(() => {
+            JSON.parse("{bad json}");
+        }).toThrow();
+
+    });
+
 });
 
 describe('LocalStorage', () => {
