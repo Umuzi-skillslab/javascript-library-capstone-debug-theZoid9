@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1783793594225" clover="3.2.0">
-  <project timestamp="1783793594225" name="All files">
-    <metrics statements="466" coveredstatements="61" conditionals="183" coveredconditionals="33" methods="89" coveredmethods="15" elements="738" coveredelements="109" complexity="0" loc="466" ncloc="466" packages="2" files="5" classes="5"/>
+<coverage generated="1783797391600" clover="3.2.0">
+  <project timestamp="1783797391601" name="All files">
+    <metrics statements="466" coveredstatements="96" conditionals="183" coveredconditionals="48" methods="89" coveredmethods="21" elements="738" coveredelements="165" complexity="0" loc="466" ncloc="466" packages="2" files="5" classes="5"/>
     <package name="javascript-library-capstone-debug-theZoid9">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="jest.config.js" path="C:\Users\zaida\Desktop\Umuzi capstone\Capstone 2\javascript-library-capstone-debug-theZoid9\jest.config.js">
@@ -9,21 +9,21 @@
       </file>
     </package>
     <package name="javascript-library-capstone-debug-theZoid9.src">
-      <metrics statements="466" coveredstatements="61" conditionals="183" coveredconditionals="33" methods="89" coveredmethods="15"/>
+      <metrics statements="466" coveredstatements="96" conditionals="183" coveredconditionals="48" methods="89" coveredmethods="21"/>
       <file name="library.js" path="C:\Users\zaida\Desktop\Umuzi capstone\Capstone 2\javascript-library-capstone-debug-theZoid9\src\library.js">
         <metrics statements="143" coveredstatements="61" conditionals="77" coveredconditionals="33" methods="38" coveredmethods="15"/>
         <line num="4" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="16" count="34" type="stmt"/>
-        <line num="17" count="34" type="stmt"/>
-        <line num="18" count="34" type="stmt"/>
-        <line num="19" count="34" type="stmt"/>
-        <line num="21" count="34" type="stmt"/>
-        <line num="22" count="34" type="stmt"/>
-        <line num="23" count="34" type="stmt"/>
-        <line num="24" count="34" type="stmt"/>
+        <line num="16" count="42" type="stmt"/>
+        <line num="17" count="42" type="stmt"/>
+        <line num="18" count="42" type="stmt"/>
+        <line num="19" count="42" type="stmt"/>
+        <line num="21" count="42" type="stmt"/>
+        <line num="22" count="42" type="stmt"/>
+        <line num="23" count="42" type="stmt"/>
+        <line num="24" count="42" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
         <line num="39" count="8" type="cond" truecount="2" falsecount="0"/>
@@ -45,12 +45,12 @@
         <line num="91" count="1" type="stmt"/>
         <line num="92" count="1" type="stmt"/>
         <line num="97" count="1" type="stmt"/>
-        <line num="105" count="6" type="stmt"/>
-        <line num="106" count="6" type="stmt"/>
-        <line num="107" count="6" type="stmt"/>
-        <line num="108" count="6" type="stmt"/>
-        <line num="109" count="6" type="stmt"/>
-        <line num="110" count="6" type="stmt"/>
+        <line num="105" count="14" type="stmt"/>
+        <line num="106" count="14" type="stmt"/>
+        <line num="107" count="14" type="stmt"/>
+        <line num="108" count="14" type="stmt"/>
+        <line num="109" count="14" type="stmt"/>
+        <line num="110" count="14" type="stmt"/>
         <line num="117" count="0" type="stmt"/>
         <line num="118" count="0" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
@@ -157,52 +157,52 @@
         <line num="495" count="0" type="stmt"/>
       </file>
       <file name="storage.js" path="C:\Users\zaida\Desktop\Umuzi capstone\Capstone 2\javascript-library-capstone-debug-theZoid9\src\storage.js">
-        <metrics statements="45" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <metrics statements="45" coveredstatements="35" conditionals="20" coveredconditionals="15" methods="6" coveredmethods="6"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="49" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="65" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="91" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="102" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="2" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="91" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="102" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="104" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
+        <line num="112" count="2" type="stmt"/>
+        <line num="121" count="2" type="stmt"/>
+        <line num="124" count="2" type="stmt"/>
+        <line num="127" count="2" type="stmt"/>
+        <line num="131" count="2" type="stmt"/>
+        <line num="133" count="2" type="stmt"/>
         <line num="137" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
         <line num="145" count="0" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
-        <line num="155" count="0" type="stmt"/>
+        <line num="153" count="3" type="stmt"/>
+        <line num="155" count="3" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
         <line num="171" count="0" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
-        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="179" count="3" type="stmt"/>
+        <line num="181" count="3" type="stmt"/>
+        <line num="183" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="187" count="0" type="stmt"/>
-        <line num="192" count="0" type="stmt"/>
-        <line num="197" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="204" count="0" type="stmt"/>
-        <line num="210" count="0" type="stmt"/>
+        <line num="192" count="1" type="stmt"/>
+        <line num="197" count="1" type="stmt"/>
+        <line num="202" count="1" type="stmt"/>
+        <line num="204" count="1" type="stmt"/>
+        <line num="210" count="2" type="stmt"/>
       </file>
       <file name="ui.js" path="C:\Users\zaida\Desktop\Umuzi capstone\Capstone 2\javascript-library-capstone-debug-theZoid9\src\ui.js">
         <metrics statements="249" coveredstatements="0" conditionals="74" coveredconditionals="0" methods="34" coveredmethods="0"/>

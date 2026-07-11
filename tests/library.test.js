@@ -2,6 +2,14 @@
 // Incomplete and with errors
 
 import { borrowBook,Book, DigitalBook, Member,members, PremiumMember,findBookByISBN,books,calculateFineAmount } from "../src/library.js";
+import {
+    saveToLocalStorage,
+    loadFromLocalStorage,
+    exportLibraryData,
+    importLibraryData
+} from "../src/storage.js";
+
+import { jest } from "@jest/globals";
 
 describe('Book Class', () => {
     test('should create a book instance', () => {
@@ -422,44 +430,168 @@ describe('DOM Manipulation', () => {
 
 describe("JSON Operations", () => {
 
-    test("JSON.stringify converts object to string", () => {
 
-        const member = {
-            id: "M1",
-            name: "John"
-        };
+    test("exportLibraryData returns valid JSON", () => {
 
-        const json = JSON.stringify(member);
+        const json = exportLibraryData();
 
-        expect(typeof json).toBe("string");
+        expect(() => JSON.parse(json)).not.toThrow();
+
     });
 
-    test("JSON.parse converts string to object", () => {
+    test("exported JSON contains books and members", () => {
 
-        const json = '{"id":"M1","name":"John"}';
+        const json = exportLibraryData();
 
-        const member = JSON.parse(json);
+        const data = JSON.parse(json);
 
-        expect(member.id).toBe("M1");
+        expect(data).toHaveProperty("books");
+        expect(data).toHaveProperty("members");
+
     });
 
-    test("JSON.parse throws on invalid JSON", () => {
+    test("importLibraryData handles malformed JSON", () => {
 
         expect(() => {
-            JSON.parse("{bad json}");
-        }).toThrow();
+
+            importLibraryData("{bad json}");
+
+        }).not.toThrow();
 
     });
 
 });
 
-describe('LocalStorage', () => {
-    // Missing: localStorage mock
-    // Missing: tests for save functionality
-    // Missing: tests for load functionality
-    // Missing: tests for error handling
-});
+describe("LocalStorage", () => {
 
+    beforeEach(() => {
+
+        const storage = {};
+
+        global.localStorage = {
+            getItem(key) {
+                return storage[key] ?? null;
+            },
+
+            setItem(key, value) {
+                storage[key] = value;
+            },
+
+            removeItem(key) {
+                delete storage[key];
+            },
+
+            clear() {
+                Object.keys(storage).forEach(key => delete storage[key]);
+            }
+        };
+
+        // Reset arrays
+        books.length = 0;
+        members.length = 0;
+
+        // Fake book
+        books.push(
+            new Book(
+                "9780134685991",
+                "Effective JavaScript",
+                "David Herman",
+                2012,
+                6,
+                "reference"
+            )
+        );
+
+        // Fake member
+        members.push(
+            new Member(
+                "M001",
+                "John Smith",
+                "john@gmail.com",
+                "standard"
+            )
+        );
+    });
+
+    test("saveToLocalStorage stores books and members", () => {
+
+        saveToLocalStorage();
+
+        const savedBooks = JSON.parse(
+            localStorage.getItem("libraryBooks")
+        );
+
+        const savedMembers = JSON.parse(
+            localStorage.getItem("libraryMembers")
+        );
+
+        expect(savedBooks).toHaveLength(1);
+        expect(savedBooks[0].title).toBe("Effective JavaScript");
+
+        expect(savedMembers).toHaveLength(1);
+        expect(savedMembers[0].name).toBe("John Smith");
+    });
+
+    test("loadFromLocalStorage restores saved data", () => {
+
+        saveToLocalStorage();
+
+        books.length = 0;
+        members.length = 0;
+
+        expect(loadFromLocalStorage()).toBe(true);
+
+        expect(books).toHaveLength(1);
+        expect(members).toHaveLength(1);
+    });
+
+    test("loadFromLocalStorage returns false when storage is empty", () => {
+
+        localStorage.clear();
+
+        books.length = 0;
+        members.length = 0;
+
+        expect(loadFromLocalStorage()).toBe(false);
+    });
+
+    test("exportLibraryData returns JSON string", () => {
+
+        const json = exportLibraryData();
+
+        expect(typeof json).toBe("string");
+
+        const parsed = JSON.parse(json);
+
+        expect(parsed.books).toHaveLength(1);
+        expect(parsed.members).toHaveLength(1);
+    });
+
+    test("importLibraryData imports books and members", () => {
+
+        const json = JSON.stringify({
+            books,
+            members
+        });
+
+        books.length = 0;
+        members.length = 0;
+
+        importLibraryData(json);
+
+        expect(books).toHaveLength(1);
+        expect(members).toHaveLength(1);
+    });
+
+    test("importLibraryData handles invalid JSON", () => {
+
+        expect(() => {
+            importLibraryData("{bad json}");
+        }).not.toThrow();
+
+    });
+
+});
 // Missing: describe blocks for:
 // - Nested loops
 // - For-of loops
