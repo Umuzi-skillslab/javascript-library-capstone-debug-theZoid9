@@ -10,7 +10,8 @@ import {
     Book,
      findMemberById,
      updateMemberInfo,
-     findOverdueBooks
+     findOverdueBooks,
+     deleteMember
 } from "./library.js";
 
 import {
@@ -184,34 +185,10 @@ function setupEventListeners() {
         );
     }
 
-    // members buttons  rework later
-    document
-    .getElementById("cancel-edit")
-    .addEventListener("click", () => {
-
-        renderMemberMessage(
-            "Member editing cancelled. You can register a new member.",
-            "info"
-        );
-
-        createMemberForm1();
-
-    });
 
     console.log("Event listeners loaded.");
 
-    document
-    .getElementById("delete-member")
-    .addEventListener("click", () => {
 
-        deleteMember(id);
-
-        renderMemberMessage(
-            "🗑️ Member deleted successfully.",
-            "success"
-        );
-
-    });
 
 }
 
@@ -662,12 +639,32 @@ function showEditMemberForm(id) {
 
             </form>
         `;
+
     document
         .getElementById("edit-member-form")
         .addEventListener(
             "submit",
             event => handleEditMemberSubmit(event, id)
         );
+
+    document.getElementById("cancel-edit")
+    .addEventListener("click", () => {
+        createMemberForm1();
+    });
+
+    document.getElementById("delete-member")
+        .addEventListener("click", () => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                console.log("Delete clicked");
+
+             console.log("Delete clicked", member.id);
+                deleteMember(member.id);
+
+                renderMemberList();
+                createMemberForm1();
+        });
 
     const form = document.getElementById("member-form");
 

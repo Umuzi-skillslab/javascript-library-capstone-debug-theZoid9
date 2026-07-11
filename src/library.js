@@ -485,6 +485,19 @@ function calculateFineAmount(daysLate) {
 
 }
 
+// Helper
+function deleteMember(id) {
+    const index = members.findIndex(member => member.id === id);
+
+    if (index === -1) {
+        return false;
+    }
+
+    members.splice(index, 1);
+   
+    return true;
+}
+
 
 export {
 
@@ -515,7 +528,7 @@ export {
 
     formatBookInfo,
 
-    LibraryStats
-
+    LibraryStats,
+    deleteMember
 };
 
