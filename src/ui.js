@@ -432,72 +432,54 @@ function updateStatisticsDisplay() {
 // Dynamic form generation with errors
 // fix - use Template Literals
 function createMemberForm1() {
-        console.log("createMemberForm called");
+        
+    console.log("createMemberForm called");
+
     const formContainer = document.getElementById("member-form");
 
-    // Clear any existing form
-    formContainer.innerHTML = "";
+    formContainer.innerHTML = `
+        <h2>Add New Member</h2>
 
-    // Create form
-    const form = document.createElement("form");
-    form.id = "member-registration-form";
+        <p class="form-description">
+            Register a new library member by completing the form below.
+        </p>
 
-    // Name label
-    const nameLabel = document.createElement("label");
-    nameLabel.htmlFor = "name";
-    nameLabel.textContent = "Name";
+        <form id="member-registration-form">
 
-    // Name input
-    const nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.id = "name";
-    nameInput.placeholder = "Enter member name";
-    nameInput.required = true;
+            <label for="name">Name</label>
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter member name"
+                required
+            >
 
-    // Email label
-    const emailLabel = document.createElement("label");
-    emailLabel.htmlFor = "email";
-    emailLabel.textContent = "Email";
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter email address"
+                required
+            >
 
-    // Email input
-    const emailInput = document.createElement("input");
-    emailInput.type = "email";      // Fixed
-    emailInput.id = "email";
-    emailInput.placeholder = "Enter email address";
-    emailInput.required = true;
+            <label for="member-id">Member ID</label>
+            <input
+                type="text"
+                id="member-id"
+                placeholder="Enter member ID"
+                required
+            >
 
-    // Member ID label
-    const idLabel = document.createElement("label");
-    idLabel.htmlFor = "member-id";
-    idLabel.textContent = "Member ID";
+            <button type="submit">
+                Add Member
+            </button>
 
-    // Member ID input
-    const idInput = document.createElement("input");
-    idInput.type = "text";
-    idInput.id = "member-id";
-    idInput.placeholder = "Enter member ID";
-    idInput.required = true;
+        </form>
+    `;
 
-    // Submit button
-    const submitButton = document.createElement("button");
-    submitButton.type = "submit";
-    submitButton.textContent = "Add Member";
-
-    // Add everything to the form
-    form.appendChild(nameLabel);
-    form.appendChild(nameInput);
-
-    form.appendChild(emailLabel);
-    form.appendChild(emailInput);
-
-    form.appendChild(idLabel);
-    form.appendChild(idInput);
-
-    form.appendChild(submitButton);
-
-    // Add form to page
-    formContainer.appendChild(form);
-    form.addEventListener("submit", handleMemberSubmit);
+    document
+        .getElementById("member-registration-form")
+        .addEventListener("submit", handleMemberSubmit);
 }
 
 // helper function - hides all sections but dom
@@ -602,21 +584,21 @@ function showEditMemberForm(id) {
             </p>
 
             <form id="edit-member-form">
-
+                <h4>Member name</h4>    
                 <input
                     id="name"
                     value="${member.name}"
                     required
                 >
-
+                <h4>Member email</h4>
                 <input
                     id="email"
                     value="${member.email}"
                     required
                 >
-
+                <h4>Membership type</h4>
                 <select id="membership-type">
-
+                  
                     <option
                         value="standard"
                         ${member.membershipType === "standard" ? "selected" : ""}>

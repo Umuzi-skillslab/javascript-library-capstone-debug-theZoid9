@@ -27,12 +27,12 @@ export function initializeLibrary() {
     );
 
     members.push(
-        new Member(
-            "M001",
-            "John Smith",
-            "john@gmail.com",
-            "standard"
-        )
+        ...[
+            new Member("M001", "John Smith", "john@gmail.com", "standard"),
+            new Member("M002", "Jane Doe", "jane@gmail.com", "premium"),
+            new Member("M003", "Mike Brown", "mike@gmail.com", "standard"),
+            new Member("M004", "Sarah Jones", "sarah@gmail.com", "premium")
+        ]
     );
   
 
