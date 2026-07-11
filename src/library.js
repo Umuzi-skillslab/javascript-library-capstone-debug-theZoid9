@@ -3,7 +3,7 @@
 // Global state management (scoping issues) // fix
 export let books = [];
 
-//let books = [];  
+ 
 export let  members = [];  
 
 const LATE_FEE_PER_DAY = 0.50;

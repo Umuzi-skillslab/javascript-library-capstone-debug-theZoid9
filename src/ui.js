@@ -19,32 +19,45 @@ import {
     saveToLocalStorage
 } from "./storage.js";
 
-import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics} from "./utils.js"
+import {initializeLibrary, searchBooks, filterBooksByCategory, getLibraryStatistics, processReturnQueue} from "./utils.js"
 
-// Global DOM References
+// ======================================================
+// GLOBAL DOM REFERENCES
+// ======================================================
 
 // Sections
 let borrowSection;
 let memberSection;
 let statisticsSection;
 let catalogueSection;
-let catalogueContainer;
 let returnSection;
 
-// Navigation Tabs
+// Navigation
 let catalogueTab;
 let membersTab;
 let statisticsTab;
 
-// Form Controls
+// Forms
+let borrowForm;
+let returnForm;
+
+// Inputs
 let searchInput;
 let filterDropdown;
-let borrowForm;
 
-// Members
+// Containers
+let catalogueContainer;
 let memberList;
 
-// fix - dom
+// Edit Member
+let editMemberForm;
+let cancelEditButton;
+let deleteMemberButton;
+let editingMemberId;
+
+// ======================================================
+// INITIALIZATION
+// ======================================================
 function initializeUI() {
 
     // Forms
@@ -69,12 +82,11 @@ function initializeUI() {
     catalogueContainer = document.getElementById("catalogue-list");
 
     // Members
-
     memberList = document.getElementById("member-list");
 
     // return section
-   returnSection = document.getElementById("return-section");
-    // Validation
+    returnSection = document.getElementById("return-section");
+    
 
     if (!catalogueContainer) {
 
@@ -109,92 +121,102 @@ function initializeUI() {
 
     loadCatalogue();
     renderMemberList();
-   
     createReturnForm();
     updateStatisticsDisplay();
     setupEventListeners();
     
 }
 
-// fix - dom
+
 function loadCatalogue() {
   renderBookCatalogue(books);
 }
 
-// fix - dom
+// ======================================================
+// EVENT LISTENERS
+// ======================================================
+
 function setupEventListeners() {
+    // return form
+    returnForm?.addEventListener("submit",handleReturnSubmit);
     // Search
-    if (searchInput) {
-            searchInput.addEventListener("input", handleSearch
-        );
-    }
-    // Category Filter
-    if (filterDropdown) {
-        filterDropdown.addEventListener("change", handleFilterChange
-        );
-    }
-    // Borrow Form
-    if (borrowForm) {
-        borrowForm.addEventListener("submit", (event) => {
-            handleBorrowSubmit(event);
-            saveToLocalStorage(); }
-        );
-    }
-    // Event Delegation
-    if (catalogueContainer) {
-        catalogueContainer.addEventListener("click", handleBookClick
-        );
-    }
+    searchInput?.addEventListener("input", handleSearch);
 
-    // Navigation Tabs
+    // Category filter
+    filterDropdown?.addEventListener("change", handleFilterChange);
 
-    if (catalogueTab) {
-        catalogueTab.addEventListener(
-            "click",
-            () => {
-                hideAllSections();
-                catalogueSection.style.display = "block";
-                borrowSection.style.display = "block";
-                returnSection.style.display = "block";
-            }
-        );
-    }
+    // Borrow form
+    borrowForm?.addEventListener("submit", (event) => {
+        handleBorrowSubmit(event);
+        saveToLocalStorage();
+    });
 
-    if( memberList){
-        memberList.addEventListener("click", handleMemberClick);
-    }
+    // Catalogue events
+    catalogueContainer?.addEventListener("click", handleBookClick);
 
-    if (membersTab) {
-        membersTab.addEventListener(
-            "click",
-            () => {
-                hideAllSections();
-                memberSection.style.display = "block";
-                createMemberForm1();
-            }
-        );
-    }
+    // Members
+    memberList?.addEventListener("click", handleMemberClick);
 
-    if (statisticsTab) {
-        statisticsTab.addEventListener(
-            "click",
-            () => {
-                hideAllSections();
-                statisticsSection.style.display = "block";
-                updateStatisticsDisplay();
-                 renderOverdueBooks();
-            }
-        );
-    }
+    // Navigation
+    catalogueTab?.addEventListener("click", showCatalogue);
 
+    membersTab?.addEventListener("click", showMembers);
+
+    statisticsTab?.addEventListener("click", showStatistics);
 
     console.log("Event listeners loaded.");
-
-
-
 }
 
-// fix - template literals
+// ======================================================
+// NAVIGATION
+// ======================================================
+
+function showCatalogue() {
+    hideAllSections();
+
+    catalogueSection.style.display = "block";
+    borrowSection.style.display = "block";
+    returnSection.style.display = "block";
+}
+
+function showMembers() {
+    hideAllSections();
+
+    memberSection.style.display = "block";
+    createMemberForm1();
+}
+
+function showStatistics() {
+    hideAllSections();
+
+    statisticsSection.style.display = "block";
+    updateStatisticsDisplay();
+    renderOverdueBooks();
+}
+
+function hideAllSections() {
+
+    if (catalogueSection)
+        catalogueSection.style.display = "none";
+
+    if (borrowSection)
+        borrowSection.style.display = "none";
+
+    if (memberSection)
+        memberSection.style.display = "none";
+
+    if (statisticsSection)
+        statisticsSection.style.display = "none";
+
+    if (returnSection)
+        returnSection.style.display = "none";
+}
+
+// ======================================================
+// CATALOGUE - All book related function
+// ======================================================
+
+
 function renderBookCatalogue(bookList) {
 
     // Clear previous books
@@ -247,8 +269,6 @@ function renderBookCatalogue(bookList) {
 
 }
 
-//dom
-// fix
 function handleBookClick(event) {
 
     // Find the nearest book card
@@ -265,9 +285,6 @@ function handleBookClick(event) {
 
 }
 
-// Display function with template issues
-//dom
-// fix - template literals
 function displayBookDetails(isbn) {
 
     const detailsContainer =
@@ -295,8 +312,28 @@ function displayBookDetails(isbn) {
 
 }
 
-// Function with event handling errors
-// fix - dom
+function handleSearch(event) {
+    const searchValue = event.target.value.trim().toLowerCase();
+    const filteredBooks = searchBooks( books, searchValue)
+    renderBookCatalogue(filteredBooks);
+}
+
+function handleFilterChange() {
+    const details = document.getElementById("book-details");
+
+    if (details) {
+        details.classList.add("hidden");
+    }
+
+    const filteredBooks =  filterBooksByCategory(books, filterDropdown.value)
+    renderBookCatalogue(filteredBooks);
+
+}
+
+// ======================================================
+// BORROWING
+// ======================================================
+
 function handleBorrowSubmit(event) {
 
     event.preventDefault();
@@ -316,7 +353,7 @@ function handleBorrowSubmit(event) {
 
         const success = borrowBook(memberId, isbn);
         console.log(
-    books.find(book => book.isbn === isbn).availableCopies
+       books.find(book => book.isbn === isbn).availableCopies
 );
 
         console.log(books);
@@ -334,116 +371,96 @@ function handleBorrowSubmit(event) {
 
 }
 
-// Search function with errors
-// fix - filter() - Event fdunction
-function handleSearch(event) {
-    const searchValue = event.target.value.trim().toLowerCase();
-    const filteredBooks = searchBooks( books, searchValue)
-    renderBookCatalogue(filteredBooks);
-}
+// ======================================================
+// RETURNS
+// ======================================================
+function createReturnForm() {
 
-// Function with filter errors
-// Fix - filter() - Event function
-function handleFilterChange() {
-    const details = document.getElementById("book-details");
+    const container = document.getElementById("return-section");
 
-    if (details) {
-        details.classList.add("hidden");
+    if (!container) {
+        return;
     }
 
-    const filteredBooks =  filterBooksByCategory(books, filterDropdown.value)
-    renderBookCatalogue(filteredBooks);
-
-}
-
-// helper message
-function renderMemberMessage(message, type = "success") {
-    const container = document.getElementById("member-message");
-
     container.innerHTML = `
-        <div class="member-message ${type}">
-            ${message}
-        </div>
+        <h2>Return Book</h2>
+
+        <form id="return-form">
+
+            <input
+                type="text"
+                id="return-member-id"
+                placeholder="Member ID"
+                required
+            >
+
+            <input
+                type="text"
+                id="return-isbn"
+                placeholder="ISBN"
+                required
+            >
+
+            <button type="submit">
+                Return Book
+            </button>
+
+        </form>
     `;
-    setTimeout(() => {
-        container.innerHTML = "";
-    }, 3000); 
+    returnForm = document.getElementById("return-form");
+
 }
-// helper function -  Event function
-// some()
-function handleMemberSubmit(event) {
+
+function handleReturnSubmit(event) {
 
     event.preventDefault();
 
-     const form = event.target;
+    const memberId = document
+        .getElementById("return-member-id")
+        .value
+        .trim();
 
-        const id = form.querySelector("#member-id").value.trim();
-        const name = form.querySelector("#name").value.trim();
-        const email = form.querySelector("#email").value.trim();
+    const isbn = document
+        .getElementById("return-isbn")
+        .value
+        .trim();
 
-    if (!id || !name || !email) {
-        renderMemberMessage("Please complete all fields.", "error");
+    if (!memberId || !isbn) {
+        alert("Please complete all fields.");
         return;
     }
 
-    // Prevent duplicate IDs
+    try {
 
-    const exists = members.some(member => member.id === id );
+        processReturnQueue([
+            {
+                memberId,
+                isbn
+            }
+        ]);
 
-    if (exists) {
-        renderMemberMessage("Member ID already exists.", "error");
-        return;
+        saveToLocalStorage();
+
+        renderBookCatalogue(books);
+        renderMemberList();
+        updateStatisticsDisplay();
+        renderOverdueBooks();
+
+        event.target.reset();
+
+        alert("Book returned successfully.");
+
+    } catch (error) {
+
+        alert(error.message);
+
     }
-
-    const newMember = new Member(
-        id,
-        name,
-        email,
-        "standard"
-    );
-
-    members.push(newMember);
-    saveToLocalStorage();
-    renderMemberList();
-    updateStatisticsDisplay();
-    renderMemberMessage("Member registered successfully.", "success");
-    event.target.reset();
 
 }
 
-// Statistics display dataq
-// fix - dom  - use Template Literals
-function updateStatisticsDisplay() {
-    console.log("Updating statistics...");
-
-    const stats = getLibraryStatistics(books, members);
-
-    const totalBooks = document.querySelector(".total-books");
-    const totalMembers = document.querySelector(".total-members");
-    const availableBooks = document.querySelector(".available-books");
-    const borrowedBooks = document.querySelector(".books-borrowed");
-
-    if (totalBooks) {
-        totalBooks.textContent = stats.totalBooks;
-    }
-
-    if (totalMembers) {
-        totalMembers.textContent = stats.totalMembers;
-    }
-
-    if (availableBooks) {
-        availableBooks.textContent = stats.availableBooks;
-    }
-
-    if (borrowedBooks) {
-        borrowedBooks.textContent = stats.borrowedBooks;
-    }
-    console.log("Updating statistics.done!");
-}
-
-// Create Member Form
-// Dynamic form generation with errors
-// fix - Template Literals - move event listener
+// ======================================================
+// MEMBERS
+// ======================================================
 function createMemberForm1() {
         
     console.log("createMemberForm called");
@@ -495,27 +512,6 @@ function createMemberForm1() {
         .addEventListener("submit", handleMemberSubmit);
 }
 
-// helper function - hides all sections but dom
-function hideAllSections() {
-
-    if (catalogueSection)
-        catalogueSection.style.display = "none";
-
-    if (borrowSection)
-        borrowSection.style.display = "none";
-
-    if (memberSection)
-        memberSection.style.display = "none";
-
-    if (statisticsSection)
-        statisticsSection.style.display = "none";
-
-    if (returnSection)
-        returnSection.style.display = "none";
-}
-
-
-// fix - Template Literals
 function renderMemberList() {
     const container = document.getElementById("member-list");
 
@@ -561,6 +557,46 @@ function renderMemberList() {
     });
 }
 
+function handleMemberSubmit(event) {
+
+    event.preventDefault();
+
+     const form = event.target;
+
+        const id = form.querySelector("#member-id").value.trim();
+        const name = form.querySelector("#name").value.trim();
+        const email = form.querySelector("#email").value.trim();
+
+    if (!id || !name || !email) {
+        renderMemberMessage("Please complete all fields.", "error");
+        return;
+    }
+
+    // Prevent duplicate IDs
+
+    const exists = members.some(member => member.id === id );
+
+    if (exists) {
+        renderMemberMessage("Member ID already exists.", "error");
+        return;
+    }
+
+    const newMember = new Member(
+        id,
+        name,
+        email,
+        "standard"
+    );
+
+    members.push(newMember);
+    saveToLocalStorage();
+    renderMemberList();
+    updateStatisticsDisplay();
+    renderMemberMessage("Member registered successfully.", "success");
+    event.target.reset();
+
+}
+
 function handleMemberClick(event) {
 
     const button = event.target.closest(".edit-member");
@@ -576,7 +612,6 @@ function handleMemberClick(event) {
 
 }
 
-// fix - Template Literals
 function showEditMemberForm(id) {
 
     const member = findMemberById(id);
@@ -586,8 +621,7 @@ function showEditMemberForm(id) {
         return;
     }
 
-    const formContainer =
-        document.getElementById("member-form");
+    const formContainer =  document.getElementById("member-form");
 
         formContainer.innerHTML = `
             <h2>Edit Member</h2>
@@ -649,31 +683,13 @@ function showEditMemberForm(id) {
             </form>
         `;
 
-    document
-        .getElementById("edit-member-form")
-        .addEventListener(
-            "submit",
-            event => handleEditMemberSubmit(event, id)
-        );
+    editMemberForm = document.getElementById("edit-member-form");
+    cancelEditButton = document.getElementById("cancel-edit");
+    deleteMemberButton = document.getElementById("delete-member");
 
-    document.getElementById("cancel-edit")
-    .addEventListener("click", () => {
-        createMemberForm1();
-    });
+    editingMemberId = id;
 
-    document.getElementById("delete-member")
-        .addEventListener("click", () => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                console.log("Delete clicked");
-
-             console.log("Delete clicked", member.id);
-                deleteMember(member.id);
-                saveToLocalStorage(); 
-                renderMemberList();
-                createMemberForm1();
-        });
+    setupEditMemberEventListeners();
 
     const form = document.getElementById("member-form");
 
@@ -684,7 +700,6 @@ function showEditMemberForm(id) {
 
     document.getElementById("name").focus();
 }
-
 
 function handleEditMemberSubmit(event, id) {
 
@@ -711,21 +726,50 @@ function handleEditMemberSubmit(event, id) {
 
     renderMemberList();
     createMemberForm1();
-
+ // load DOM message for
     alert("Member updated.");
 
 }
 
-// fix - Template Literals
+// ======================================================
+// STATISTICS
+// ======================================================
+
+function updateStatisticsDisplay() {
+    console.log("Updating statistics...");
+
+    const stats = getLibraryStatistics(books, members);
+
+    const totalBooks = document.querySelector(".total-books");
+    const totalMembers = document.querySelector(".total-members");
+    const availableBooks = document.querySelector(".available-books");
+    const borrowedBooks = document.querySelector(".books-borrowed");
+
+    if (totalBooks) {
+        totalBooks.textContent = stats.totalBooks;
+    }
+
+    if (totalMembers) {
+        totalMembers.textContent = stats.totalMembers;
+    }
+
+    if (availableBooks) {
+        availableBooks.textContent = stats.availableBooks;
+    }
+
+    if (borrowedBooks) {
+        borrowedBooks.textContent = stats.borrowedBooks;
+    }
+    console.log("Updating statistics.done!");
+}
+
 function renderOverdueBooks() {
 
     const overdue = findOverdueBooks();
 
-    const count =
-        document.getElementById("overdue-count");
+    const count = document.getElementById("overdue-count");
 
-    const list =
-        document.getElementById("overdue-list");
+    const list = document.getElementById("overdue-list");
 
     if (!count || !list) {
         return;
@@ -770,140 +814,24 @@ function renderOverdueBooks() {
 
 }
 
-// fix - Template Literals
-function createReturnForm() {
+// ======================================================
+// HELPERS
+// ======================================================
 
-    const container = document.getElementById("return-section");
-
-    if (!container) {
-        return;
-    }
+function renderMemberMessage(message, type = "success") {
+    const container = document.getElementById("member-message");
 
     container.innerHTML = `
-        <h2>Return Book</h2>
-
-        <form id="return-form">
-
-            <input
-                type="text"
-                id="return-member-id"
-                placeholder="Member ID"
-                required
-            >
-
-            <input
-                type="text"
-                id="return-isbn"
-                placeholder="ISBN"
-                required
-            >
-
-            <button type="submit">
-                Return Book
-            </button>
-
-        </form>
+        <div class="member-message ${type}">
+            ${message}
+        </div>
     `;
-
-    document
-        .getElementById("return-form")
-        .addEventListener(
-            "submit",
-            handleReturnSubmit
-        );
-
-}
-
-function handleReturnSubmit(event) {
-
-    event.preventDefault();
-
-    const memberId = document
-        .getElementById("return-member-id")
-        .value
-        .trim();
-
-    const isbn = document
-        .getElementById("return-isbn")
-        .value
-        .trim();
-
-    if (!memberId || !isbn) {
-        alert("Please complete all fields.");
-        return;
-    }
-
-    try {
-
-        processReturnQueue([
-            {
-                memberId,
-                isbn
-            }
-        ]);
-
-        saveToLocalStorage();
-
-        renderBookCatalogue(books);
-        renderMemberList();
-        updateStatisticsDisplay();
-        renderOverdueBooks();
-
-        event.target.reset();
-
-        alert("Book returned successfully.");
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
+    setTimeout(() => {
+        container.innerHTML = "";
+    }, 3000); 
 }
 
 
-// helper for handleReturnSubmit
-function processReturnQueue(queue) {
-
-    let index = 0;
-
-    while (index < queue.length) {
-
-        const item = queue[index];
-
-        const book = findBookByISBN(item.isbn);
-        const member = findMemberById(item.memberId);
-
-        if (!book) {
-            throw new Error("Book not found.");
-        }
-
-        if (!member) {
-            throw new Error("Member not found.");
-        }
-
-        const checkoutIndex = book.checkedOut.findIndex(
-            checkout => checkout.memberId === item.memberId
-        );
-
-        if (checkoutIndex === -1) {
-            throw new Error("This member did not borrow this book.");
-        }
-
-        book.availableCopies++;
-
-        book.checkedOut.splice(checkoutIndex, 1);
-
-        member.borrowedBooks =
-            member.borrowedBooks.filter(
-                borrowedIsbn => borrowedIsbn !== item.isbn
-            );
-
-        index++;
-
-    }
-
-}
 // Initialize on DOMContentLoaded
 document.addEventListener(
 

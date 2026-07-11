@@ -73,3 +73,46 @@ export function getLibraryStatistics(books, members) {
         )
     };
 }
+
+// helper for handleReturnSubmit
+export function processReturnQueue(queue) {
+
+    let index = 0;
+
+    while (index < queue.length) {
+
+        const item = queue[index];
+
+        const book = findBookByISBN(item.isbn);
+        const member = findMemberById(item.memberId);
+
+        if (!book) {
+            throw new Error("Book not found.");
+        }
+
+        if (!member) {
+            throw new Error("Member not found.");
+        }
+
+        const checkoutIndex = book.checkedOut.findIndex(
+            checkout => checkout.memberId === item.memberId
+        );
+
+        if (checkoutIndex === -1) {
+            throw new Error("This member did not borrow this book.");
+        }
+
+        book.availableCopies++;
+
+        book.checkedOut.splice(checkoutIndex, 1);
+
+        member.borrowedBooks =
+            member.borrowedBooks.filter(
+                borrowedIsbn => borrowedIsbn !== item.isbn
+            );
+
+        index++;
+
+    }
+
+}
