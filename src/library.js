@@ -261,10 +261,8 @@ function searchBooksByCategory(bookList, category, index = 0 ) {
 // Function missing array methods
 // Fix - filter
 function getBooksByAuthor(authorName) {
-  
-    console.log("hit get author!!")
-    const result = books.filter( book => book.author === authorName);
-    return result;
+    return books.filter( book => book.author === authorName);
+    
 }
 
 // Function that should use reduce
@@ -370,15 +368,13 @@ function findMemberById(id) {
 
     return members.find(
         member => member.id === id
-    ) || null;
+    );
 
 }
 
 // Fix - find()
 // pure
 function findBookByISBN(isbn) {
-    console.log("hit get book isbn!")
-
     if (isbn === undefined || isbn === null) return null;
     if (typeof isbn !== 'string') return null;
 
