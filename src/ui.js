@@ -193,7 +193,7 @@ function hideAllSections() {
 
 function renderBookCatalogue(bookList) {
   // Clear previous books
-  catalogueContainer.innerHTML = "";
+  const catalogueContainer = document.getElementById("catalogue-list");
 
   // Display a message if there are no books
   if (!Array.isArray(bookList) || bookList.length === 0) {
@@ -786,6 +786,19 @@ function renderMemberMessage(id, message, type = "success") {
 }
 
 // Initialize on DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
-  initializeUI();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeUI();
+  });
+}
+
+
+export {
+  initializeUI,
+  renderBookCatalogue,
+  handleSearch,
+  handleFilterChange,
+  setupEventListeners,
+  handleBorrowSubmit,
+  updateStatisticsDisplay,
+};

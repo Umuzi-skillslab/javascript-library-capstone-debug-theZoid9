@@ -129,8 +129,7 @@ export function importLibraryData(jsonString) {
 
     loadFromLocalStorage();
 
-    console.log("Library imported successfully.");
   } catch (error) {
-    console.error("Import failed:", error);
+     return false;
   }
 }

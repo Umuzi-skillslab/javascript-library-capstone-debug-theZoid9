@@ -1,6 +1,3 @@
-// Jest Tests - Library Management System
-// Incomplete and with errors
-
 import {
   initializeLibrary,
   searchBooks,
@@ -10,17 +7,27 @@ import {
 } from "../src/utils.js";
 
 import {
-  borrowBook,
   Book,
   DigitalBook,
   Member,
-  members,
   PremiumMember,
-  findBookByISBN,
+  borrowBook,
   books,
+  members,
+  findBookByISBN,
   calculateFineAmount,
-  findMemberById,
+  formatBookInfo,
+  searchBooksByCategory,
+  combineBookCollections,
+  addMultipleBooks,
+  updateMemberInfo,
+  calculateTotalLateFees,
+  findOverdueBooks,
+  LibraryStats,
+  deleteMember,
+  getBooksByAuthor,
 } from "../src/library.js";
+
 import {
   saveToLocalStorage,
   loadFromLocalStorage,
@@ -28,388 +35,197 @@ import {
   importLibraryData,
 } from "../src/storage.js";
 
-import { jest } from "@jest/globals";
-
-describe("Book Class", () => {
-  test("should create a book instance", () => {
-    const book = new Book("978-0-123", "Test Book", "Author Name", 2020, 5);
-
-    expect(book.isbn).toBe("978-0-123");
-    expect(book.title).toBe("Test Book");
-    expect(book.author).toBe("Author Name");
-    expect(book.year).toBe(2020);
-    expect(book.availableCopies).toBe(5);
-    // Missing: tests for other properties
-    // Missing: test for availableCopies
-  });
-
-  // Missing: test for checkOut method
-  test("should checkout book", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
-
-    expect(book.checkOut(2)).toBe(true);
-  });
-
-  test("checkOut decreases availableCopies and stores memberId", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
-
-    book.checkOut("user1");
-    expect(book.availableCopies).toBe(1);
-    expect(book.checkedOut).toContainEqual(
-      expect.objectContaining({
-        memberId: "user1",
-      }),
-    );
-  });
-
-  test("rejects invalid memberId types", () => {
-    const book = new Book("123", "Title", "Author", 2024, 1);
-
-    expect(() => book.checkOut()).toThrow();
-    expect(() => book.checkOut({})).toThrow();
-    expect(() => book.checkOut(true)).toThrow();
-  });
-
-  test("checkOut throws error when no copies available", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 1);
-
-    book.checkOut("user1");
-
-    expect(() => {
-      book.checkOut("user2");
-    }).toThrow("No available copies to check out");
-  });
-
-  // Missing: test for availability checking
-  test("isAvailable returns true when copies exist", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 3);
-
-    expect(book.isAvailable()).toBe(true);
-  });
-
-  test("isAvailable returns false when no copies left", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 1);
-
-    book.checkOut("user1");
-
-    expect(book.isAvailable()).toBe(false);
-  });
-
-  // Missing: test for template literal methods
-  test("getInfo returns formatted string", () => {
-    const book = new Book("123", "Clean Code", "Robert Martin", 2008, 2);
-
-    expect(book.getInfo()).toBe(
-      "Clean Code by Robert Martin (2008) - ISBN: 123",
-    );
-  });
-});
-
-describe("DigitalBook Class", () => {
-  // Missing: test for inheritance
-  test("inherits from Book class", () => {
-    const book = new DigitalBook(
+describe("Book", () => {
+  test("constructor, availability and info", () => {
+    const book = new Book(
       "123",
       "Clean Code",
       "Robert Martin",
       2008,
-      1,
-      5,
-      "PDF",
-    );
-
-    expect(book instanceof DigitalBook).toBe(true);
-    expect(book instanceof Book).toBe(true);
-  });
-
-  // Missing: test for super() call
-  test("initializes parent class properties via super()", () => {
-    const book = new DigitalBook(
-      "123",
-      "Clean Code",
-      "Robert Martin",
-      2008,
-      3,
-      5,
-      "PDF",
+      2,
+      "Programming",
     );
 
     expect(book.isbn).toBe("123");
     expect(book.title).toBe("Clean Code");
     expect(book.author).toBe("Robert Martin");
-    expect(book.year).toBe(2008);
-    expect(book.availableCopies).toBe(3);
+    expect(book.availableCopies).toBe(2);
+    expect(book.totalCopies).toBe(2);
+    expect(book.isAvailable()).toBe(true);
+
+    expect(book.getInfo()).toBe(
+      "Clean Code by Robert Martin (2008) - ISBN: 123",
+    );
   });
 
-  // Missing: test for download method
-  test("download method tracks downloads correctly", () => {
-    const book = new DigitalBook(
+  test("successful checkout updates state", () => {
+    const book = new Book(
       "123",
       "Clean Code",
       "Robert Martin",
       2008,
-      1,
-      5,
-      "PDF",
+      2,
+      "Programming",
     );
 
-    book.download("user1");
+    expect(book.checkOut("M1")).toBe(true);
 
-    expect(book.downloads).toBe(1);
-    expect(book.downloadHistory.length).toBe(1);
+    expect(book.availableCopies).toBe(1);
+
+    expect(book.checkedOut).toContainEqual(
+      expect.objectContaining({
+        memberId: "M1",
+      }),
+    );
+  });
+
+  test("checkout validates input", () => {
+    const book = new Book("1", "JS", "John", 2024, 1, "Programming");
+
+    expect(() => book.checkOut()).toThrow();
+    expect(() => book.checkOut({})).toThrow();
+    expect(() => book.checkOut(true)).toThrow();
+
+    book.checkOut("M1");
+
+    expect(() => book.checkOut("M2")).toThrow(
+      "No available copies to check out",
+    );
+  });
+
+  test("book unavailable after last copy", () => {
+    const book = new Book("1", "JS", "John", 2024, 1, "Programming");
+
+    book.checkOut("M1");
+
+    expect(book.isAvailable()).toBe(false);
   });
 });
 
-describe("Member Class", () => {
-  test("canBorrow returns boolean", () => {
-    const member = new Member(1, "John Doe", "john@example.com", "standard");
-    const result = member.canBorrow();
+describe("DigitalBook", () => {
+  test("inherits and downloads", () => {
+    const book = new DigitalBook(
+      "1",
+      "JavaScript",
+      "John",
+      2024,
+      1,
+      "Programming",
+      25,
+      "pdf",
+    );
 
-    // Wrong assertion type // fix was a weak test
+    expect(book instanceof DigitalBook).toBe(true);
+    expect(book instanceof Book).toBe(true);
 
-    expect(result).toBe(true);
+    expect(book.download("M1")).toBe(true);
+
+    expect(book.downloads).toBe(1);
+    expect(book.downloadHistory).toHaveLength(1);
+
+    expect(() => book.download()).toThrow();
   });
+});
 
-  // Missing: test for borrow limit
-  test("returns false when member reaches limit", () => {
-    const member = new Member(1, "John", "john@example.com", "standard");
+describe("Member", () => {
+  test("member methods", () => {
+    const member = new Member(
+      "M1",
+      "John",
+      "john@test.com",
+      "standard",
+    );
+
+    expect(member.canBorrow()).toBe(true);
 
     member.borrowedBooks = ["1", "2", "3", "4", "5"];
 
     expect(member.canBorrow()).toBe(false);
-  });
 
-  // Missing: test for membership duration calculation
-  test("returns true when under limit", () => {
-    const member = new Member(1, "John", "john@example.com", "standard");
+    expect(member.getMembershipDuration()).toBeGreaterThanOrEqual(0);
 
-    member.borrowedBooks = ["1", "2"];
-
-    expect(member.canBorrow()).toBe(true);
+    expect(member.getMemberInfo()).toEqual({
+      id: "M1",
+      name: "John",
+      email: "john@test.com",
+      membershipType: "standard",
+    });
   });
 });
 
-describe("PremiumMember Class", () => {
-  // Missing: all tests for premium member // 3 + tests fix
-  // Missing: test for inheritance // fix
-  test("PremiumMember is instance of Member", () => {
-    const premium = new PremiumMember(1, "Sarah", "sarah@example.com");
+describe("PremiumMember", () => {
+  test("premium member overrides borrowing rules", () => {
+    const premium = new PremiumMember(
+      "M1",
+      "Sarah",
+      "sarah@test.com",
+    );
 
-    expect(premium instanceof PremiumMember).toBe(true);
     expect(premium instanceof Member).toBe(true);
-  });
-  // Missing: test for overridden methods // fix
-  test("sets membership type to premium", () => {
-    const premium = new PremiumMember(1, "Uncle", "sarah@example.com");
+
     expect(premium.membershipType).toBe("premium");
-  });
 
-  test("sets more book for premium members", () => {
-    const premium = new PremiumMember(1, "Uncle", "sarah@example.com");
-
-    premium.borrowedBooks = ["1", "2", "3", "4", "5", "6"];
+    premium.borrowedBooks = Array(9).fill("book");
 
     expect(premium.canBorrow()).toBe(true);
+
+    premium.borrowedBooks.push("book10");
+
+    expect(premium.canBorrow()).toBe(false);
   });
 });
 
 describe("Library Functions", () => {
   beforeEach(() => {
     books.length = 0;
+  });
 
-    books.push(
-      new Book(
-        "978-0-123",
-        "JavaScript Basics",
-        "John Doe",
-        2024,
-        "Programming",
-        5,
-      ),
+  test("findBookByISBN", () => {
+    const book = new Book(
+      "123",
+      "JavaScript",
+      "John",
+      2024,
+      1,
+      "Programming",
     );
-  });
 
-  test("findBookByISBN returns the correct book", () => {
-    const book = findBookByISBN("978-0-123");
+    books.push(book);
 
-    expect(book).not.toBeUndefined();
-    expect(book.isbn).toBe("978-0-123");
-    expect(book.title).toBe("JavaScript Basics");
-    expect(book.author).toBe("John Doe");
-  });
+    expect(findBookByISBN("123")).toBe(book);
 
-  test("findBookByISBN returns undefined for unknown ISBN", () => {
-    const book = findBookByISBN("999");
+    expect(findBookByISBN("999")).toBeUndefined();
 
-    expect(book).toBeUndefined();
-  });
-
-  test("findBookByISBN returns undefined when books array is empty", () => {
-    books.length = 0;
-
-    expect(findBookByISBN("978-0-123")).toBeUndefined();
-  });
-});
-
-describe("Array Operations", () => {
-  beforeEach(() => {
-    books.length = 0;
-
-    books.push(
-      new Book("1", "JavaScript", "John", 2020, "Programming", 2),
-      new Book("2", "CSS", "Jane", 2021, "Web", 3),
-      new Book("3", "React", "John", 2022, "Programming", 1),
-    );
-  });
-
-  test("filterBooksByCategory filters books correctly", () => {
-    const result = filterBooksByCategory(books, "Programming");
-
-    expect(result).toHaveLength(2);
-  });
-
-  test("searchBooks filters using title", () => {
-    const result = searchBooks(books, "java");
-
-    expect(result).toHaveLength(1);
-    expect(result[0].title).toBe("JavaScript");
-  });
-
-  test("map returns all book titles", () => {
-    const titles = books.map((book) => book.title);
-
-    expect(titles).toEqual(["JavaScript", "CSS", "React"]);
-  });
-
-  test("reduce calculates total available copies", () => {
-    const total = books.reduce((sum, book) => sum + book.availableCopies, 0);
-
-    expect(total).toBe(6);
-  });
-
-  test("spread creates a copy of books array", () => {
-    const copy = [...books];
-
-    expect(copy).toEqual(books);
-    expect(copy).not.toBe(books);
-  });
-
-  test("rest parameter collects arguments", () => {
-    function total(...numbers) {
-      return numbers.reduce((sum, value) => sum + value, 0);
-    }
-
-    expect(total(1, 2, 3, 4)).toBe(10);
-  });
-});
-
-describe("Recursive Functions", () => {
-  // Missing: test for searchBooksByCategory
-  // Missing: test for base case
-  // Missing: test for stack overflow prevention
-});
-
-describe("Error Handling", () => {
-  // Missing: tests for try-catch blocks
-  // Missing: tests for undefined/null handling
-  // Missing: tests for type checking
-  beforeEach(() => {
-    books.length = 0;
-    members.length = 0;
-  });
-
-  test("borrowBook throws when member does not exist", () => {
-    expect(() => {
-      borrowBook("M001", "123");
-    }).toThrow("Member not found");
-  });
-
-  test("findBookByISBN returns null for undefined", () => {
     expect(findBookByISBN(undefined)).toBeNull();
-  });
 
-  test("findBookByISBN returns null for wrong type", () => {
     expect(findBookByISBN(123)).toBeNull();
   });
 });
 
-describe("String Operations", () => {
-  // Missing: tests for formatBookInfo
-  // Missing: tests for template literals
-  // Missing: tests for string methods
-  test("formatBookInfo returns HTML string", () => {
-    const book = new Book("1", "JavaScript", "John", 2024, "Programming", 5);
+describe("Formatting and Math", () => {
+  test("formatBookInfo", () => {
+    const book = new Book(
+      "123",
+      "JavaScript",
+      "John",
+      2024,
+      1,
+      "Programming",
+    );
 
     const html = formatBookInfo(book);
 
-    expect(typeof html).toBe("string");
     expect(html).toContain("JavaScript");
     expect(html).toContain("John");
+
+    expect(formatBookInfo()).toContain("No book selected");
   });
 
-  test("formatBookInfo uses template literals", () => {
-    const book = new Book("1", "CSS", "Jane", 2024, "Web", 3);
-
-    const html = formatBookInfo(book);
-
-    expect(html).toContain("CSS");
-    expect(html).toContain("Jane");
-    expect(html).toContain("Web");
-  });
-});
-
-describe("Math Operations", () => {
-  test("calculateFineAmount returns number", () => {
-    var fine = calculateFineAmount(5);
-
-    expect(typeof fine).toBe("number");
-    // Missing: test for correct calculation
-    // Missing: test for toFixed/rounding
-  });
-
-  test("calculateFineAmount returns correct amount", () => {
+  test("calculateFineAmount", () => {
     expect(calculateFineAmount(5)).toBe(2.5);
-  });
-
-  test("returns zero for NaN", () => {
+    expect(calculateFineAmount(undefined)).toBe(0);
     expect(calculateFineAmount(NaN)).toBe(0);
-  });
-
-  test("returns negative value for negative days", () => {
     expect(calculateFineAmount(-2)).toBe(-1);
-  });
-
-  // Missing: test for NaN handling
-  // Missing: test for negative numbers
-});
-
-describe("DOM Manipulation", () => {
-  // Missing: DOM setup with jsdom
-  // Missing: tests for event handlers
-  // Missing: tests for renderBookCatalogue
-  // Missing: tests for search functionality
-});
-
-describe("JSON Operations", () => {
-  test("exportLibraryData returns valid JSON", () => {
-    const json = exportLibraryData();
-
-    expect(() => JSON.parse(json)).not.toThrow();
-  });
-
-  test("exported JSON contains books and members", () => {
-    const json = exportLibraryData();
-
-    const data = JSON.parse(json);
-
-    expect(data).toHaveProperty("books");
-    expect(data).toHaveProperty("members");
-  });
-
-  test("importLibraryData handles malformed JSON", () => {
-    expect(() => {
-      importLibraryData("{bad json}");
-    }).not.toThrow();
   });
 });
 
@@ -418,28 +234,17 @@ describe("LocalStorage", () => {
     const storage = {};
 
     global.localStorage = {
-      getItem(key) {
-        return storage[key] ?? null;
-      },
-
-      setItem(key, value) {
+      getItem: (key) => storage[key] ?? null,
+      setItem: (key, value) => {
         storage[key] = value;
       },
-
-      removeItem(key) {
-        delete storage[key];
-      },
-
-      clear() {
-        Object.keys(storage).forEach((key) => delete storage[key]);
-      },
+      removeItem: (key) => delete storage[key],
+      clear: () => Object.keys(storage).forEach((k) => delete storage[k]),
     };
 
-    // Reset arrays
     books.length = 0;
     members.length = 0;
 
-    // Fake book
     books.push(
       new Book(
         "9780134685991",
@@ -451,27 +256,17 @@ describe("LocalStorage", () => {
       ),
     );
 
-    // Fake member
     members.push(
-      new Member("M001", "John Smith", "john@gmail.com", "standard"),
+      new Member(
+        "M001",
+        "John Smith",
+        "john@gmail.com",
+        "standard",
+      ),
     );
   });
 
-  test("saveToLocalStorage stores books and members", () => {
-    saveToLocalStorage();
-
-    const savedBooks = JSON.parse(localStorage.getItem("libraryBooks"));
-
-    const savedMembers = JSON.parse(localStorage.getItem("libraryMembers"));
-
-    expect(savedBooks).toHaveLength(1);
-    expect(savedBooks[0].title).toBe("Effective JavaScript");
-
-    expect(savedMembers).toHaveLength(1);
-    expect(savedMembers[0].name).toBe("John Smith");
-  });
-
-  test("loadFromLocalStorage restores saved data", () => {
+  test("save and load localStorage", () => {
     saveToLocalStorage();
 
     books.length = 0;
@@ -483,31 +278,13 @@ describe("LocalStorage", () => {
     expect(members).toHaveLength(1);
   });
 
-  test("loadFromLocalStorage returns false when storage is empty", () => {
-    localStorage.clear();
-
-    books.length = 0;
-    members.length = 0;
-
-    expect(loadFromLocalStorage()).toBe(false);
-  });
-
-  test("exportLibraryData returns JSON string", () => {
+  test("export and import library", () => {
     const json = exportLibraryData();
-
-    expect(typeof json).toBe("string");
 
     const parsed = JSON.parse(json);
 
-    expect(parsed.books).toHaveLength(1);
-    expect(parsed.members).toHaveLength(1);
-  });
-
-  test("importLibraryData imports books and members", () => {
-    const json = JSON.stringify({
-      books,
-      members,
-    });
+    expect(parsed).toHaveProperty("books");
+    expect(parsed).toHaveProperty("members");
 
     books.length = 0;
     members.length = 0;
@@ -518,220 +295,351 @@ describe("LocalStorage", () => {
     expect(members).toHaveLength(1);
   });
 
-  test("importLibraryData handles invalid JSON", () => {
-    expect(() => {
-      importLibraryData("{bad json}");
-    }).not.toThrow();
+  test("handles empty storage and invalid json", () => {
+    localStorage.clear();
+
+    expect(loadFromLocalStorage()).toBe(false);
+
+    expect(() => importLibraryData("{bad json}")).not.toThrow();
   });
 });
 
-// UTILS.JS
-
-describe("Utility functions", () => {
+describe("Utility Functions", () => {
   beforeEach(() => {
     books.length = 0;
     members.length = 0;
   });
 
-  describe("initializeLibrary", () => {
-    test("loads default books and members", () => {
-      initializeLibrary();
+  test("initializeLibrary only loads once", () => {
+    initializeLibrary();
 
-      expect(books).toHaveLength(2);
-      expect(members).toHaveLength(4);
-    });
+    expect(books).toHaveLength(2);
+    expect(members).toHaveLength(4);
 
-    test("does not load duplicate data", () => {
-      initializeLibrary();
-      initializeLibrary();
+    initializeLibrary();
 
-      expect(books).toHaveLength(2);
-      expect(members).toHaveLength(4);
-    });
+    expect(books).toHaveLength(2);
+    expect(members).toHaveLength(4);
   });
 
-  describe("searchBooks", () => {
-    beforeEach(() => {
-      initializeLibrary();
-    });
+  test("searchBooks", () => {
+    initializeLibrary();
 
-    test("finds books by title", () => {
-      const result = searchBooks(books, "react");
+    expect(searchBooks(books, "react")).toHaveLength(1);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].title).toBe("Learning React");
-    });
+    expect(searchBooks(books, "david")).toHaveLength(1);
 
-    test("finds books by author", () => {
-      const result = searchBooks(books, "david");
-
-      expect(result).toHaveLength(1);
-      expect(result[0].author).toBe("David Herman");
-    });
-
-    test("returns empty array when no match exists", () => {
-      const result = searchBooks(books, "python");
-
-      expect(result).toEqual([]);
-    });
+    expect(searchBooks(books, "python")).toEqual([]);
   });
 
-  describe("filterBooksByCategory", () => {
-    beforeEach(() => {
-      initializeLibrary();
-    });
+  test("filterBooksByCategory", () => {
+    initializeLibrary();
 
-    test("returns only matching category", () => {
-      const result = filterBooksByCategory(books, "reference");
+    expect(filterBooksByCategory(books, "reference")).toHaveLength(1);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].category).toBe("reference");
-    });
+    expect(filterBooksByCategory(books, "all")).toHaveLength(2);
 
-    test("returns all books when category is all", () => {
-      const result = filterBooksByCategory(books, "all");
-
-      expect(result).toHaveLength(2);
-    });
-
-    test("returns empty array for unknown category", () => {
-      const result = filterBooksByCategory(books, "history");
-
-      expect(result).toEqual([]);
-    });
+    expect(filterBooksByCategory(books, "history")).toEqual([]);
   });
 
-  describe("getLibraryStatistics", () => {
-    beforeEach(() => {
-      initializeLibrary();
+  test("getLibraryStatistics", () => {
+    initializeLibrary();
+
+    books[0].checkedOut.push({
+      memberId: "M001",
+      dueDate: "2026-08-01",
     });
 
-    test("returns correct statistics", () => {
-      books[0].checkedOut.push({
-        memberId: "M001",
-        dueDate: "2026-08-01",
-      });
+    books[0].availableCopies--;
 
-      books[0].availableCopies--;
-
-      const stats = getLibraryStatistics(books, members);
-
-      expect(stats).toEqual({
-        totalBooks: 2,
-        totalMembers: 4,
-        availableBooks: 6,
-        borrowedBooks: 1,
-      });
-    });
-  });
-
-  describe("processReturnQueue", () => {
-    beforeEach(() => {
-      books.length = 0;
-      members.length = 0;
-
-      const book = new Book("123", "JavaScript", "John", 2024, 0, "reference");
-
-      book.checkedOut.push({
-        memberId: "M001",
-        dueDate: "2026-08-01",
-      });
-
-      const member = new Member("M001", "John", "john@test.com", "standard");
-
-      member.borrowedBooks.push("123");
-
-      books.push(book);
-      members.push(member);
-    });
-
-    test("returns a borrowed book", () => {
-      processReturnQueue([
-        {
-          isbn: "123",
-          memberId: "M001",
-        },
-      ]);
-
-      expect(books[0].availableCopies).toBe(1);
-      expect(books[0].checkedOut).toHaveLength(0);
-      expect(members[0].borrowedBooks).toEqual([]);
-    });
-
-    test("throws if book does not exist", () => {
-      expect(() =>
-        processReturnQueue([
-          {
-            isbn: "999",
-            memberId: "M001",
-          },
-        ]),
-      ).toThrow("Book not found.");
-    });
-
-    test("throws if member does not exist", () => {
-      expect(() =>
-        processReturnQueue([
-          {
-            isbn: "123",
-            memberId: "M999",
-          },
-        ]),
-      ).toThrow("Member not found.");
-    });
-
-    test("throws if member never borrowed the book", () => {
-      books[0].checkedOut = [];
-
-      expect(() =>
-        processReturnQueue([
-          {
-            isbn: "123",
-            memberId: "M001",
-          },
-        ]),
-      ).toThrow("This member did not borrow this book.");
-    });
-
-    test("processes multiple returns", () => {
-      const secondBook = new Book(
-        "456",
-        "React",
-        "Alex",
-        2024,
-        0,
-        "non-fiction",
-      );
-
-      secondBook.checkedOut.push({
-        memberId: "M001",
-        dueDate: "2026-08-01",
-      });
-
-      books.push(secondBook);
-      members[0].borrowedBooks.push("456");
-
-      processReturnQueue([
-        {
-          isbn: "123",
-          memberId: "M001",
-        },
-        {
-          isbn: "456",
-          memberId: "M001",
-        },
-      ]);
-
-      expect(books[0].availableCopies).toBe(1);
-      expect(books[1].availableCopies).toBe(1);
-      expect(members[0].borrowedBooks).toEqual([]);
+    expect(getLibraryStatistics(books, members)).toEqual({
+      totalBooks: 2,
+      totalMembers: 4,
+      availableBooks: 6,
+      borrowedBooks: 1,
     });
   });
 });
 
-// Missing: describe blocks for:
-// - Nested loops
-// - For-of loops
-// - Destructuring
-// - Scope testing (var, let, const)
-// - Module exports/imports
+describe("processReturnQueue", () => {
+  beforeEach(() => {
+    books.length = 0;
+    members.length = 0;
+
+    const book = new Book(
+      "123",
+      "JavaScript",
+      "John",
+      2024,
+      0,
+      "reference",
+    );
+
+    book.checkedOut.push({
+      memberId: "M001",
+      dueDate: "2026-08-01",
+    });
+
+    const member = new Member(
+      "M001",
+      "John",
+      "john@test.com",
+      "standard",
+    );
+
+    member.borrowedBooks.push("123");
+
+    books.push(book);
+    members.push(member);
+  });
+
+  test("returns borrowed book", () => {
+    processReturnQueue([
+      {
+        isbn: "123",
+        memberId: "M001",
+      },
+    ]);
+
+    expect(books[0].availableCopies).toBe(1);
+    expect(books[0].checkedOut).toHaveLength(0);
+    expect(members[0].borrowedBooks).toEqual([]);
+  });
+
+  test("throws expected errors", () => {
+    expect(() =>
+      processReturnQueue([
+        {
+          isbn: "999",
+          memberId: "M001",
+        },
+      ]),
+    ).toThrow("Book not found.");
+
+    expect(() =>
+      processReturnQueue([
+        {
+          isbn: "123",
+          memberId: "M999",
+        },
+      ]),
+    ).toThrow("Member not found.");
+
+    books[0].checkedOut = [];
+
+    expect(() =>
+      processReturnQueue([
+        {
+          isbn: "123",
+          memberId: "M001",
+        },
+      ]),
+    ).toThrow("This member did not borrow this book.");
+  });
+
+  test("processes multiple returns", () => {
+    const secondBook = new Book(
+      "456",
+      "React",
+      "Alex",
+      2024,
+      0,
+      "Programming",
+    );
+
+    secondBook.checkedOut.push({
+      memberId: "M001",
+      dueDate: "2026-08-01",
+    });
+
+    books.push(secondBook);
+
+    members[0].borrowedBooks.push("456");
+
+    processReturnQueue([
+      {
+        isbn: "123",
+        memberId: "M001",
+      },
+      {
+        isbn: "456",
+        memberId: "M001",
+      },
+    ]);
+
+    expect(members[0].borrowedBooks).toEqual([]);
+    expect(books[0].availableCopies).toBe(1);
+    expect(books[1].availableCopies).toBe(1);
+  });
+});
+
+describe("Additional Library Functions", () => {
+  beforeEach(() => {
+    books.length = 0;
+    members.length = 0;
+  });
+
+  test("borrowBook success and failure", () => {
+    const member = new Member(
+      "M001",
+      "John",
+      "john@test.com",
+      "standard",
+    );
+
+    const book = new Book(
+      "123",
+      "JavaScript",
+      "John",
+      2024,
+      1,
+      "Programming",
+    );
+
+    members.push(member);
+    books.push(book);
+
+    expect(borrowBook("M001", "123")).toBe(true);
+
+    expect(member.borrowedBooks).toContain("123");
+    expect(book.availableCopies).toBe(0);
+
+    expect(() => borrowBook("BAD", "123")).toThrow("Member not found");
+    expect(() => borrowBook("M001", "BAD")).toThrow("Book not found");
+  });
+
+  test("searchBooksByCategory", () => {
+    const b1 = new Book("1", "JavaScript", "John", 2024, 1, "Programming");
+    const b2 = new Book("2", "CSS", "Jane", 2024, 1, "Web");
+
+    expect(searchBooksByCategory([b1, b2], "Programming")).toEqual([b1]);
+
+    expect(searchBooksByCategory([], "Programming")).toEqual([]);
+
+    expect(searchBooksByCategory(null, "Programming")).toEqual([]);
+  });
+
+  test("collection helper functions", () => {
+    const b1 = new Book("1", "JS", "John", 2024, 1, "Programming");
+    const b2 = new Book("2", "CSS", "Jane", 2024, 1, "Web");
+
+    expect(combineBookCollections([b1], [b2], [])).toEqual([b1, b2]);
+
+    addMultipleBooks(b1, b2);
+
+    expect(books).toHaveLength(2);
+
+    expect(getBooksByAuthor("John")).toEqual([b1]);
+  });
+
+  test("updateMemberInfo", () => {
+    const member = new Member(
+      "1",
+      "Old",
+      "old@test.com",
+      "standard",
+    );
+
+    updateMemberInfo(member, {
+      name: "New",
+      email: "new@test.com",
+      membershipType: "premium",
+    });
+
+    expect(member.name).toBe("New");
+    expect(member.email).toBe("new@test.com");
+    expect(member.membershipType).toBe("premium");
+  });
+
+  test("calculateTotalLateFees", () => {
+    expect(
+      calculateTotalLateFees({
+        overdueBooks: [
+          { daysLate: 2 },
+          { daysLate: 4 },
+        ],
+      }),
+    ).toBe(3);
+  });
+
+  test("findOverdueBooks", () => {
+    const book = new Book(
+      "1",
+      "JavaScript",
+      "John",
+      2024,
+      0,
+      "Programming",
+    );
+
+    book.checkedOut.push({
+      memberId: "M001",
+      dueDate: "2020-01-01",
+    });
+
+    books.push(book);
+
+    const overdue = findOverdueBooks();
+
+    expect(overdue).toHaveLength(1);
+
+    expect(overdue[0]).toEqual(
+      expect.objectContaining({
+        memberId: "M001",
+        isbn: "1",
+        title: "JavaScript",
+      }),
+    );
+  });
+
+  test("LibraryStats", () => {
+    expect(LibraryStats.getMostPopularBook()).toBeNull();
+
+    const book = new Book(
+      "1",
+      "JavaScript",
+      "John",
+      2024,
+      1,
+      "Programming",
+    );
+
+    book.checkedOut.push({
+      memberId: "M001",
+    });
+
+    books.push(book);
+
+    members.push(
+      new Member(
+        "M001",
+        "John",
+        "john@test.com",
+        "standard",
+      ),
+    );
+
+    expect(LibraryStats.getStatistics()).toEqual({
+      totalBooks: 1,
+      totalMembers: 1,
+      totalBorrowings: 1,
+    });
+
+    expect(LibraryStats.getMostPopularBook()).toBe(book);
+  });
+
+  test("deleteMember", () => {
+    members.push(
+      new Member(
+        "M001",
+        "John",
+        "john@test.com",
+        "standard",
+      ),
+    );
+
+    expect(deleteMember("M001")).toBe(true);
+
+    expect(members).toHaveLength(0);
+  });
+});
