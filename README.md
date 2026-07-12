@@ -139,7 +139,7 @@ The project was refactored into modular components.
 Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Umuzi-skillslab/javascript-library-capstone-debug-theZoid9
 ```
 
 Install dependencies
