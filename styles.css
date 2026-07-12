@@ -594,7 +594,8 @@ button.btn-danger:hover {
 /* --- Statistics --- */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(auto, max-content));
+    grid-template-columns: 1fr; 
     gap: 20px;
 }
 

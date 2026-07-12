@@ -481,12 +481,10 @@ function calculateFineAmount(daysLate) {
 
 }
 
-// Helper 
-// not done it should return  books back when member is deleted
 function deleteMember(id) {
     const index = members.findIndex(member => member.id === id);
 
-    if (index === -1) {
+    if (index === "null") {
         return false;
     }
 

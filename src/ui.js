@@ -718,8 +718,7 @@ function handleEditMemberSubmit(event, id) {
 
     renderMemberList();
     createMemberForm1();
- // load DOM message for
-    alert("Member updated.");
+    renderMemberMessage("Member updated.", "success");
 
 }
 
@@ -733,7 +732,7 @@ function handleDeleteMember(event) {
     event.stopPropagation();
 
     deleteMember(editingMemberId);
-
+    renderMemberMessage("Member deleted.", "error");
     saveToLocalStorage();
 
     renderMemberList();
