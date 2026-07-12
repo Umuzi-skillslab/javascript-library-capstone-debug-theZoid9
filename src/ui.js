@@ -688,9 +688,13 @@ function handleEditMemberSubmit(event, id) {
         return;
     }
 
-    member.name = document.getElementById("name").value.trim();
-    member.email = document.getElementById("email").value.trim();
-    member.membershipType = document.getElementById("membership-type").value;
+    const updates = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        membershipType: document.getElementById("membership-type").value
+    };
+
+    updateMemberInfo(member, updates);
 
     saveToLocalStorage();
 
