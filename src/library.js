@@ -436,22 +436,19 @@ const LibraryStats = {
 
 };
 
-// Function with string manipulation errors // fix
-// Template Literals
-function formatBookInfo(book) {
-    // Should use template literals
 
+
+function formatBookInfo(book) {
     if (!book) {
          return "<p>No book selected.</p>";
     }
-    // add validation 
+
     return `
             <h3>${book.title}</h3>
             <p>Author: ${book.author}</p>
             <p>Year: ${book.year}</p>
-
+            <p>ISBN: ${book.isbn}</p>
             `;
-    // Missing: proper string methods (trim, toUpperCase, etc.)
     
    
 }

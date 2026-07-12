@@ -525,7 +525,7 @@ function renderMemberList() {
                 ${member.borrowedBooks.length}
             </p>
 
-            <button class="edit-member"
+            <button type="submit" class="edit-member"
                 data-id="${member.id}">
                 Edit
             </button>
@@ -681,7 +681,16 @@ function showEditMemberForm(id) {
 function handleEditMemberSubmit(event, id) {
 
     event.preventDefault();
+    const member = findMemberById(editingMemberId);
 
+    if (!member) {
+        renderMemberMessage("member-message", "Member not found.", "error");
+        return;
+    }
+
+    member.name = document.getElementById("name").value.trim();
+    member.email = document.getElementById("email").value.trim();
+    member.membershipType = document.getElementById("membership-type").value;
 
     saveToLocalStorage();
 
