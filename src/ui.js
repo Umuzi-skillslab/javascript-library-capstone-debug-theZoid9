@@ -353,20 +353,16 @@ function handleBorrowSubmit(event) {
     const isbn = isbnInput.value.trim();
 
     if (!memberId || !isbn) {
-        alert("Please complete all fields.");
+        renderMemberMessage("borrow-message","Please complete all fields.", "error");
         return;
     }
 
     try {
 
         const success = borrowBook(memberId, isbn);
-        console.log(
-       books.find(book => book.isbn === isbn).availableCopies
-);
-
-        console.log(books);
+    
         if (success) {
-            alert("Book borrowed successfully.");
+            renderMemberMessage("borrow-message","Book borrowed successfully.");
             saveToLocalStorage();
             renderBookCatalogue(books);
             updateStatisticsDisplay();
@@ -374,7 +370,7 @@ function handleBorrowSubmit(event) {
         }
 
     } catch (error) {
-        alert(error.message);
+        renderMemberMessage("borrow-message", error.message, "error");
     }
 
 }
@@ -456,11 +452,11 @@ function handleReturnSubmit(event) {
 
         event.target.reset();
 
-        alert("Book returned successfully.");
-
+        
+        renderMemberMessage("Book returned")
     } catch (error) {
 
-        alert(error.message);
+        renderMemberMessage(error.message,"error");
 
     }
 
@@ -580,8 +576,6 @@ function handleMemberSubmit(event) {
         return;
     }
 
-    // Prevent duplicate IDs
-
     const exists = members.some(member => member.id === id );
 
     if (exists) {
@@ -614,7 +608,6 @@ function handleMemberClick(event) {
     }
 
     const id = button.dataset.id;
-    const form = document.getElementById("edit-member-form");
 
     showEditMemberForm(id);
 
@@ -632,7 +625,7 @@ function showEditMemberForm(id) {
     const formContainer =  document.getElementById("member-form");
 
         formContainer.innerHTML = `
-            <h2>Edit Member</h2>
+            <h2>Edit Member : ${member.name}</h2>
 
             <p class="form-description">
                 Update this member's information below.
@@ -744,8 +737,6 @@ function handleDeleteMember(event) {
 // ======================================================
 
 function updateStatisticsDisplay() {
-    console.log("Updating statistics...");
-
     const stats = getLibraryStatistics(books, members);
 
     const totalBooks = document.querySelector(".total-books");
@@ -826,8 +817,8 @@ function renderOverdueBooks() {
 // HELPERS
 // ======================================================
 
-function renderMemberMessage(message, type = "success") {
-    const container = document.getElementById("member-message");
+function renderMemberMessage(id, message, type = "success") {
+    const container = document.getElementById(id);
 
     container.innerHTML = `
         <div class="member-message ${type}">

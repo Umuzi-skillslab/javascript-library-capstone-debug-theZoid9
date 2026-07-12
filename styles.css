@@ -807,6 +807,7 @@ button.btn-danger:hover {
 }
 
 .member-message {
+    margin-top: 40px;
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: var(--radius-sm);
