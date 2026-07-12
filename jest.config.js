@@ -7,6 +7,6 @@ export default {
     "**/*.js",
     "!**/*.test.js",
     "!**/node_modules/**",
-    "!coverage/**"
-  ]
+    "!coverage/**",
+  ],
 };
