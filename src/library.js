@@ -58,7 +58,7 @@ class Book {
             memberId,
             borrowDate: new Date(),
             dueDate: new Date(
-                Date.now() + 14 * 24 * 60 * 60 * 1000
+                Date.now()
             )
         });
         this.availableCopies--;
@@ -343,9 +343,6 @@ function borrowBook(memberId, isbn) {
 
         book.checkOut(member.id);
 
-        console.log("checkedOut =", book.checkedOut);
-        console.log("available =", book.availableCopies);
-        console.log("books =", books);
 
         if(!Array.isArray(member.borrowedBooks)){
             member.borrowedBooks = [];
@@ -356,7 +353,6 @@ function borrowBook(memberId, isbn) {
         return true;
 
     }catch(error){
-        console.error("borrowBook error:", error.message);
         throw error;
     }
 }

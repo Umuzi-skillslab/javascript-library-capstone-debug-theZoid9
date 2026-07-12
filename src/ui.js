@@ -453,10 +453,10 @@ function handleReturnSubmit(event) {
         event.target.reset();
 
         
-        renderMemberMessage("Book returned")
+        renderMemberMessage("return-message","Book returned")
     } catch (error) {
 
-        renderMemberMessage(error.message,"error");
+        renderMemberMessage("return-message",error.message,"error");
 
     }
 
@@ -572,14 +572,14 @@ function handleMemberSubmit(event) {
         const email = form.querySelector("#email").value.trim();
 
     if (!id || !name || !email) {
-        renderMemberMessage("Please complete all fields.", "error");
+        renderMemberMessage("return-message","Please complete all fields.", "error");
         return;
     }
 
     const exists = members.some(member => member.id === id );
 
     if (exists) {
-        renderMemberMessage("Member ID already exists.", "error");
+        renderMemberMessage("return-message","Member ID already exists.", "error");
         return;
     }
 
@@ -594,7 +594,7 @@ function handleMemberSubmit(event) {
     saveToLocalStorage();
     renderMemberList();
     updateStatisticsDisplay();
-    renderMemberMessage("Member registered successfully.", "success");
+    renderMemberMessage("member-message","Member registered successfully.", "success");
     event.target.reset();
 
 }
@@ -711,7 +711,7 @@ function handleEditMemberSubmit(event, id) {
 
     renderMemberList();
     createMemberForm1();
-    renderMemberMessage("Member updated.", "success");
+    renderMemberMessage("member-message","Member updated.", "success");
 
 }
 
@@ -725,7 +725,7 @@ function handleDeleteMember(event) {
     event.stopPropagation();
 
     deleteMember(editingMemberId);
-    renderMemberMessage("Member deleted.", "error");
+    renderMemberMessage("member-message","Member deleted.", "error");
     saveToLocalStorage();
 
     renderMemberList();
@@ -759,7 +759,6 @@ function updateStatisticsDisplay() {
     if (borrowedBooks) {
         borrowedBooks.textContent = stats.borrowedBooks;
     }
-    console.log("Updating statistics.done!");
 }
 
 function renderOverdueBooks() {
