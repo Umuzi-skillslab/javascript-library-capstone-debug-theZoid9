@@ -9,6 +9,13 @@ import {
   handleFilterChange,
   handleBorrowSubmit,
   updateStatisticsDisplay,
+  showEditMemberForm,
+  handleEditMemberSubmit,
+  handleDeleteMember,
+  renderOverdueBooks,
+  renderMemberMessage,
+  handleCancelEdit
+  
 } from "../src/ui.js";
 
 import {
@@ -172,6 +179,14 @@ describe("filter", () => {
 
 describe("statistics", () => {
 
+    test("statistics does not throw when elements are missing", () => {
+  document.body.innerHTML = "";
+
+  expect(() => {
+    updateStatisticsDisplay();
+  }).not.toThrow();
+});
+
   test("updates statistics", () => {
 
     updateStatisticsDisplay();
@@ -240,6 +255,19 @@ describe("navigation", () => {
 });
 
 describe("member rendering", () => {
+    test("renders member success message", () => {
+  renderMemberMessage(
+    "member-message",
+    "Saved",
+    "success"
+  );
+
+  expect(
+    document.getElementById("member-message").textContent
+  ).toContain("Saved");
+});
+
+
   test("renders member cards", () => {
     document.getElementById("members-tab").click();
 
@@ -251,6 +279,14 @@ describe("member rendering", () => {
       document.getElementById("member-list").textContent
     ).toContain("John");
   });
+
+  test("showEditMemberForm alerts when member does not exist", () => {
+  window.alert = jest.fn();
+
+  showEditMemberForm("BAD");
+
+  expect(window.alert).toHaveBeenCalledWith("Member not found.");
+});
 
   test("renders empty member message", () => {
     members.length = 0;
@@ -271,6 +307,18 @@ describe("member registration", () => {
       document.getElementById("member-registration-form")
     ).not.toBeNull();
   });
+
+  test("edit submit shows error if member no longer exists", () => {
+  members.length = 0;
+
+  handleEditMemberSubmit({
+    preventDefault() {},
+  });
+
+  expect(
+    document.getElementById("member-message").textContent
+  ).toContain("Member not found.");
+});
 
   test("adds new member", () => {
     document.getElementById("members-tab").click();
@@ -332,6 +380,18 @@ describe("member registration", () => {
       document.body.textContent
     ).toContain("");
   });
+  test("delete member shows error when member does not exist", () => {
+  members.length = 0;
+
+  handleDeleteMember({
+    preventDefault() {},
+    stopPropagation() {},
+  });
+
+  expect(
+    document.getElementById("member-message").textContent
+  ).toContain("Member not found.");
+});
 });
 
 describe("statistics extra", () => {
@@ -365,6 +425,7 @@ describe("catalogue rendering", () => {
     ).toContain("JavaScript");
   });
 
+  
   test("contains author", () => {
     expect(
       document.body.textContent
@@ -491,6 +552,15 @@ describe("statistics changes", () => {
 });
 
 describe("borrow validation", () => {
+
+    test("renders no overdue books message", () => {
+  renderOverdueBooks();
+
+  expect(
+    document.getElementById("overdue-list").textContent
+  ).toContain("No overdue books");
+});
+
   test("blank member id fails", () => {
     document.getElementById("isbn").value = "111";
 
@@ -635,6 +705,15 @@ describe("statistics rendering", () => {
 });
 
 describe("catalogue html", () => {
+  test("cancel edit recreates registration form", () => {
+  showEditMemberForm("M001");
+
+  handleCancelEdit();
+
+  expect(
+    document.getElementById("member-registration-form")
+  ).not.toBeNull();
+});
   test("book card class exists", () => {
     expect(
       document.querySelector(".book-card")

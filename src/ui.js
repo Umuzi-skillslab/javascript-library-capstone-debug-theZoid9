@@ -642,7 +642,7 @@ function handleEditMemberSubmit(event, id) {
 
   if (!member) {
     renderMemberMessage("member-message", "Member not found.", "error");
-    return;
+    return false;
   }
 
   const updates = {
@@ -810,4 +810,5 @@ export {
   renderOverdueBooks,
   renderMemberMessage,
   handleReturnSubmit,
+  handleCancelEdit
 };
