@@ -813,5 +813,5 @@ export {
   showMembers,
   showStatistics,
   handleBookClick,
-displayBookDetails,
+  displayBookDetails,
 };

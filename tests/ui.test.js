@@ -17,7 +17,7 @@ import {
   Book,
   Member,
 } from "../src/library.js";
-
+import { jest } from "@jest/globals";
 beforeEach(() => {
   document.body.innerHTML = `
     <button id="catalogue-tab"></button>
@@ -30,17 +30,17 @@ beforeEach(() => {
     <section id="statistics-section"></section>
     <section id="return-section"></section>
 
-    <input id="search">
+    <input id="search" />
 
     <select id="filter-category">
-        <option value="all">all</option>
-        <option value="Programming">Programming</option>
-        <option value="Web">Web</option>
+      <option value="all">all</option>
+      <option value="Programming">Programming</option>
+      <option value="Web">Web</option>
     </select>
 
     <form id="borrow-form">
-        <input id="member-id">
-        <input id="isbn">
+      <input id="member-id" />
+      <input id="isbn" />
     </form>
 
     <div id="catalogue-list"></div>
@@ -62,55 +62,33 @@ beforeEach(() => {
     <div id="overdue-list"></div>
   `;
 
-  localStorage.clear();
-
   books.length = 0;
   members.length = 0;
 
   books.push(
-    new Book(
-      "111",
-      "JavaScript",
-      "John",
-      2024,
-      2,
-      "Programming"
-    ),
-
-    new Book(
-      "222",
-      "CSS",
-      "Jane",
-      2023,
-      1,
-      "Web"
-    )
+    new Book("111", "JavaScript", "John", 2024, 2, "Programming"),
+    new Book("222", "CSS", "Jane", 2023, 1, "Web")
   );
 
   members.push(
-    new Member(
-      "M001",
-      "John",
-      "john@test.com",
-      "standard"
-    )
+    new Member("M001", "John", "john@test.com", "standard")
   );
 
-    renderBookCatalogue(books);
-  updateStatisticsDisplay();
+  localStorage.clear();
+
+  initializeUI();
 });
 
 describe("renderBookCatalogue", () => {
 
-  test("renders all books", () => {
+   test("renders all books", () => {
+    const list = document.getElementById("catalogue-list");
+    list.innerHTML = "";
 
     renderBookCatalogue(books);
 
-    expect(
-      document.querySelectorAll(".book-card")
-    ).toHaveLength(2);
-
-  });
+    expect(document.querySelectorAll(".book-card")).toHaveLength(2);
+    });
 
   test("renders empty message", () => {
 
@@ -208,22 +186,17 @@ describe("statistics", () => {
 
 describe("borrow form", () => {
 
-  test("missing fields shows validation", () => {
-
-    const form =
-      document.getElementById("borrow-form");
+    test("missing fields shows validation", () => {
+    const form = document.getElementById("borrow-form");
 
     handleBorrowSubmit({
-      preventDefault: jest.fn(),
-      target: form,
+        preventDefault: () => {},
+        target: form,
     });
 
     expect(
-      document
-        .getElementById("borrow-message")
-        .textContent
+        document.getElementById("borrow-message").textContent
     ).toContain("Please complete");
-
-  });
+    });
 
 });
