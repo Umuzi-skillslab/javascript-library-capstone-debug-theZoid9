@@ -194,7 +194,7 @@ function hideAllSections() {
 function renderBookCatalogue(bookList) {
   // Clear previous books
   const catalogueContainer = document.getElementById("catalogue-list");
-
+    catalogueContainer.innerHTML = "";
   // Display a message if there are no books
   if (!Array.isArray(bookList) || bookList.length === 0) {
     catalogueContainer.innerHTML = `
@@ -797,8 +797,21 @@ export {
   initializeUI,
   renderBookCatalogue,
   handleSearch,
-  handleFilterChange,
   setupEventListeners,
   handleBorrowSubmit,
   updateStatisticsDisplay,
+    handleFilterChange,
+  // Testing
+  handleReturnSubmit,
+  renderMemberList,
+  handleMemberSubmit,
+  handleMemberClick,
+  showEditMemberForm,
+  handleEditMemberSubmit,
+  handleDeleteMember,
+  renderOverdueBooks,
+  showMembers,
+  showStatistics,
+  handleBookClick,
+displayBookDetails,
 };

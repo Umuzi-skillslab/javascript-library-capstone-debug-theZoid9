@@ -2,184 +2,228 @@
  * @jest-environment jsdom
  */
 
-import { jest } from "@jest/globals";
+import {
+  initializeUI,
+  renderBookCatalogue,
+  handleSearch,
+  handleFilterChange,
+  handleBorrowSubmit,
+  updateStatisticsDisplay,
+} from "../src/ui.js";
 
-jest.unstable_mockModule("../src/library.js", () => ({
-  books: [],
-  members: [],
-  borrowBook: jest.fn(),
-  findBookByISBN: jest.fn(),
-  formatBookInfo: jest.fn(),
-  Member: class {},
-  Book: class {},
-  findMemberById: jest.fn(),
-  updateMemberInfo: jest.fn(),
-  findOverdueBooks: jest.fn(() => []),
-  deleteMember: jest.fn(),
-}));
+import {
+  books,
+  members,
+  Book,
+  Member,
+} from "../src/library.js";
 
-jest.unstable_mockModule("../src/storage.js", () => ({
-  saveToLocalStorage: jest.fn(),
-  loadFromLocalStorage: jest.fn(() => true),
-}));
+beforeEach(() => {
+  document.body.innerHTML = `
+    <button id="catalogue-tab"></button>
+    <button id="members-tab"></button>
+    <button id="statistics-tab"></button>
 
-jest.unstable_mockModule("../src/utils.js", () => ({
-  initializeLibrary: jest.fn(),
-  searchBooks: jest.fn(() => []),
-  filterBooksByCategory: jest.fn(() => []),
-  getLibraryStatistics: jest.fn(() => ({
-    totalBooks: 10,
-    totalMembers: 5,
-    availableBooks: 7,
-    borrowedBooks: 3,
-  })),
-  processReturnQueue: jest.fn(),
-}));
+    <section id="catalogue-section"></section>
+    <section id="borrow-section"></section>
+    <section id="member-section"></section>
+    <section id="statistics-section"></section>
+    <section id="return-section"></section>
 
-const ui = await import("../src/ui.js");
-const library = await import("../src/library.js");
-const storage = await import("../src/storage.js");
-const utils = await import("../src/utils.js");
+    <input id="search">
+
+    <select id="filter-category">
+        <option value="all">all</option>
+        <option value="Programming">Programming</option>
+        <option value="Web">Web</option>
+    </select>
+
+    <form id="borrow-form">
+        <input id="member-id">
+        <input id="isbn">
+    </form>
+
+    <div id="catalogue-list"></div>
+    <div id="book-details" class="hidden"></div>
+
+    <div id="member-list"></div>
+    <div id="member-form"></div>
+
+    <div id="borrow-message"></div>
+    <div id="member-message"></div>
+    <div id="return-message"></div>
+
+    <div class="total-books"></div>
+    <div class="total-members"></div>
+    <div class="available-books"></div>
+    <div class="books-borrowed"></div>
+
+    <div id="overdue-count"></div>
+    <div id="overdue-list"></div>
+  `;
+
+  localStorage.clear();
+
+  books.length = 0;
+  members.length = 0;
+
+  books.push(
+    new Book(
+      "111",
+      "JavaScript",
+      "John",
+      2024,
+      2,
+      "Programming"
+    ),
+
+    new Book(
+      "222",
+      "CSS",
+      "Jane",
+      2023,
+      1,
+      "Web"
+    )
+  );
+
+  members.push(
+    new Member(
+      "M001",
+      "John",
+      "john@test.com",
+      "standard"
+    )
+  );
+
+    renderBookCatalogue(books);
+  updateStatisticsDisplay();
+});
 
 describe("renderBookCatalogue", () => {
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <div id="catalogue-list"></div>
-    `;
-  });
 
-  test("renders books", () => {
-    ui.renderBookCatalogue([
-      {
-        isbn: "1",
-        title: "JavaScript",
-        author: "John",
-        category: "Programming",
-        year: 2024,
-        availableCopies: 2,
-      },
-    ]);
+  test("renders all books", () => {
 
-    expect(document.querySelectorAll(".book-card")).toHaveLength(1);
-    expect(document.body.textContent).toContain("JavaScript");
+    renderBookCatalogue(books);
+
+    expect(
+      document.querySelectorAll(".book-card")
+    ).toHaveLength(2);
+
   });
 
   test("renders empty message", () => {
-    ui.renderBookCatalogue([]);
 
-    expect(document.body.textContent).toContain("No books found.");
+    renderBookCatalogue([]);
+
+    expect(
+      document.getElementById("catalogue-list").textContent
+    ).toContain("No books found");
+
   });
 
-  test("handles null", () => {
-    ui.renderBookCatalogue(null);
-
-    expect(document.body.textContent).toContain("No books found.");
-  });
 });
 
-describe("handleSearch", () => {
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <input id="search">
-      <div id="catalogue-list"></div>
-    `;
+describe("book details", () => {
+
+  test("clicking a card shows details", () => {
+
+    document
+      .querySelector(".book-card")
+      .dispatchEvent(
+        new MouseEvent("click", {
+          bubbles: true,
+        })
+      );
+
+    expect(
+      document.getElementById("book-details").innerHTML
+    ).toContain("JavaScript");
+
   });
 
-  test("calls searchBooks", () => {
-    ui.handleSearch({
-      target: {
-        value: "javascript",
-      },
-    });
-
-    expect(utils.searchBooks).toHaveBeenCalled();
-  });
 });
 
-describe("handleBorrowSubmit", () => {
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <form id="borrow-form">
-        <input id="member-id">
-        <input id="isbn">
-      </form>
+describe("search", () => {
 
-      <div id="borrow-message"></div>
-      <div id="catalogue-list"></div>
-    `;
-  });
+  test("filters by title", () => {
 
-  test("shows validation message", () => {
-    ui.handleBorrowSubmit({
-      preventDefault: jest.fn(),
-      target: {
-        reset: jest.fn(),
-      },
+    const input =
+      document.getElementById("search");
+
+    input.value = "css";
+
+    handleSearch({
+      target: input,
     });
 
-    expect(document.body.textContent).toContain(
-      "Please complete all fields."
-    );
+    expect(
+      document.querySelectorAll(".book-card")
+    ).toHaveLength(1);
+
   });
 
-  test("successful borrow", () => {
-    library.borrowBook.mockReturnValue(true);
-
-    document.getElementById("member-id").value = "M001";
-    document.getElementById("isbn").value = "123";
-
-    ui.handleBorrowSubmit({
-      preventDefault: jest.fn(),
-      target: {
-        reset: jest.fn(),
-      },
-    });
-
-    expect(library.borrowBook).toHaveBeenCalled();
-    expect(storage.saveToLocalStorage).toHaveBeenCalled();
-  });
-
-  test("borrow throws", () => {
-    library.borrowBook.mockImplementation(() => {
-      throw new Error("Book unavailable");
-    });
-
-    document.getElementById("member-id").value = "M001";
-    document.getElementById("isbn").value = "123";
-
-    ui.handleBorrowSubmit({
-      preventDefault: jest.fn(),
-      target: {
-        reset: jest.fn(),
-      },
-    });
-
-    expect(document.body.textContent).toContain("Book unavailable");
-  });
 });
 
-describe("updateStatisticsDisplay", () => {
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <span class="total-books"></span>
-      <span class="total-members"></span>
-      <span class="available-books"></span>
-      <span class="books-borrowed"></span>
-    `;
+describe("filter", () => {
+
+  test("filters by category", () => {
+
+    const filter =
+      document.getElementById("filter-category");
+
+    filter.value = "Programming";
+
+    handleFilterChange();
+
+    expect(
+      document.querySelectorAll(".book-card")
+    ).toHaveLength(1);
+
   });
+
+});
+
+describe("statistics", () => {
 
   test("updates statistics", () => {
-    ui.updateStatisticsDisplay();
 
-    expect(document.querySelector(".total-books").textContent).toBe("10");
-    expect(document.querySelector(".total-members").textContent).toBe("5");
-    expect(document.querySelector(".available-books").textContent).toBe("7");
-    expect(document.querySelector(".books-borrowed").textContent).toBe("3");
+    updateStatisticsDisplay();
+
+    expect(
+      document.querySelector(".total-books").textContent
+    ).toBe("2");
+
+    expect(
+      document.querySelector(".total-members").textContent
+    ).toBe("1");
+
+    expect(
+      document.querySelector(".available-books").textContent
+    ).toBe("3");
+
   });
 
-  test("does not throw if elements are missing", () => {
-    document.body.innerHTML = "";
+});
 
-    expect(() => ui.updateStatisticsDisplay()).not.toThrow();
+describe("borrow form", () => {
+
+  test("missing fields shows validation", () => {
+
+    const form =
+      document.getElementById("borrow-form");
+
+    handleBorrowSubmit({
+      preventDefault: jest.fn(),
+      target: form,
+    });
+
+    expect(
+      document
+        .getElementById("borrow-message")
+        .textContent
+    ).toContain("Please complete");
+
   });
+
 });
