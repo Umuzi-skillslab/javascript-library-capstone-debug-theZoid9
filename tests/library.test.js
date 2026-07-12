@@ -5,6 +5,7 @@ import {
   getLibraryStatistics,
   processReturnQueue,
 } from "../src/utils.js";
+import { jest } from "@jest/globals";
 
 import {
   Book,
@@ -641,5 +642,126 @@ describe("Additional Library Functions", () => {
     expect(deleteMember("M001")).toBe(true);
 
     expect(members).toHaveLength(0);
+  });
+});
+
+describe("storage extra coverage", () => {
+  beforeEach(() => {
+    books.length = 0;
+    members.length = 0;
+    localStorage.clear();
+    jest.restoreAllMocks();
+  });
+
+  test("loadFromLocalStorage returns false when storage is empty", () => {
+    expect(loadFromLocalStorage()).toBe(false);
+  });
+
+  test("loadFromLocalStorage restores a DigitalBook", () => {
+    localStorage.setItem(
+      "libraryBooks",
+      JSON.stringify([
+        {
+          isbn: "1",
+          title: "JS",
+          author: "Me",
+          year: 2024,
+          totalCopies: 1,
+          availableCopies: 1,
+          checkedOut: [],
+          fileSize: 12,
+          format: "pdf",
+        },
+      ])
+    );
+
+    localStorage.setItem("libraryMembers", JSON.stringify([]));
+
+    loadFromLocalStorage();
+
+    expect(books[0]).toBeInstanceOf(DigitalBook);
+  });
+
+  test("loadFromLocalStorage restores PremiumMember", () => {
+    localStorage.setItem("libraryBooks", JSON.stringify([]));
+
+    localStorage.setItem(
+      "libraryMembers",
+      JSON.stringify([
+        {
+          id: "M1",
+          name: "John",
+          email: "a@a.com",
+          membershipType: "premium",
+          borrowedBooks: [],
+          joinDate: new Date(),
+        },
+      ])
+    );
+
+    loadFromLocalStorage();
+
+    expect(members[0].membershipType).toBe("premium");
+  });
+
+  test("loadFromLocalStorage returns false for invalid JSON", () => {
+    localStorage.setItem("libraryBooks", "{");
+
+    expect(loadFromLocalStorage()).toBe(false);
+    expect(books).toHaveLength(0);
+    expect(members).toHaveLength(0);
+  });
+
+ 
+
+  test("exportLibraryData returns json string", () => {
+    books.push(new Book("1", "Book", "Author", 2024, 1, "Programming"));
+    members.push(new Member("M1", "John", "a@a.com", "standard"));
+
+    const json = exportLibraryData();
+
+    expect(typeof json).toBe("string");
+    expect(json).toContain('"books"');
+    expect(json).toContain('"members"');
+  });
+
+  test("importLibraryData returns false for invalid json", () => {
+    expect(importLibraryData("{")).toBe(false);
+  });
+
+  test("importLibraryData returns false for wrong structure", () => {
+    expect(importLibraryData("{}")).toBe(false);
+  });
+
+  test("importLibraryData imports valid data", () => {
+    const json = JSON.stringify({
+      books: [
+        {
+          isbn: "1",
+          title: "Book",
+          author: "Author",
+          year: 2024,
+          totalCopies: 1,
+          availableCopies: 1,
+          checkedOut: [],
+          category: "Programming",
+        },
+      ],
+      members: [
+        {
+          id: "M1",
+          name: "John",
+          email: "a@a.com",
+          membershipType: "standard",
+          borrowedBooks: [],
+          joinDate: new Date(),
+        },
+      ],
+    });
+
+    importLibraryData(json);
+
+    expect(books).toHaveLength(1);
+    expect(members).toHaveLength(1);
   });
 });
