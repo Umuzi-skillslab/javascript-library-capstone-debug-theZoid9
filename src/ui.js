@@ -86,29 +86,7 @@ function initializeUI() {
 
     // return section
     returnSection = document.getElementById("return-section");
-    
 
-    if (!catalogueContainer) {
-
-        console.error("Catalogue container not found.");
-
-        return;
-
-    }
-
-    if (!searchInput) {
-
-        console.error("Search input not found.");
-
-        return;
-
-    }
-
-    if (!filterDropdown) {
-        console.error("Filter dropdown not found.");
-        return;
-
-    }
 
     const loaded = loadFromLocalStorage();
    
@@ -164,7 +142,6 @@ function setupEventListeners() {
 
     statisticsTab?.addEventListener("click", showStatistics);
 
-    console.log("Event listeners loaded.");
 }
 
 function setupEditMemberEventListeners() {
@@ -192,6 +169,7 @@ function showMembers() {
 
     memberSection.style.display = "block";
     createMemberForm1();
+    renderMemberList();
 }
 
 function showStatistics() {
@@ -244,17 +222,17 @@ function renderBookCatalogue(bookList) {
     // Improves performance by updating the DOM only once
     const fragment = document.createDocumentFragment();
 
-    // Create one card for each book
+    // Create one card for each book - using for of 
     for (const book of bookList) {
 
         const bookCard = document.createElement("div");
 
         bookCard.className = "book-card";
 
-        // Store the ISBN for event delegation
+        // Store the ISBN for event delegation //
         bookCard.dataset.isbn = book.isbn;
 
-        // Display book information
+        // Display book information here //
         bookCard.innerHTML = `
 
             <h3>${book.title}</h3>
@@ -362,10 +340,11 @@ function handleBorrowSubmit(event) {
         const success = borrowBook(memberId, isbn);
     
         if (success) {
-            renderMemberMessage("borrow-message","Book borrowed successfully.");
+            
             saveToLocalStorage();
-            renderBookCatalogue(books);
+            loadCatalogue();
             updateStatisticsDisplay();
+            renderMemberMessage("borrow-message","Book borrowed successfully.");
             event.target.reset();
         }
 
@@ -466,9 +445,6 @@ function handleReturnSubmit(event) {
 // MEMBERS
 // ======================================================
 function createMemberForm1() {
-        
-    console.log("createMemberForm called");
-
     const formContainer = document.getElementById("member-form");
 
     formContainer.innerHTML = `
@@ -724,13 +700,32 @@ function handleDeleteMember(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    deleteMember(editingMemberId);
-    renderMemberMessage("member-message","Member deleted.", "error");
+    
+    const member = findMemberById(editingMemberId);
+
+    if (!member) {
+        renderMemberMessage("member-message", "Member not found.", "error");
+        return;
+    }
+
+    // Build return queue
+    const queue = member.borrowedBooks.map(isbn => ({
+        memberId: member.id,
+        isbn
+    }));
+
+    // Return all borrowed books
+    processReturnQueue(queue);
+
+    // Delete the member
+    deleteMember(member.id);
+   
     saveToLocalStorage();
-
+    loadCatalogue();
     renderMemberList();
-
     createMemberForm1();
+    renderMemberMessage("member-message","Member deleted.", "error");
+   
 }
 // ======================================================
 // STATISTICS
