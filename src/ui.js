@@ -797,21 +797,17 @@ export {
   initializeUI,
   renderBookCatalogue,
   handleSearch,
+  handleFilterChange,
   setupEventListeners,
   handleBorrowSubmit,
   updateStatisticsDisplay,
-    handleFilterChange,
-  // Testing
-  handleReturnSubmit,
+
+  // testing
   renderMemberList,
-  handleMemberSubmit,
-  handleMemberClick,
   showEditMemberForm,
   handleEditMemberSubmit,
   handleDeleteMember,
   renderOverdueBooks,
-  showMembers,
-  showStatistics,
-  handleBookClick,
-  displayBookDetails,
+  renderMemberMessage,
+  handleReturnSubmit,
 };
