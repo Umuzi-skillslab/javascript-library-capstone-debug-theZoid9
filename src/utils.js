@@ -1,4 +1,4 @@
-import { books, members, Member, Book } from "../src/library.js";
+import { books, members, Member, Book, findBookByISBN, findMemberById} from "../src/library.js";
 
 
 

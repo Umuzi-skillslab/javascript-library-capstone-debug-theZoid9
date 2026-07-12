@@ -713,25 +713,6 @@ function handleEditMemberSubmit(event, id) {
 
     event.preventDefault();
 
-    const name =
-        document.getElementById("name").value.trim();
-
-    const email =
-        document.getElementById("email").value.trim();
-
-    const membershipType =
-        document.getElementById("membership-type").value;
-
-    const member = findMemberById(editingMemberId);
-
-
-console.log(id);
-console.log(member);
-    updateMemberInfo(member, {
-        name,
-        email,
-        membershipType
-    });
 
     saveToLocalStorage();
 

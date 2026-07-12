@@ -1,7 +1,19 @@
 // Jest Tests - Library Management System
 // Incomplete and with errors
 
-import { borrowBook,Book, DigitalBook, Member,members, PremiumMember,findBookByISBN,books,calculateFineAmount } from "../src/library.js";
+import {
+    initializeLibrary,
+    searchBooks,
+    filterBooksByCategory,
+    getLibraryStatistics,
+    processReturnQueue
+} from "../src/utils.js";
+
+
+
+
+
+import { borrowBook,Book, DigitalBook, Member,members, PremiumMember, findBookByISBN, books, calculateFineAmount, findMemberById} from "../src/library.js";
 import {
     saveToLocalStorage,
     loadFromLocalStorage,
@@ -592,6 +604,252 @@ describe("LocalStorage", () => {
     });
 
 });
+
+
+
+
+
+// UTILS.JS
+
+describe("Utility functions", () => {
+
+    beforeEach(() => {
+        books.length = 0;
+        members.length = 0;
+    });
+
+    describe("initializeLibrary", () => {
+
+        test("loads default books and members", () => {
+            initializeLibrary();
+
+            expect(books).toHaveLength(2);
+            expect(members).toHaveLength(4);
+        });
+
+        test("does not load duplicate data", () => {
+            initializeLibrary();
+            initializeLibrary();
+
+            expect(books).toHaveLength(2);
+            expect(members).toHaveLength(4);
+        });
+
+    });
+
+    describe("searchBooks", () => {
+
+        beforeEach(() => {
+            initializeLibrary();
+        });
+
+        test("finds books by title", () => {
+            const result = searchBooks(books, "react");
+
+            expect(result).toHaveLength(1);
+            expect(result[0].title).toBe("Learning React");
+        });
+
+        test("finds books by author", () => {
+            const result = searchBooks(books, "david");
+
+            expect(result).toHaveLength(1);
+            expect(result[0].author).toBe("David Herman");
+        });
+
+        test("returns empty array when no match exists", () => {
+            const result = searchBooks(books, "python");
+
+            expect(result).toEqual([]);
+        });
+
+    });
+
+    describe("filterBooksByCategory", () => {
+
+        beforeEach(() => {
+            initializeLibrary();
+        });
+
+        test("returns only matching category", () => {
+            const result = filterBooksByCategory(books, "reference");
+
+            expect(result).toHaveLength(1);
+            expect(result[0].category).toBe("reference");
+        });
+
+        test("returns all books when category is all", () => {
+            const result = filterBooksByCategory(books, "all");
+
+            expect(result).toHaveLength(2);
+        });
+
+        test("returns empty array for unknown category", () => {
+            const result = filterBooksByCategory(books, "history");
+
+            expect(result).toEqual([]);
+        });
+
+    });
+
+    describe("getLibraryStatistics", () => {
+
+        beforeEach(() => {
+            initializeLibrary();
+        });
+
+        test("returns correct statistics", () => {
+
+            books[0].checkedOut.push({
+                memberId: "M001",
+                dueDate: "2026-08-01"
+            });
+
+            books[0].availableCopies--;
+
+            const stats = getLibraryStatistics(books, members);
+
+            expect(stats).toEqual({
+                totalBooks: 2,
+                totalMembers: 4,
+                availableBooks: 6,
+                borrowedBooks: 1
+            });
+
+        });
+
+    });
+
+    describe("processReturnQueue", () => {
+
+        beforeEach(() => {
+            books.length = 0;
+            members.length = 0;
+
+            const book = new Book(
+                "123",
+                "JavaScript",
+                "John",
+                2024,
+                0,
+                "reference"
+            );
+
+            book.checkedOut.push({
+                memberId: "M001",
+                dueDate: "2026-08-01"
+            });
+
+            const member = new Member(
+                "M001",
+                "John",
+                "john@test.com",
+                "standard"
+            );
+
+            member.borrowedBooks.push("123");
+
+            books.push(book);
+            members.push(member);
+        });
+
+        test("returns a borrowed book", () => {
+
+            processReturnQueue([
+                {
+                    isbn: "123",
+                    memberId: "M001"
+                }
+            ]);
+
+            expect(books[0].availableCopies).toBe(1);
+            expect(books[0].checkedOut).toHaveLength(0);
+            expect(members[0].borrowedBooks).toEqual([]);
+
+        });
+
+        test("throws if book does not exist", () => {
+
+            expect(() =>
+                processReturnQueue([
+                    {
+                        isbn: "999",
+                        memberId: "M001"
+                    }
+                ])
+            ).toThrow("Book not found.");
+
+        });
+
+        test("throws if member does not exist", () => {
+
+            expect(() =>
+                processReturnQueue([
+                    {
+                        isbn: "123",
+                        memberId: "M999"
+                    }
+                ])
+            ).toThrow("Member not found.");
+
+        });
+
+        test("throws if member never borrowed the book", () => {
+
+            books[0].checkedOut = [];
+
+            expect(() =>
+                processReturnQueue([
+                    {
+                        isbn: "123",
+                        memberId: "M001"
+                    }
+                ])
+            ).toThrow("This member did not borrow this book.");
+
+        });
+
+        test("processes multiple returns", () => {
+
+            const secondBook = new Book(
+                "456",
+                "React",
+                "Alex",
+                2024,
+                0,
+                "non-fiction"
+            );
+
+            secondBook.checkedOut.push({
+                memberId: "M001",
+                dueDate: "2026-08-01"
+            });
+
+            books.push(secondBook);
+            members[0].borrowedBooks.push("456");
+
+            processReturnQueue([
+                {
+                    isbn: "123",
+                    memberId: "M001"
+                },
+                {
+                    isbn: "456",
+                    memberId: "M001"
+                }
+            ]);
+
+            expect(books[0].availableCopies).toBe(1);
+            expect(books[1].availableCopies).toBe(1);
+            expect(members[0].borrowedBooks).toEqual([]);
+
+        });
+
+    });
+
+});
+
+
 // Missing: describe blocks for:
 // - Nested loops
 // - For-of loops
