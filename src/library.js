@@ -444,8 +444,8 @@ function formatBookInfo(book) {
     }
 
     return `
-            <h1>Book description</h1>
-            <h3>${book.title}</h3>
+            <h3>Book description</h3>
+            <p>Title: ${book.title}</p>
             <p>Author: ${book.author}</p>
             <p>Year: ${book.year}</p>
             <p>ISBN: ${book.isbn}</p>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.33% </span>
+                <span class="strong">43.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>65/150</span>
+                <span class='fraction'>64/146</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.35% </span>
+                <span class="strong">43.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>62/143</span>
+                <span class='fraction'>61/139</span>
             </div>
         
             
@@ -586,15 +586,7 @@
 <a name='L521'></a><a href='#L521'>521</a>
 <a name='L522'></a><a href='#L522'>522</a>
 <a name='L523'></a><a href='#L523'>523</a>
-<a name='L524'></a><a href='#L524'>524</a>
-<a name='L525'></a><a href='#L525'>525</a>
-<a name='L526'></a><a href='#L526'>526</a>
-<a name='L527'></a><a href='#L527'>527</a>
-<a name='L528'></a><a href='#L528'>528</a>
-<a name='L529'></a><a href='#L529'>529</a>
-<a name='L530'></a><a href='#L530'>530</a>
-<a name='L531'></a><a href='#L531'>531</a>
-<a name='L532'></a><a href='#L532'>532</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L524'></a><a href='#L524'>524</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -939,9 +931,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -952,7 +941,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1039,8 +1027,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1071,8 +1057,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1185,7 +1169,7 @@ class Book {
             memberId,
             borrowDate: new Date(),
             dueDate: new Date(
-                Date.now() + 14 * 24 * 60 * 60 * 1000
+                Date.now()
             )
         });
         this.availableCopies--;
@@ -1470,9 +1454,6 @@ function borrowBook(memberId, isbn) {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        book.checkOut(member.id);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        console.log("checkedOut =", book.checkedOut);</span>
-<span class="cstat-no" title="statement not covered" >        console.log("available =", book.availableCopies);</span>
-<span class="cstat-no" title="statement not covered" >        console.log("books =", books);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        if(!Array.isArray(member.borrowedBooks)){</span>
 <span class="cstat-no" title="statement not covered" >            member.borrowedBooks = [];</span>
@@ -1483,7 +1464,6 @@ function borrowBook(memberId, isbn) {
 <span class="cstat-no" title="statement not covered" >        return true;</span>
 &nbsp;
     }catch(error){
-        console.error("borrowBook error:", error.message);
         throw error;
     }
 }
@@ -1567,22 +1547,20 @@ const LibraryStats = {
 &nbsp;
 };
 &nbsp;
-// Function with string manipulation errors // fix
-// Template Literals
-function <span class="fstat-no" title="function not covered" >formatBookInfo(</span>book) {
-    // Should use template literals
 &nbsp;
+&nbsp;
+function <span class="fstat-no" title="function not covered" >formatBookInfo(</span>book) {
 <span class="cstat-no" title="statement not covered" >    if (!book) {</span>
 <span class="cstat-no" title="statement not covered" >         return "&lt;p&gt;No book selected.&lt;/p&gt;";</span>
     }
-    // add validation 
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return `</span>
-            &lt;h3&gt;${book.title}&lt;/h3&gt;
+            &lt;h3&gt;Book description&lt;/h3&gt;
+            &lt;p&gt;Title: ${book.title}&lt;/p&gt;
             &lt;p&gt;Author: ${book.author}&lt;/p&gt;
             &lt;p&gt;Year: ${book.year}&lt;/p&gt;
-&nbsp;
+            &lt;p&gt;ISBN: ${book.isbn}&lt;/p&gt;
             `;
-    // Missing: proper string methods (trim, toUpperCase, etc.)
     
    
 }
@@ -1608,12 +1586,10 @@ function calculateFineAmount(daysLate) {
 &nbsp;
 }
 &nbsp;
-// Helper 
-// not done it should return  books back when member is deleted
 function <span class="fstat-no" title="function not covered" >deleteMember(</span>id) {
     const index = <span class="cstat-no" title="statement not covered" >members.findIndex(<span class="fstat-no" title="function not covered" >me</span>mber =&gt; <span class="cstat-no" title="statement not covered" >member.id === id)</span>;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (index === -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (index === "null") {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
     }
 &nbsp;
@@ -1663,7 +1639,7 @@ export {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-12T14:12:33.599Z
+                at 2026-07-12T17:59:35.295Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
