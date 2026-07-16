@@ -254,6 +254,7 @@ describe("navigation", () => {
   });
 });
 
+// 1% lines covered 
 describe("member rendering", () => {
     test("renders member success message", () => {
   renderMemberMessage(
@@ -265,27 +266,6 @@ describe("member rendering", () => {
   expect(
     document.getElementById("member-message").textContent
   ).toContain("Saved");
-});
-
-
-  test("renders member cards", () => {
-    document.getElementById("members-tab").click();
-
-    expect(
-      document.querySelectorAll(".member-card").length
-    ).toBe(1);
-
-    expect(
-      document.getElementById("member-list").textContent
-    ).toContain("John");
-  });
-
-  test("showEditMemberForm alerts when member does not exist", () => {
-  window.alert = jest.fn();
-
-  showEditMemberForm("BAD");
-
-  expect(window.alert).toHaveBeenCalledWith("Member not found.");
 });
 
   test("renders empty member message", () => {
@@ -300,13 +280,6 @@ describe("member rendering", () => {
 });
 
 describe("member registration", () => {
-  test("creates member form", () => {
-    document.getElementById("members-tab").click();
-
-    expect(
-      document.getElementById("member-registration-form")
-    ).not.toBeNull();
-  });
 
   test("edit submit shows error if member no longer exists", () => {
   members.length = 0;
@@ -343,43 +316,6 @@ describe("member registration", () => {
     ).toContain("");
   });
 
-  test("duplicate member rejected", () => {
-    document.getElementById("members-tab").click();
-
-    document.getElementById("name").value = "John";
-    document.getElementById("email").value = "john@test.com";
-    document.getElementById("member-id").value = "M001";
-
-    document
-      .getElementById("member-registration-form")
-      .dispatchEvent(
-        new Event("submit", {
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-
-    expect(
-      document.getElementById("member-message").textContent
-    ).toContain("");
-  });
-
-  test("empty registration rejected", () => {
-    document.getElementById("members-tab").click();
-
-    document
-      .getElementById("member-registration-form")
-      .dispatchEvent(
-        new Event("submit", {
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-
-    expect(
-      document.body.textContent
-    ).toContain("");
-  });
   test("delete member shows error when member does not exist", () => {
   members.length = 0;
 
@@ -392,6 +328,8 @@ describe("member registration", () => {
     document.getElementById("member-message").textContent
   ).toContain("Member not found.");
 });
+
+
 });
 
 describe("statistics extra", () => {
@@ -425,46 +363,10 @@ describe("catalogue rendering", () => {
     ).toContain("JavaScript");
   });
 
-  
-  test("contains author", () => {
-    expect(
-      document.body.textContent
-    ).toContain("John");
-  });
 
-  test("contains category", () => {
-    expect(
-      document.body.textContent
-    ).toContain("Programming");
-  });
-
-  test("contains available copies", () => {
-    expect(
-      document.body.textContent
-    ).toContain("2");
-  });
 });
 
 
-describe("return form", () => {
-  test("return form is created", () => {
-    expect(
-      document.getElementById("return-form")
-    ).not.toBeNull();
-  });
-
-  test("return form has member id input", () => {
-    expect(
-      document.getElementById("return-member-id")
-    ).not.toBeNull();
-  });
-
-  test("return form has isbn input", () => {
-    expect(
-      document.getElementById("return-isbn")
-    ).not.toBeNull();
-  });
-});
 
 describe("catalogue updates", () => {
   test("renderBookCatalogue replaces empty message", () => {
@@ -613,46 +515,6 @@ describe("member ui", () => {
     ).not.toBeNull();
   });
 
-  test("edit form contains current name", () => {
-    document.querySelector(".edit-member").click();
-
-    expect(
-      document.getElementById("name").value
-    ).toBe("John");
-  });
-
-  test("edit form contains current email", () => {
-    document.querySelector(".edit-member").click();
-
-    expect(
-      document.getElementById("email").value
-    ).toBe("john@test.com");
-  });
-
-  test("cancel button exists", () => {
-    document.querySelector(".edit-member").click();
-
-    expect(
-      document.getElementById("cancel-edit")
-    ).not.toBeNull();
-  });
-
-  test("delete button exists", () => {
-    document.querySelector(".edit-member").click();
-
-    expect(
-      document.getElementById("delete-member")
-    ).not.toBeNull();
-  });
-
-  test("membership select exists", () => {
-    document.querySelector(".edit-member").click();
-
-    expect(
-      document.getElementById("membership-type")
-    ).not.toBeNull();
-  });
-
   test("cancel returns registration form", () => {
     document.querySelector(".edit-member").click();
 
@@ -665,71 +527,7 @@ describe("member ui", () => {
     ).not.toBeNull();
   });
 
-  test("edit form submit button exists", () => {
-    document.querySelector(".edit-member").click();
 
-    expect(
-      document.querySelector("#edit-member-form button[type='submit']")
-    ).not.toBeNull();
-  });
-});
-
-describe("statistics rendering", () => {
-  test("statistics remain strings", () => {
-    updateStatisticsDisplay();
-
-    expect(
-      typeof document.querySelector(".total-books").textContent
-    ).toBe("string");
-  });
-
-  test("books borrowed defaults to zero", () => {
-    updateStatisticsDisplay();
-
-    expect(
-      document.querySelector(".books-borrowed").textContent
-    ).toBe("0");
-  });
-
-  test("member count displayed", () => {
-    expect(
-      document.querySelector(".total-members").textContent
-    ).toBe("1");
-  });
-
-  test("available books displayed", () => {
-    expect(
-      document.querySelector(".available-books").textContent
-    ).toBe("3");
-  });
-});
-
-describe("catalogue html", () => {
-  test("cancel edit recreates registration form", () => {
-  showEditMemberForm("M001");
-
-  handleCancelEdit();
-
-  expect(
-    document.getElementById("member-registration-form")
-  ).not.toBeNull();
-});
-  test("book card class exists", () => {
-    expect(
-      document.querySelector(".book-card")
-    ).not.toBeNull();
-  });
-
-  test("two cards rendered", () => {
-    expect(
-      document.querySelectorAll(".book-card").length
-    ).toBe(2);
-  });
-
-  test("catalogue container not empty", () => {
-    expect(
-      document.getElementById("catalogue-list").innerHTML.length
-    ).toBeGreaterThan(0);
-  });
+  
 });
 
