@@ -283,7 +283,7 @@ function renderBookCatalogue(bookList) {
         bookCard.className = "book-card";
         bookCard.dataset.isbn = book.isbn;
 
-        const isDigital = book.pdf !== null && book.pdf !== undefined;
+        const isDigital = book.type === "digital";
 
         bookCard.innerHTML = `
             <h3>${book.title}</h3>

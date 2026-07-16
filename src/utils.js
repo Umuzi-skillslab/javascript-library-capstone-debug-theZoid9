@@ -27,11 +27,13 @@ export function initializeLibrary() {
     ),
     new Book(
       "9781491950296",
-      "Learning React",
-      "Alex Banks",
+      "BEING LOGICAL",
+      "D.Q McInery",
       2020,
       10,
       "non-fiction",
+       "covers/logi.png",  
+       "books/being.pdf"
     ),
   );
 

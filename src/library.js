@@ -14,6 +14,7 @@ class Book {
   constructor(isbn, title, author, year, copies, category,
     cover = null,
     pdf = null) {
+      this.type = "physical";
     this.isbn = isbn;
     this.title = title;
     this.author = author;
@@ -74,6 +75,7 @@ class DigitalBook extends Book {
   
     super(isbn, title, author, year, copies, category,cover,
       pdf);
+      this.type = "digital";
     this.fileSize = fileSize;
     this.format = format;
     this.cover = cover;

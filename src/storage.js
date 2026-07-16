@@ -59,6 +59,8 @@ export function loadFromLocalStorage() {
           data.year,
           data.totalCopies,
           data.category,
+          data.cover,
+          data.pdf
         );
       }
 
