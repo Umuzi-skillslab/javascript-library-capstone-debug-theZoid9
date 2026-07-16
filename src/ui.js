@@ -497,7 +497,7 @@ function renderMemberList() {
             <p>${member.membershipType}</p>
 
             <p>
-                Borrowed:
+                Borrowed books:
                 ${member.borrowedBooks.length}
             </p>
 

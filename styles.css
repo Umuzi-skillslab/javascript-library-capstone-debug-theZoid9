@@ -264,20 +264,92 @@ form input::placeholder {
   gap: 20px;
 }
 
-/* Individual book card (rendered by JS, we style the structure) */
+/* Book Card */
 .book-grid > div,
 .book-grid > article {
+  display: flex;
+  flex-direction: column;
+   gap: 0.75rem;
+
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 1.5rem;
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: var(--transition);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
   cursor: pointer;
-  position: relative;
   overflow: hidden;
+  position: relative;
 }
+
+
+.book-info {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.book-cover-large {
+    width: 170px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.book-details {
+    flex: 1;
+}
+
+
+@media (max-width: 700px) {
+    .book-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .book-cover-large {
+        width: 140px;
+        height: 200px;
+    }
+}
+/* ========================================
+   BOOK CARD
+======================================== */
+
+.book-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    padding: 1rem;
+
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    transition: .25s ease;
+    cursor: pointer;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(255,255,255,.15);
+
+    box-shadow: 0 12px 25px rgba(0,0,0,.18);
+}
+
+
 
 .book-grid > div::before,
 .book-grid > article::before {

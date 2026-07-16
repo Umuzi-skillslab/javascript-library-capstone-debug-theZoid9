@@ -3,6 +3,7 @@ import {
   members,
   Member,
   Book,
+  DigitalBook,
   findBookByISBN,
   findMemberById,
 } from "../src/library.js";
@@ -12,20 +13,24 @@ export function initializeLibrary() {
   if (books.length > 0) return;
 
   books.push(
-    new Book(
+    new DigitalBook(
       "9780134685991",
-      "Effective JavaScript",
-      "David Herman",
+      "PARALLEL WORLDS",
+      "Michio Kaku",
       2012,
-      6,
-      "reference",
+      2,
+      "fiction",
+      "24 MB",     
+      "PDF",                
+      "covers/pworlds.png",  
+      "books/pworlds.pdf"    
     ),
     new Book(
       "9781491950296",
       "Learning React",
       "Alex Banks",
       2020,
-      1,
+      10,
       "non-fiction",
     ),
   );

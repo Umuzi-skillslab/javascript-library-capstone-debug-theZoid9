@@ -11,30 +11,32 @@ const MAX_BOOKS_PER_MEMBER = 5;
 // Book class with multiple issues // fix
 
 class Book {
-  constructor(isbn, title, author, year, copies, category) {
+  constructor(isbn, title, author, year, copies, category,cover=
+    null, pdf = null) {
     this.isbn = isbn;
     this.title = title;
     this.author = author;
     this.year = year;
-    // Missing: availableCopies and totalCopies properties // fix
     this.availableCopies = copies;
     this.totalCopies = copies;
     this.category = category;
+    this.cover = cover;
+    this.pdf = pdf;
     this.checkedOut = [];
   }
 
-  // Missing: method to check availability // fix
+
   isAvailable() {
     return this.availableCopies > 0;
   }
 
-  // Missing: method to get book info using template literals // fix
+ 
   getInfo() {
     return `${this.title} by ${this.author} (${this.year}) - ISBN: ${this.isbn}`;
   }
 
   checkOut(memberId) {
-    // No validation for available copies // fix
+
     if (
       memberId === undefined ||
       memberId === null ||
@@ -64,9 +66,12 @@ class Book {
 // Digital book class with inheritance problems //
 
 class DigitalBook extends Book {
-  constructor(isbn, title, author, year, copies, category, fileSize, format) {
+  constructor(isbn, title, author, year, copies, category, fileSize, format,
+    cover = null,
+    pdf = null) {
     // Missing: super() call with correct parameters // fix
-    super(isbn, title, author, year, copies, category);
+    super(isbn, title, author, year, copies, category,cover,
+      pdf);
     this.fileSize = fileSize;
     this.format = format;
     this.downloads = 0;
@@ -359,21 +364,52 @@ const LibraryStats = {
     };
   },
 };
-
 function formatBookInfo(book) {
   if (!book) {
     return "<p>No book selected.</p>";
   }
 
-  return `
-            <h3>Book description</h3>
-            <p>Title: ${book.title}</p>
-            <p>Author: ${book.author}</p>
-            <p>Year: ${book.year}</p>
-            <p>ISBN: ${book.isbn}</p>
-            `;
-}
+  const isDigital = book instanceof DigitalBook;
 
+  return `
+    <div class="book-info">
+
+      ${
+        book.cover
+          ? `<img class="book-cover-large"
+                 src="${book.cover}"
+                 alt="${book.title} cover">`
+          : ""
+      }
+
+      <div class="book-details">
+        <h2>${book.title}</h2>
+
+        <p><strong>Author:</strong> ${book.author}</p>
+        <p><strong>Published:</strong> ${book.year}</p>
+        <p><strong>ISBN:</strong> ${book.isbn}</p>
+        <p><strong>Category:</strong> ${book.category}</p>
+
+        ${
+          isDigital
+            ? `
+              <p><strong>Format( Digital ):</strong> ${book.format}</p>
+              <p><strong>File Size:</strong> ${book.fileSize}</p>
+              <p><strong>Downloads:</strong> ${book.downloads}</p>
+            `
+            : `
+              <p><strong>Available Copies:</strong>
+                 ${book.availableCopies} / ${book.totalCopies}
+              </p>
+            `
+        }
+
+
+      </div>
+
+    </div>
+  `;
+}
 // Function with number/type issues
 function calculateFineAmount(daysLate) {
   if (daysLate === undefined || daysLate === null) {
