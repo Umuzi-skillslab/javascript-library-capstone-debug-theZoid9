@@ -45,8 +45,11 @@ export function loadFromLocalStorage() {
           data.author,
           data.year,
           data.totalCopies,
+          data.category,
           data.fileSize,
           data.format,
+          data.cover,
+          data.pdf
         );
       } else {
         book = new Book(
@@ -61,6 +64,8 @@ export function loadFromLocalStorage() {
 
       book.availableCopies = data.availableCopies;
       book.checkedOut = data.checkedOut || [];
+      book.downloads = data.downloads ?? 0;
+      book.downloadHistory = data.downloadHistory ?? [];
 
       books.push(book);
     });

@@ -11,8 +11,9 @@ const MAX_BOOKS_PER_MEMBER = 5;
 // Book class with multiple issues // fix
 
 class Book {
-  constructor(isbn, title, author, year, copies, category,cover=
-    null, pdf = null) {
+  constructor(isbn, title, author, year, copies, category,
+    cover = null,
+    pdf = null) {
     this.isbn = isbn;
     this.title = title;
     this.author = author;
@@ -20,6 +21,7 @@ class Book {
     this.availableCopies = copies;
     this.totalCopies = copies;
     this.category = category;
+
     this.cover = cover;
     this.pdf = pdf;
     this.checkedOut = [];
@@ -69,11 +71,13 @@ class DigitalBook extends Book {
   constructor(isbn, title, author, year, copies, category, fileSize, format,
     cover = null,
     pdf = null) {
-    // Missing: super() call with correct parameters // fix
+  
     super(isbn, title, author, year, copies, category,cover,
       pdf);
     this.fileSize = fileSize;
     this.format = format;
+    this.cover = cover;
+    this.pdf = pdf;
     this.downloads = 0;
     this.downloadHistory = [];
   }
@@ -393,17 +397,22 @@ function formatBookInfo(book) {
         ${
           isDigital
             ? `
-              <p><strong>Format( Digital ):</strong> ${book.format}</p>
+              <p><strong>Format:</strong> ${book.format}</p>
               <p><strong>File Size:</strong> ${book.fileSize}</p>
               <p><strong>Downloads:</strong> ${book.downloads}</p>
+
+              <button
+                class="download-btn"
+                data-isbn="${book.isbn}">
+                ⬇ Download PDF
+              </button>
             `
             : `
               <p><strong>Available Copies:</strong>
-                 ${book.availableCopies} / ${book.totalCopies}
+                ${book.availableCopies} / ${book.totalCopies}
               </p>
             `
         }
-
 
       </div>
 

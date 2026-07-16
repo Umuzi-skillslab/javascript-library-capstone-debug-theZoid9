@@ -309,18 +309,18 @@ form input::placeholder {
     flex: 1;
 }
 
+.download-btn {
+    border: none;
+    border-radius: 8px;
+    padding:  20px;
+    border: 2px solid #000000;
+    color: var(--fg);
+    background: var(--surface);
+}
 
-@media (max-width: 700px) {
-    .book-info {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .book-cover-large {
-        width: 140px;
-        height: 200px;
-    }
+.download-btn:hover {
+    opacity: .9;
+    transform: translateY(-2px);
 }
 /* ========================================
    BOOK CARD
@@ -1151,4 +1151,17 @@ button.btn-danger:hover {
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 700px) {
+    .book-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .book-cover-large {
+        width: 140px;
+        height: 200px;
+    }
 }
