@@ -25,6 +25,18 @@ export function initializeLibrary() {
       "covers/pworlds.png",  
       "books/pworlds.pdf"    
     ),
+      new DigitalBook(
+      "978013",
+      "THE DON",
+      "Ronald Perry",
+      2012,
+      2,
+      "non-fiction",
+      "84 MB",     
+      "PDF",                
+      "covers/don.png",  
+      "books/TheDon(Roland Perry).pdf"    
+    ),
     new Book(
       "9781491950296",
       "BEING LOGICAL",
@@ -35,6 +47,16 @@ export function initializeLibrary() {
        "covers/logi.png",  
        "books/being.pdf"
     ),
+      new Book(
+      "91950296",
+      "UNTIL THE END OF TIME",
+      "Brian Green",
+      2017,
+      6,
+      "fiction",
+       "covers/green.png",  
+       "books/green.epub"
+    )
   );
 
   members.push(
