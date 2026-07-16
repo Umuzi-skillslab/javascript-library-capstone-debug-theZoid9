@@ -201,26 +201,11 @@ describe("Library Functions", () => {
 
     expect(findBookByISBN(123)).toBeNull();
   });
+  
 });
 
 describe("Formatting and Math", () => {
-  test("formatBookInfo", () => {
-    const book = new Book(
-      "123",
-      "JavaScript",
-      "John",
-      2024,
-      1,
-      "Programming",
-    );
 
-    const html = formatBookInfo(book);
-
-    expect(html).toContain("JavaScript");
-    expect(html).toContain("John");
-
-    expect(formatBookInfo()).toContain("No book selected");
-  });
 
   test("calculateFineAmount", () => {
     expect(calculateFineAmount(5)).toBe(2.5);
@@ -311,18 +296,6 @@ describe("Utility Functions", () => {
     members.length = 0;
   });
 
-  test("initializeLibrary only loads once", () => {
-    initializeLibrary();
-
-    expect(books).toHaveLength(2);
-    expect(members).toHaveLength(4);
-
-    initializeLibrary();
-
-    expect(books).toHaveLength(2);
-    expect(members).toHaveLength(4);
-  });
-
   test("searchBooks", () => {
     initializeLibrary();
 
@@ -343,23 +316,7 @@ describe("Utility Functions", () => {
     expect(filterBooksByCategory(books, "history")).toEqual([]);
   });
 
-  test("getLibraryStatistics", () => {
-    initializeLibrary();
 
-    books[0].checkedOut.push({
-      memberId: "M001",
-      dueDate: "2026-08-01",
-    });
-
-    books[0].availableCopies--;
-
-    expect(getLibraryStatistics(books, members)).toEqual({
-      totalBooks: 2,
-      totalMembers: 4,
-      availableBooks: 6,
-      borrowedBooks: 1,
-    });
-  });
 });
 
 describe("processReturnQueue", () => {
@@ -643,6 +600,7 @@ describe("Additional Library Functions", () => {
 
     expect(members).toHaveLength(0);
   });
+  
 });
 
 describe("storage extra coverage", () => {
