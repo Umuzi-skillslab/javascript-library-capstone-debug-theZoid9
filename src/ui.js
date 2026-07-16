@@ -277,17 +277,15 @@ function renderBookCatalogue(bookList) {
   const fragment = document.createDocumentFragment();
 
 
-  for (const book of bookList) {
-    const bookCard = document.createElement("div");
+    for (const book of bookList) {
+        const bookCard = document.createElement("div");
 
-    bookCard.className = "book-card";
+        bookCard.className = "book-card";
+        bookCard.dataset.isbn = book.isbn;
 
+        const isDigital = book.pdf !== null && book.pdf !== undefined;
 
-    bookCard.dataset.isbn = book.isbn;
-
-    
-    bookCard.innerHTML = `
-
+        bookCard.innerHTML = `
             <h3>${book.title}</h3>
 
             <p><strong>Author:</strong> ${book.author}</p>
@@ -296,12 +294,15 @@ function renderBookCatalogue(bookList) {
 
             <p><strong>Year:</strong> ${book.year}</p>
 
-            <p><strong>Available:</strong> ${book.availableCopies}</p>
-
+            ${
+                isDigital
+                    ? `<p><strong>Type:</strong> Digital Book</p>`
+                    : `<p><strong>Available:</strong> ${book.availableCopies}</p>`
+            }
         `;
 
-    fragment.appendChild(bookCard);
-  }
+        fragment.appendChild(bookCard);
+    }
 
   catalogueContainer.appendChild(fragment);
 }
