@@ -90,6 +90,11 @@ function initializeUI() {
 
   // return section
   returnSection = document.getElementById("return-section");
+  
+
+  borrowSection.style.display = "none";
+  returnSection.style.display = "none";
+
 
   const loaded = loadFromLocalStorage();
 
@@ -193,7 +198,7 @@ function handleDownloadClick(event) {
         saveToLocalStorage();
         renderMemberMessage("return-message", "Thank you for downloading!");
  
-        detailsContainer.classList.add("hidden")
+        
         displayBookDetails(book);
         
         renderMemberMessage("return-message", "Thank you for downloading!");
@@ -221,11 +226,14 @@ function setupEditMemberEventListeners() {
 // ======================================================
 
 function showCatalogue() {
+  
   hideAllSections();
+  const detailsContainer = document.getElementById("book-details");
+  detailsContainer?.classList.add("hidden");
 
   catalogueSection.style.display = "block";
-  borrowSection.style.display = "block";
-  returnSection.style.display = "block";
+  borrowSection.style.display = "none";
+  returnSection.style.display = "none";
 }
 
 function showMembers() {
@@ -356,6 +364,18 @@ function displayBookDetails(isbn) {
     return;
   }
 
+
+  const borrowSection = document.getElementById("borrow-section");
+  const returnSection = document.getElementById("return-section");
+
+  if (book.type === "digital") {
+      borrowSection.style.display = "none";
+      returnSection.style.display = "none";
+  } else {
+      borrowSection.style.display = "block";
+      returnSection.style.display = "block";
+  }
+
   // Show hidden panel
   detailsContainer.classList.remove("hidden");
 
@@ -367,9 +387,6 @@ function displayBookDetails(isbn) {
 }
 
 
-
-
-
 function handleSearch(event) {
   const searchValue = event.target.value.trim().toLowerCase();
   const filteredBooks = searchBooks(books, searchValue);
@@ -378,10 +395,12 @@ function handleSearch(event) {
 
 function handleFilterChange() {
   const details = document.getElementById("book-details");
+  
 
-  if (details) {
-    details.classList.add("hidden");
-  }
+  details?.classList.add("hidden");
+
+  borrowSection.style.display = "none";
+  returnSection.style.display = "none";
 
   const filteredBooks = filterBooksByCategory(books, filterDropdown.value);
   renderBookCatalogue(filteredBooks);

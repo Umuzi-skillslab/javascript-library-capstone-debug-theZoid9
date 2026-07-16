@@ -291,6 +291,12 @@ function borrowBook(memberId, isbn) {
       throw new Error("Book not found");
     }
 
+    if (book.type === "digital") {
+    throw new Error(
+        "Digital books cannot be borrowed. Please download them instead."
+    );
+}
+
     if (!book.isAvailable()) {
       throw new Error("No copies of this book are currently available.");
     }
