@@ -112,8 +112,26 @@ function loadCatalogue() {
 // ======================================================
 
 function setupEventListeners() {
-  // return form
+  // Forms
+  const borrowForm = document.getElementById("borrow-form");
+  const returnForm = document.getElementById("return-form");
+
+  // Inputs
+  const searchInput = document.getElementById("search");
+  const filterDropdown = document.getElementById("filter-category");
+
+  // Containers
+  const catalogueContainer = document.getElementById("catalogue-list");
+  const memberList = document.getElementById("member-list");
+
+  // Navigation
+  const catalogueTab = document.getElementById("catalogue-tab");
+  const membersTab = document.getElementById("members-tab");
+  const statisticsTab = document.getElementById("statistics-tab");
+
+  // Return form
   returnForm?.addEventListener("submit", handleReturnSubmit);
+
   // Search
   searchInput?.addEventListener("input", handleSearch);
 
@@ -126,7 +144,7 @@ function setupEventListeners() {
     saveToLocalStorage();
   });
 
-  // Catalogue events
+  // Catalogue
   catalogueContainer?.addEventListener("click", handleBookClick);
 
   // Members
@@ -134,9 +152,7 @@ function setupEventListeners() {
 
   // Navigation
   catalogueTab?.addEventListener("click", showCatalogue);
-
   membersTab?.addEventListener("click", showMembers);
-
   statisticsTab?.addEventListener("click", showStatistics);
 }
 
@@ -785,12 +801,10 @@ function renderMemberMessage(id, message, type = "success") {
   }, 3000);
 }
 
-// Initialize on DOMContentLoaded
-if (typeof document !== "undefined") {
+
   document.addEventListener("DOMContentLoaded", () => {
     initializeUI();
   });
-}
 
 
 export {

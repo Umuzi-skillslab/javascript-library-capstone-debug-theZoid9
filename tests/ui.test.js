@@ -14,7 +14,8 @@ import {
   handleDeleteMember,
   renderOverdueBooks,
   renderMemberMessage,
-  handleCancelEdit
+  handleCancelEdit,
+  setupEventListeners
   
 } from "../src/ui.js";
 
@@ -212,6 +213,23 @@ describe("borrow form", () => {
     expect(
         document.getElementById("borrow-message").textContent
     ).toContain("Please complete");
+    });
+
+    test("adds submit listener to borrow form", () => {
+        document.body.innerHTML = `
+            <form id="borrow-form"></form>
+        `
+
+        let borrowForm = document.getElementById("borrow-form");
+
+        const spy = jest.spyOn(borrowForm, "addEventListener");
+
+        setupEventListeners();
+
+        expect(spy).toHaveBeenCalledWith(
+            "submit",
+            expect.any(Function)
+);
     });
 
 });
