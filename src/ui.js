@@ -58,6 +58,8 @@ let cancelEditButton;
 let deleteMemberButton;
 let editingMemberId;
 
+let bookDetailsContainer;
+
 // ======================================================
 // INITIALIZATION
 // ======================================================
@@ -104,6 +106,9 @@ function initializeUI() {
 }
 
 function loadCatalogue() {
+  // fix later
+  const detailsContainer = document.getElementById("book-details");
+  detailsContainer.classList.add("hidden")
   renderBookCatalogue(books);
 }
 
@@ -129,6 +134,7 @@ function setupEventListeners() {
   const membersTab = document.getElementById("members-tab");
   const statisticsTab = document.getElementById("statistics-tab");
 
+  bookDetailsContainer = document.getElementById("book-details");
   // Return form
   returnForm?.addEventListener("submit", handleReturnSubmit);
 
@@ -154,7 +160,54 @@ function setupEventListeners() {
   catalogueTab?.addEventListener("click", showCatalogue);
   membersTab?.addEventListener("click", showMembers);
   statisticsTab?.addEventListener("click", showStatistics);
+
+
+  // dwn
+  bookDetailsContainer?.addEventListener("click", handleDownloadClick);
 }
+
+function handleDownloadClick(event) {
+      const detailsContainer = document.getElementById("book-details");
+    const button = event.target.closest(".download-btn");
+
+    if (!button) return;
+
+    const isbn = button.dataset.isbn;
+
+    const memberId = document.getElementById("download-member").value;
+
+    if (!memberId) {
+        renderMemberMessage("return-message", "select a member", "error");
+        return;
+    }
+
+    const book = books.find(book => book.isbn === isbn);
+
+    if (!book.pdf) {
+        return;
+    }
+
+    try {
+        book.download(memberId);
+
+        saveToLocalStorage();
+        renderMemberMessage("return-message", "Thank you for downloading!");
+ 
+        detailsContainer.classList.add("hidden")
+        displayBookDetails(book);
+        
+        renderMemberMessage("return-message", "Thank you for downloading!");
+               setTimeout(() => {
+            window.open(book.pdf, "_blank");
+        }, 4000);
+
+    } catch (error) {
+          renderMemberMessage("return-message", "select a member", "error");
+        return;
+    }
+}
+
+
 
 function setupEditMemberEventListeners() {
   editMemberForm?.addEventListener("submit", handleEditMemberSubmit);
@@ -267,6 +320,24 @@ function handleBookClick(event) {
   displayBookDetails(isbn);
 }
 
+function populateDownloadMembers() {
+
+  const select = document.getElementById("download-member");
+  if (!select) return;
+
+  select.innerHTML = `
+    <option value="">Select Member</option>
+  `;
+
+  members.forEach(member => {
+    select.innerHTML += `
+      <option value="${member.memberId}">
+        ${member.name}
+      </option>
+    `;
+  });
+}
+
 function displayBookDetails(isbn) {
   const detailsContainer = document.getElementById("book-details");
 
@@ -289,7 +360,14 @@ function displayBookDetails(isbn) {
 
   // Uses helper function from library.js
   detailsContainer.innerHTML = formatBookInfo(book);
+
+  populateDownloadMembers();
+  
 }
+
+
+
+
 
 function handleSearch(event) {
   const searchValue = event.target.value.trim().toLowerCase();

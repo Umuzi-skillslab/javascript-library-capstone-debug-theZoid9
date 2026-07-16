@@ -368,6 +368,8 @@ const LibraryStats = {
     };
   },
 };
+
+
 function formatBookInfo(book) {
   if (!book) {
     return "<p>No book selected.</p>";
@@ -380,13 +382,15 @@ function formatBookInfo(book) {
 
       ${
         book.cover
-          ? `<img class="book-cover-large"
-                 src="${book.cover}"
-                 alt="${book.title} cover">`
+          ? `<img
+                class="book-cover-large"
+                src="${book.cover}"
+                alt="${book.title} cover">`
           : ""
       }
 
       <div class="book-details">
+
         <h2>${book.title}</h2>
 
         <p><strong>Author:</strong> ${book.author}</p>
@@ -401,6 +405,14 @@ function formatBookInfo(book) {
               <p><strong>File Size:</strong> ${book.fileSize}</p>
               <p><strong>Downloads:</strong> ${book.downloads}</p>
 
+              <label for="download-member">
+                <strong>Member:</strong>
+              </label>
+
+              <select id="download-member">
+                <option value="">Select Member</option>
+              </select>
+
               <button
                 class="download-btn"
                 data-isbn="${book.isbn}">
@@ -408,7 +420,8 @@ function formatBookInfo(book) {
               </button>
             `
             : `
-              <p><strong>Available Copies:</strong>
+              <p>
+                <strong>Available Copies:</strong>
                 ${book.availableCopies} / ${book.totalCopies}
               </p>
             `
@@ -418,7 +431,12 @@ function formatBookInfo(book) {
 
     </div>
   `;
+
+  
 }
+
+
+
 // Function with number/type issues
 function calculateFineAmount(daysLate) {
   if (daysLate === undefined || daysLate === null) {
