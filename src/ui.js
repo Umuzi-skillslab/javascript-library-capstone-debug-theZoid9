@@ -179,7 +179,7 @@ function showMembers() {
   hideAllSections();
 
   memberSection.style.display = "block";
-  createMemberForm1();
+  createMemberForm();
   renderMemberList();
 }
 
@@ -208,10 +208,10 @@ function hideAllSections() {
 // ======================================================
 
 function renderBookCatalogue(bookList) {
-  // Clear previous books
+
   const catalogueContainer = document.getElementById("catalogue-list");
     catalogueContainer.innerHTML = "";
-  // Display a message if there are no books
+
   if (!Array.isArray(bookList) || bookList.length === 0) {
     catalogueContainer.innerHTML = `
             <p class="empty-message">
@@ -221,19 +221,18 @@ function renderBookCatalogue(bookList) {
     return;
   }
 
-  // Improves performance by updating the DOM only once
   const fragment = document.createDocumentFragment();
 
-  // Create one card for each book - using for of
+
   for (const book of bookList) {
     const bookCard = document.createElement("div");
 
     bookCard.className = "book-card";
 
-    // Store the ISBN for event delegation //
+
     bookCard.dataset.isbn = book.isbn;
 
-    // Display book information here //
+    
     bookCard.innerHTML = `
 
             <h3>${book.title}</h3>
@@ -422,7 +421,7 @@ function handleReturnSubmit(event) {
 // ======================================================
 // MEMBERS
 // ======================================================
-function createMemberForm1() {
+function createMemberForm() {
   const formContainer = document.getElementById("member-form");
 
   formContainer.innerHTML = `
@@ -672,12 +671,12 @@ function handleEditMemberSubmit(event, id) {
   saveToLocalStorage();
 
   renderMemberList();
-  createMemberForm1();
+  createMemberForm();
   renderMemberMessage("member-message", "Member updated.", "success");
 }
 
 function handleCancelEdit() {
-  createMemberForm1();
+  createMemberForm();
 }
 
 function handleDeleteMember(event) {
@@ -706,7 +705,7 @@ function handleDeleteMember(event) {
   saveToLocalStorage();
   loadCatalogue();
   renderMemberList();
-  createMemberForm1();
+  createMemberForm();
   renderMemberMessage("member-message", "Member deleted.", "error");
 }
 // ======================================================
