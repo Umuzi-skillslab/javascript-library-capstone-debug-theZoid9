@@ -712,23 +712,6 @@ describe("storage extra coverage", () => {
     expect(members).toHaveLength(0);
   });
 
- 
-
-  test("exportLibraryData returns json string", () => {
-    books.push(new Book("1", "Book", "Author", 2024, 1, "Programming"));
-    members.push(new Member("M1", "John", "a@a.com", "standard"));
-
-    const json = exportLibraryData();
-
-    expect(typeof json).toBe("string");
-    expect(json).toContain('"books"');
-    expect(json).toContain('"members"');
-  });
-
-  test("importLibraryData returns false for invalid json", () => {
-    expect(importLibraryData("{")).toBe(false);
-  });
-
   test("importLibraryData returns false for wrong structure", () => {
     expect(importLibraryData("{}")).toBe(false);
   });

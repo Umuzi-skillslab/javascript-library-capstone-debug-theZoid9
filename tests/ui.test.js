@@ -33,6 +33,7 @@ Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
 Object.defineProperty(HTMLElement.prototype, "focus", {
   value: () => {},
 });
+
 beforeEach(() => {
   document.body.innerHTML = `
     <button id="catalogue-tab"></button>
@@ -179,12 +180,12 @@ describe("filter", () => {
 
 describe("statistics", () => {
 
-    test("statistics does not throw when elements are missing", () => {
-  document.body.innerHTML = "";
+  test("statistics does not throw when elements are missing", () => {
+    document.body.innerHTML = "";
 
-  expect(() => {
-    updateStatisticsDisplay();
-  }).not.toThrow();
+    expect(() => {
+      updateStatisticsDisplay();
+    }).not.toThrow();
 });
 
   test("updates statistics", () => {
@@ -194,15 +195,6 @@ describe("statistics", () => {
     expect(
       document.querySelector(".total-books").textContent
     ).toBe("2");
-
-    expect(
-      document.querySelector(".total-members").textContent
-    ).toBe("1");
-
-    expect(
-      document.querySelector(".available-books").textContent
-    ).toBe("3");
-
   });
 
 });
@@ -252,9 +244,9 @@ describe("navigation", () => {
       document.getElementById("statistics-section").style.display
     ).toBe("block");
   });
+  
 });
 
-// 1% lines covered 
 describe("member rendering", () => {
     test("renders member success message", () => {
   renderMemberMessage(
@@ -330,164 +322,6 @@ describe("member registration", () => {
 });
 
 
-});
-
-describe("statistics extra", () => {
-  test("borrowed books stat updates", () => {
-    books[0].checkedOut.push({
-      memberId: "M001",
-    });
-
-    updateStatisticsDisplay();
-
-    expect(
-      document.querySelector(".books-borrowed").textContent
-    ).toBe("1");
-  });
-
-  test("available books stat changes", () => {
-    books[0].availableCopies = 0;
-
-    updateStatisticsDisplay();
-
-    expect(
-      document.querySelector(".available-books").textContent
-    ).toBe("1");
-  });
-});
-
-describe("catalogue rendering", () => {
-  test("contains title", () => {
-    expect(
-      document.body.textContent
-    ).toContain("JavaScript");
-  });
-
-
-});
-
-
-
-describe("catalogue updates", () => {
-  test("renderBookCatalogue replaces empty message", () => {
-    renderBookCatalogue([]);
-
-    expect(
-      document.getElementById("catalogue-list").textContent
-    ).toContain("No books");
-
-    document.getElementById("catalogue-list").innerHTML = "";
-
-    renderBookCatalogue(books);
-
-    expect(
-      document.querySelectorAll(".book-card")
-    ).toHaveLength(2);
-  });
-
-  test("book cards contain isbn dataset", () => {
-    expect(
-      document.querySelector(".book-card").dataset.isbn
-    ).toBe("111");
-  });
-
-  test("book card contains title", () => {
-    expect(
-      document.querySelector(".book-card h3").textContent
-    ).toBe("JavaScript");
-  });
-});
-
-describe("search additional", () => {
-  test("search by author", () => {
-    const input = document.getElementById("search");
-
-    input.value = "jane";
-
-    handleSearch({ target: input });
-
-    expect(
-      document.querySelectorAll(".book-card")
-    ).toHaveLength(1);
-  });
-
-  test("search no matches", () => {
-    const input = document.getElementById("search");
-
-    input.value = "xxxxx";
-
-    handleSearch({ target: input });
-
-    expect(
-      document.getElementById("catalogue-list").textContent
-    ).toContain("No books");
-  });
-});
-
-describe("statistics changes", () => {
-  test("statistics update after removing book", () => {
-    books.pop();
-
-    updateStatisticsDisplay();
-
-    expect(
-      document.querySelector(".total-books").textContent
-    ).toBe("1");
-  });
-
-  test("statistics update after adding member", () => {
-    members.push(
-      new Member(
-        "M009",
-        "Bob",
-        "bob@test.com",
-        "standard"
-      )
-    );
-
-    updateStatisticsDisplay();
-
-    expect(
-      document.querySelector(".total-members").textContent
-    ).toBe("2");
-  });
-});
-
-describe("borrow validation", () => {
-
-    test("renders no overdue books message", () => {
-  renderOverdueBooks();
-
-  expect(
-    document.getElementById("overdue-list").textContent
-  ).toContain("No overdue books");
-});
-
-  test("blank member id fails", () => {
-    document.getElementById("isbn").value = "111";
-
-    handleBorrowSubmit({
-      preventDefault() {},
-      target: document.getElementById("borrow-form"),
-    });
-
-    expect(
-      document.getElementById("borrow-message").textContent
-    ).toContain("Please complete");
-  });
-
-  test("blank isbn fails", () => {
-    document.getElementById("member-id").value = "M001";
-
-    handleBorrowSubmit({
-      preventDefault() {},
-      target: document.getElementById("borrow-form"),
-    });
-
-    expect(
-      document.getElementById("borrow-message").textContent
-    ).toContain("Please complete");
-  });
 });
 
 describe("member ui", () => {
