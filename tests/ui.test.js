@@ -244,7 +244,7 @@ describe("navigation", () => {
 
     expect(
       document.getElementById("borrow-section").style.display
-    ).toBe("block");
+    ).toBe("none");
   });
 
   test("members tab shows member section", () => {

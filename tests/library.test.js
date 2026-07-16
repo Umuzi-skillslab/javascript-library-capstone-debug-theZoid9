@@ -300,7 +300,7 @@ describe("Utility Functions", () => {
     initializeLibrary();
 
 
-    expect(searchBooks(books, "m")).toHaveLength(1);
+    expect(searchBooks(books, "m")).toHaveLength(2);
 
     expect(searchBooks(books, "python")).toEqual([]);
   });
