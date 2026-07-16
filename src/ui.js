@@ -389,6 +389,10 @@ function displayBookDetails(isbn) {
 
 function handleSearch(event) {
   const searchValue = event.target.value.trim().toLowerCase();
+    const details = document.getElementById("book-details");
+  
+
+  details?.classList.add("hidden");
   const filteredBooks = searchBooks(books, searchValue);
   renderBookCatalogue(filteredBooks);
 }
