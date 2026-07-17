@@ -291,23 +291,14 @@ function renderBookCatalogue(bookList) {
         bookCard.className = "book-card";
         bookCard.dataset.isbn = book.isbn;
 
-        const isDigital = book.type === "digital";
-
-        bookCard.innerHTML = `
-            <h3>${book.title}</h3>
-
-            <p><strong>Author:</strong> ${book.author}</p>
-
-            <p><strong>Category:</strong> ${book.category}</p>
-
-            <p><strong>Year:</strong> ${book.year}</p>
-
-            ${
-                isDigital
-                    ? `<p><strong>Type:</strong> Digital Book</p>`
-                    : `<p><strong>Available:</strong> ${book.availableCopies}</p>`
-            }
-        `;
+ 
+      bookCard.innerHTML = `
+        <img
+          class="catalogue-cover"
+          src="${book.cover || "covers/default-book.png"}"
+          alt="${book.title} cover"
+        >
+      `;
 
         fragment.appendChild(bookCard);
     }

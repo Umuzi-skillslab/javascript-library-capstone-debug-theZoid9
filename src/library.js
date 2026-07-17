@@ -393,14 +393,11 @@ function formatBookInfo(book) {
   return `
     <div class="book-info">
 
-      ${
-        book.cover
-          ? `<img
-                class="book-cover-large"
-                src="${book.cover}"
-                alt="${book.title} cover">`
-          : ""
-      }
+      <img
+        class="book-cover-large"
+        src="${book.cover || "covers/default-book.png"}"
+        alt="${book.title} cover"
+      >
 
       <div class="book-details">
 
@@ -411,19 +408,23 @@ function formatBookInfo(book) {
         <p><strong>ISBN:</strong> ${book.isbn}</p>
         <p><strong>Category:</strong> ${book.category}</p>
 
+        <p><strong>Type:</strong> ${
+          isDigital ? "Digital Book" : "Physical Book"
+        }</p>
+
         ${
           isDigital
             ? `
               <p><strong>Format:</strong> ${book.format}</p>
               <p><strong>File Size:</strong> ${book.fileSize}</p>
-              <p><strong>Downloads:</strong> ${book.downloads}</p>
+              <p><strong>Total Downloads:</strong> ${book.downloads}</p>
 
               <label for="download-member">
-                <strong>Member:</strong>
+                <strong>Select Member:</strong>
               </label>
 
               <select id="download-member">
-                <option value="">Select Member</option>
+                <option value="">Choose a member...</option>
               </select>
 
               <button
@@ -433,9 +434,12 @@ function formatBookInfo(book) {
               </button>
             `
             : `
-              <p>
-                <strong>Available Copies:</strong>
+              <p><strong>Available Copies:</strong>
                 ${book.availableCopies} / ${book.totalCopies}
+              </p>
+
+              <p><strong>Currently Borrowed:</strong>
+                ${book.checkedOut.length}
               </p>
             `
         }

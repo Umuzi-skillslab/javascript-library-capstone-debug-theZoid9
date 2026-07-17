@@ -261,6 +261,36 @@ form input::placeholder {
   color: var(--muted);
 }
 
+
+/* Catalogue book card */
+.book-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0px;
+
+}
+
+
+
+/* Book cover */
+.catalogue-cover {
+
+    width: 100%;
+    max-width: 150px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+
+
+
 /* --- Book Grid --- */
 .book-grid {
   display: grid;
@@ -268,30 +298,6 @@ form input::placeholder {
   gap: 20px;
 }
 
-/* Book Card */
-.book-grid > div,
-.book-grid > article {
-  display: flex;
-  flex-direction: column;
-   gap: 0.75rem;
-
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
-
-  cursor: pointer;
-  overflow: hidden;
-  position: relative;
-}
 
 
 .book-info {
@@ -337,21 +343,13 @@ form input::placeholder {
 
     padding: 1rem;
 
-    background: var(--card);
-    border: 1px solid var(--border);
+    border: 0px solid var(--border);
     border-radius: var(--radius);
 
     transition: .25s ease;
     cursor: pointer;
 }
 
-.book-card:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(255,255,255,.15);
-
-    box-shadow: 0 12px 25px rgba(0,0,0,.18);
-}
 
 
 
@@ -363,17 +361,16 @@ form input::placeholder {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-dim));
   opacity: 0;
   transition: var(--transition);
 }
 
 .book-grid > div:hover,
 .book-grid > article:hover {
-  background: var(--card-hover);
+  
   border-color: var(--border-strong);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow), var(--shadow-accent);
+  transform: translateY(-8px);
+  
 }
 
 .book-grid > div:hover::before,
