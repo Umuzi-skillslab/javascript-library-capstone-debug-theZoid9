@@ -78,14 +78,14 @@ export function initializeLibrary() {
        "books/money.epub"
     ),
       new Book(
-      "91009",
+      "889996",
       "THE ROAD TO REACT",
       "Robin Wieruch",
       2018,
       3,
       "non-fiction",
        "covers/react.png",  
-       "books/money.epub"
+       "books/react.pdf"
     )
   );
 
