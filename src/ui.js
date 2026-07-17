@@ -406,7 +406,7 @@ function handleBorrowSubmit(event) {
 
   const memberId = memberIdInput.value.trim();
   const isbn = isbnInput.value.trim();
-
+  const book = findBookByISBN(isbn);
   if (!memberId || !isbn) {
     renderMemberMessage(
       "borrow-message",
@@ -422,8 +422,9 @@ function handleBorrowSubmit(event) {
     if (success) {
       saveToLocalStorage();
       loadCatalogue();
+      displayBookDetails(isbn);
       updateStatisticsDisplay();
-      renderMemberMessage("borrow-message", "Book borrowed successfully.");
+      renderMemberMessage("borrow-message",  `<span class="book-title">${book.title}</span> borrowed successfully.`);
       event.target.reset();
     }
   } catch (error) {
@@ -490,7 +491,7 @@ function handleReturnSubmit(event) {
     ]);
 
     saveToLocalStorage();
-
+    displayBookDetails(isbn);
     renderBookCatalogue(books);
     renderMemberList();
     updateStatisticsDisplay();
@@ -883,7 +884,7 @@ function renderMemberMessage(id, message, type = "success") {
     `;
   setTimeout(() => {
     container.innerHTML = "";
-  }, 3000);
+  }, 6000);
 }
 
 

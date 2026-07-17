@@ -89,6 +89,12 @@ body::after {
   background-size: 200px 200px;
 }
 
+
+.book-title {
+    color: #000000;
+    font-weight: bold;
+}
+
 /* --- Container --- */
 .container {
   position: relative;
