@@ -534,6 +534,10 @@ form input::placeholder {
   margin-bottom: 4px;
 }
 
+
+.book-title {
+  color: #000000;
+}
 #book-details button {
   margin-top: 20px;
 }
