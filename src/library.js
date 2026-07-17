@@ -388,7 +388,7 @@ function formatBookInfo(book) {
     return "<p>No book selected.</p>";
   }
 
-  const isDigital = book instanceof DigitalBook;
+  const isDigital = book.type === "digital";
 
   return `
     <div class="book-info">
@@ -448,8 +448,6 @@ function formatBookInfo(book) {
 
     </div>
   `;
-
-  
 }
 
 
