@@ -56,10 +56,15 @@ class Book {
       throw new Error("Member already checked out this book");
     }
 
+    const borrowDate = new Date();
+
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 14); // 14-day loan
+
     this.checkedOut.push({
       memberId,
-      borrowDate: new Date(),
-      dueDate: new Date(Date.now()),
+      borrowDate,
+      dueDate
     });
     this.availableCopies--;
     return true;
@@ -85,7 +90,7 @@ class DigitalBook extends Book {
   }
 
   download(memberId) {
-    // Should override differently than physical checkout
+    
     if (
       memberId === undefined ||
       memberId === null ||
