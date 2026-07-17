@@ -56,6 +56,36 @@ export function initializeLibrary() {
       "fiction",
        "covers/green.png",  
        "books/green.epub"
+    ),
+      new Book(
+      "919",
+      "ASTROPHYSICS FOR PEOPLE IN A HURRY",
+      "Neil deGrasse Tyson",
+      2010,
+      6,
+      "fiction",
+       "covers/astro.png",  
+       "books/astro.epub"
+    ),
+      new Book(
+      "91009",
+      "THE PSYCHOLOGY OF MONEY",
+      "Morgan Housel",
+      2019,
+      3,
+      "non-fiction",
+       "covers/money.png",  
+       "books/money.epub"
+    ),
+      new Book(
+      "91009",
+      "THE ROAD TO REACT",
+      "Robin Wieruch",
+      2018,
+      3,
+      "non-fiction",
+       "covers/react.png",  
+       "books/money.epub"
     )
   );
 
