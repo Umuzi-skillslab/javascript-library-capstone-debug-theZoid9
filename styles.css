@@ -100,10 +100,33 @@ body::after {
 
 /* --- Header --- */
 header {
-  padding: 40px 0 28px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 36px;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 2rem 1rem;
+    
+  margin-bottom: 20px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 1rem;
 }
 
 header::after {
