@@ -107,17 +107,19 @@ header {
 
     text-align: center;
 
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
     
-  margin-bottom: 20px;
+    margin-bottom: 20px;
+     margin-top: 20px;
     background: var(--card);
     border-bottom: 1px solid var(--border);
 }
 
 header h1 {
-    margin: 0;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
+    font-family: "Rubik Glitch", system-ui;
+    font-size: clamp(3rem, 6vw, 5rem);
+    letter-spacing: 6px;
+    text-transform: uppercase;
 }
 
 header nav {
