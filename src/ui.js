@@ -569,34 +569,57 @@ function renderMemberList() {
     return;
   }
 
-  members.forEach((member) => {
+members.forEach((member) => {
     const card = document.createElement("div");
-
     card.className = "member-card";
 
+    const initials = member.name
+        .split(" ")
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+
     card.innerHTML = `
-            <h3>${member.name}</h3>
+        <div class="member-header">
+            <div class="member-avatar">${initials}</div>
 
-            <p>${member.id}</p>
+            <div class="member-info">
+                <h3>${member.name}</h3>
+                <span class="member-id">${member.id}</span>
+            </div>
+        </div>
 
-            <p>${member.email}</p>
+        <div class="member-body">
 
-            <p>${member.membershipType}</p>
+            <div class="member-row">
+                <span>Email</span>
+                <strong>${member.email}</strong>
+            </div>
 
-            <p>
-                Borrowed books:
-                ${member.borrowedBooks.length}
-            </p>
+            <div class="member-row">
+                <span>Membership</span>
+                <strong>${member.membershipType}</strong>
+            </div>
 
-            <button type="submit" class="edit-member"
+            <div class="member-row">
+                <span>Borrowed Books</span>
+                <strong>${member.borrowedBooks.length}</strong>
+            </div>
+
+        </div>
+
+        <div class="member-actions">
+            <button
+                type="submit"
+                class="edit-member"
                 data-id="${member.id}">
                 Edit
             </button>
-
-        `;
+        </div>
+    `;
 
     container.appendChild(card);
-  });
+});
 }
 
 function handleMemberSubmit(event) {
