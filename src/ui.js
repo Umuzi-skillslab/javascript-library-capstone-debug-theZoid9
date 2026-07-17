@@ -182,7 +182,7 @@ function handleDownloadClick(event) {
     const memberId = document.getElementById("download-member").value;
 
     if (!memberId) {
-        renderMemberMessage("return-message", "select a member", "error");
+        renderMemberMessage("return-message2", "select a member", "error");
         return;
     }
 
@@ -196,18 +196,18 @@ function handleDownloadClick(event) {
         book.download(memberId);
 
         saveToLocalStorage();
-        renderMemberMessage("return-message", "Thank you for downloading!");
+        renderMemberMessage("return-message2", "Thank you for downloading!");
  
         
         displayBookDetails(book);
         
-        renderMemberMessage("return-message", "Thank you for downloading!");
+        renderMemberMessage("return-message2", "Thank you for downloading!");
                setTimeout(() => {
             window.open(book.pdf, "_blank");
         }, 4000);
 
     } catch (error) {
-          renderMemberMessage("return-message", "select a member", "error");
+          renderMemberMessage("return-message2", "select a member", "error");
         return;
     }
 }
@@ -358,9 +358,7 @@ function displayBookDetails(isbn) {
   const book = findBookByISBN(isbn);
 
   if (!book) {
-    detailsContainer.innerHTML = `
-            <p>Book not found.</p>
-        `;
+    document.getElementById("book-details");
     return;
   }
 
