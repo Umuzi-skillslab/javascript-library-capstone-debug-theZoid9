@@ -264,11 +264,15 @@ Show all tests passing (15+ tests).
 Show coverage greater than 80%.
 
 ## 5. Features
-
+Search
 ![Library System Screenshot](screenshots/search.png)
+Borrow
 ![Library System Screenshot](screenshots/borrow.png)
+Stats
 ![Library System Screenshot](screenshots/statistics.png)
+Edit Member
 ![Library System Screenshot](screenshots/editMember.png)
+Digital Book
 ![Library System Screenshot](screenshots/digi.png)
 
 ## 6. Other
