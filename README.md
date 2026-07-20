@@ -234,39 +234,37 @@ Include the following screenshots in the `/screenshots` folder.
 
 ## 1. Application Running
 
-![Library System Screenshot](images/screenshot.png)
+![Library System Screenshot](scrrenshots/application.png)
 
 
 ## 2. Browser Console
 
-```
-screenshots/console.png
-```
+
+![Library System Screenshot](screenshots/console.png)
+
 
 Show no JavaScript errors.
 
 ## 3. Jest Tests
 
-```
-screenshots/tests.png
-```
+![Library System Screenshot](screenshots/tests.png)
+
 
 Show all tests passing (15+ tests).
 
 ## 4. Coverage Report
 
-```
-screenshots/coverage.png
-```
+![Library System Screenshot](screenshots/coverage.png)
+
 
 Show coverage greater than 80%.
 
 ## 5. Features
 
-```
-screenshots/search.png
-screenshots/borrow.png
-screenshots/statistics.png
+![Library System Screenshot](screenshots/coverage.png)
+![Library System Screenshot](screenshots/borrow.png)
+![Library System Screenshot](screenshots/statistics.png)
+
 ```
 
 Demonstrate search, borrowing, and statistics functionality.
