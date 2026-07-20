@@ -236,6 +236,10 @@ Include the following screenshots in the `/screenshots` folder.
 
 ![Library System Screenshot](screenshots/application.png)
 
+## 1.1 Member Section
+
+
+![Library System Screenshot](screenshots/members.png)
 
 ## 2. Browser Console
 
@@ -264,6 +268,13 @@ Show coverage greater than 80%.
 ![Library System Screenshot](screenshots/search.png)
 ![Library System Screenshot](screenshots/borrow.png)
 ![Library System Screenshot](screenshots/statistics.png)
+![Library System Screenshot](screenshots/editMember.png)
+![Library System Screenshot](screenshots/digi.png)
+
+## 6. Other
+
+![Library System Screenshot](screenshots/overdue.png)
+
 
 ```
 
