@@ -99,14 +99,5 @@ npm run test:watch    # Watch mode for development
 npm run test:coverage # Generate coverage report
 ```
 
-## Complexity Notes
 
-This project is more challenging than a basic application:
 
-- Multiple interrelated classes with inheritance
-- Complex data relationships (books ↔ members)
-- Nested data structures requiring careful manipulation
-- Performance considerations with search/filter operations
-- Comprehensive error handling requirements
-
-Good luck with your debugging and implementation!
