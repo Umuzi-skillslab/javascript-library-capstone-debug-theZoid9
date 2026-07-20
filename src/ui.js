@@ -12,6 +12,7 @@ import {
   updateMemberInfo,
   findOverdueBooks,
   deleteMember,
+  calculateFineAmount
 } from "./library.js";
 
 import { loadFromLocalStorage, saveToLocalStorage } from "./storage.js";
@@ -862,8 +863,8 @@ function updateStatisticsDisplay() {
 }
 
 function renderOverdueBooks() {
-  const overdue = findOverdueBooks();
-
+  const book = findOverdueBooks();
+  
   const count = document.getElementById("overdue-count");
 
   const list = document.getElementById("overdue-list");
@@ -872,11 +873,11 @@ function renderOverdueBooks() {
     return;
   }
 
-  count.textContent = overdue.length;
+  count.textContent = book.length;
 
   list.innerHTML = "";
 
-  if (overdue.length === 0) {
+  if (book.length === 0) {
     list.innerHTML = `
             <p class="empty-message">
                 No overdue books
@@ -885,8 +886,9 @@ function renderOverdueBooks() {
 
     return;
   }
-
-  overdue.forEach((book) => {
+  console.log(book.daysLate)
+  book.forEach((book) => {
+    const fine = calculateFineAmount(book.daysLate);
     list.innerHTML += `
                 <div class="overdue-book">
 
@@ -900,6 +902,10 @@ function renderOverdueBooks() {
                     <p>
                         <span>Days Late:</span>
                         ${book.daysLate}
+                    </p>
+                    <p>
+                    <span>Fine:</span>
+                    R${fine.toFixed(2)}
                     </p>
 
                 </div>

@@ -59,7 +59,7 @@ class Book {
     const borrowDate = new Date();
 
     const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 14); // 14-day loan
+    dueDate.setDate(dueDate.getDate() - 1 ); // test due date here
 
     this.checkedOut.push({
       memberId,
@@ -171,11 +171,14 @@ function findOverdueBooks() {
   const overdue = [];
   const today = new Date();
 
+  console.log(books)
+
   for (const book of books) {
+    
     for (const record of book.checkedOut) {
-      if (today > new Date(record.dueDate)) {
-        const daysLate = Math.floor(
-          (today - new Date(record.dueDate)) / (1000 * 60 * 60 * 24),
+      console.log(record) // this is true
+      if (today >= new Date(record.dueDate)) {
+        const daysLate = Math.floor( (today - new Date(record.dueDate)) / (1000 * 60 * 60 * 24),
         );
 
         overdue.push({
@@ -320,9 +323,12 @@ function borrowBook(memberId, isbn) {
       member.borrowedBooks = [];
     }
 
-    member.borrowedBooks.push(book.isbn);
+    member.borrowedBooks.push( 
+        isbn
+    );
 
     return true;
+
   } catch (error) {
     throw error;
   }
@@ -381,7 +387,6 @@ const LibraryStats = {
     };
   },
 };
-
 
 function formatBookInfo(book) {
   if (!book) {
@@ -450,9 +455,6 @@ function formatBookInfo(book) {
   `;
 }
 
-
-
-// Function with number/type issues
 function calculateFineAmount(daysLate) {
   if (daysLate === undefined || daysLate === null) {
     return 0;
@@ -496,5 +498,5 @@ export {
   findOverdueBooks,
   formatBookInfo,
   LibraryStats,
-  deleteMember,
+  deleteMember
 };

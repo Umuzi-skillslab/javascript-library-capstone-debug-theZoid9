@@ -1263,3 +1263,49 @@ button.btn-danger:hover {
         height: 200px;
     }
 }
+
+
+.overdue-book {
+    background: rgba(255, 245, 245, 0.9);
+    border-left: 6px solid #e63946;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.overdue-book:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.overdue-book strong {
+    display: block;
+    font-size: 1.15rem;
+    color: #b00020;
+    margin-bottom: 12px;
+}
+
+.overdue-book p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.overdue-book span {
+    font-weight: 600;
+    color: #222;
+}
+
+.overdue-book p:last-child {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    font-weight: bold;
+    color: #d62828;
+}
