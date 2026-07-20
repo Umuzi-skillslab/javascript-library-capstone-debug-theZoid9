@@ -362,9 +362,15 @@ function displayBookDetails(isbn) {
   if (book.type === "digital") {
       borrowSection.style.display = "none";
       returnSection.style.display = "none";
+
+      
   } else {
       borrowSection.style.display = "block";
       returnSection.style.display = "block";
+      borrowSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
   }
 
   // Show hidden panel
@@ -372,9 +378,14 @@ function displayBookDetails(isbn) {
 
   // Uses helper function from library.js
   detailsContainer.innerHTML = formatBookInfo(book);
-
+  detailsContainer.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
   populateDownloadMembers();
-  
+    
+
+
 }
 
 // Search features up top
