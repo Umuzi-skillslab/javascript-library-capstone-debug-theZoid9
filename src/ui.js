@@ -886,7 +886,7 @@ function renderOverdueBooks() {
 
     return;
   }
-  console.log(book.daysLate)
+  
   book.forEach((book) => {
     const fine = calculateFineAmount(book.daysLate);
     list.innerHTML += `

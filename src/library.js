@@ -171,12 +171,10 @@ function findOverdueBooks() {
   const overdue = [];
   const today = new Date();
 
-  console.log(books)
-
   for (const book of books) {
     
     for (const record of book.checkedOut) {
-      console.log(record) // this is true
+   
       if (today >= new Date(record.dueDate)) {
         const daysLate = Math.floor( (today - new Date(record.dueDate)) / (1000 * 60 * 60 * 24),
         );

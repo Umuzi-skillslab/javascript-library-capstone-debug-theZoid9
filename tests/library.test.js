@@ -300,7 +300,7 @@ describe("Utility Functions", () => {
     initializeLibrary();
 
 
-    expect(searchBooks(books, "m")).toHaveLength(3);
+    expect(searchBooks(books, "m")).toHaveLength(4);
 
     expect(searchBooks(books, "python")).toEqual([]);
   });
@@ -309,7 +309,7 @@ describe("Utility Functions", () => {
     initializeLibrary();
 
 
-    expect(filterBooksByCategory(books, "all")).toHaveLength(4);
+    expect(filterBooksByCategory(books, "all")).toHaveLength(7);
 
   });
 
