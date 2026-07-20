@@ -261,7 +261,7 @@ Show coverage greater than 80%.
 
 ## 5. Features
 
-![Library System Screenshot](screenshots/coverage.png)
+![Library System Screenshot](screenshots/search.png)
 ![Library System Screenshot](screenshots/borrow.png)
 ![Library System Screenshot](screenshots/statistics.png)
 
