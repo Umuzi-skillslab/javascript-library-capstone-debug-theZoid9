@@ -234,9 +234,8 @@ Include the following screenshots in the `/screenshots` folder.
 
 ## 1. Application Running
 
-```
 ![Library System Screenshot](images/screenshot.png)
-```
+
 
 ## 2. Browser Console
 
