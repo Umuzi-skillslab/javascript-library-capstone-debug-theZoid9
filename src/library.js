@@ -273,8 +273,8 @@ function updateMemberInfo(member, updates) {
   return member;
 }
 
-// Function with no error handling
-// fix - try and catch + type of checks
+// using findMemberById, findBookByISBN function to push book into borrow book array for member using memberId 
+
 function borrowBook(memberId, isbn) {
   try {
     if (!memberId || !isbn) {

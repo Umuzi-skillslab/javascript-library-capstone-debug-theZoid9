@@ -268,6 +268,7 @@ function hideAllSections() {
 // CATALOGUE - All book related function
 // ======================================================
 
+// Rendering Books From Utils "I can use a api btw"
 function renderBookCatalogue(bookList) {
 
   const catalogueContainer = document.getElementById("catalogue-list");
@@ -306,19 +307,18 @@ function renderBookCatalogue(bookList) {
   catalogueContainer.appendChild(fragment);
 }
 
+// Action when clicking book 
 function handleBookClick(event) {
-  // Find the nearest book card
   const bookCard = event.target.closest(".book-card");
 
   if (!bookCard) {
     return;
   }
-
-  // Read the stored ISBN
   const isbn = bookCard.dataset.isbn;
 
   displayBookDetails(isbn);
 }
+
 
 function populateDownloadMembers() {
 
@@ -338,6 +338,7 @@ function populateDownloadMembers() {
   });
 }
 
+// Displaying book information book using isbn string value to find info
 function displayBookDetails(isbn) {
   const detailsContainer = document.getElementById("book-details");
 
@@ -375,7 +376,7 @@ function displayBookDetails(isbn) {
   
 }
 
-
+// Search features up top
 function handleSearch(event) {
   const searchValue = event.target.value.trim().toLowerCase();
   const filteredBooks = searchBooks(books, searchValue);
@@ -435,6 +436,8 @@ function handleBorrowSubmit(event) {
 // ======================================================
 // RETURNS
 // ======================================================
+
+// Rendering form for Returning the book (Only Renders for non-digital books)
 function createReturnForm() {
   const container = document.getElementById("return-section");
 
@@ -470,6 +473,17 @@ function createReturnForm() {
   returnForm = document.getElementById("return-form");
 }
 
+// After clicking get member id and isbn from current input  - Lastly render message on screen using renderMemberMessage()
+// Use it in ProcessReturnQueue()
+/* Other function used:
+    saveToLocalStorage();
+    displayBookDetails(isbn);
+    renderBookCatalogue(books);
+    renderMemberList();
+    updateStatisticsDisplay();
+    renderOverdueBooks();
+ * 
+ */ 
 function handleReturnSubmit(event) {
   event.preventDefault();
 
@@ -585,7 +599,7 @@ members.forEach((member) => {
 
             <div class="member-info">
                 <h3>${member.name}</h3>
-                <span class="member-id">${member.id}</span>
+                <span class="member-id">Member id: ${member.id}</span>
             </div>
         </div>
 
@@ -924,8 +938,6 @@ export {
   setupEventListeners,
   handleBorrowSubmit,
   updateStatisticsDisplay,
-
-  // testing
   renderMemberList,
   showEditMemberForm,
   handleEditMemberSubmit,
