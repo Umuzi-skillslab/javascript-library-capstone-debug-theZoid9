@@ -155,10 +155,21 @@ export function getLibraryStatistics(books, members) {
 
 // helper for handleReturnSubmit
 export function processReturnQueue(queue) {
+  if (!Array.isArray(queue)) {
+    throw new Error("Invalid queue data.");
+  }
   let index = 0;
 
   while (index < queue.length) {
     const item = queue[index];
+    if (
+      !item ||
+      typeof item !== "object" ||
+      typeof item.isbn !== "string" ||
+      typeof item.memberId !== "string"
+    ) {
+      throw new TypeError("Invalid queue item.");
+    }
 
     const book = findBookByISBN(item.isbn);
     const member = findMemberById(item.memberId);
