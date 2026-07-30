@@ -271,6 +271,10 @@ function hideAllSections() {
 
 // Rendering Books From Utils "I can use a api btw"
 function renderBookCatalogue(bookList) {
+  if (!Array.isArray(bookList)) {
+    console.error("Invalid book list provided.");
+    return;
+  }
 
   const catalogueContainer = document.getElementById("catalogue-list");
     catalogueContainer.innerHTML = "";
@@ -342,6 +346,10 @@ function populateDownloadMembers() {
 }
 // Displaying book information book using isbn string value to find info
 function displayBookDetails(isbn) {
+  if (typeof isbn !== "string") {
+    console.error("Invalid ISBN provided.");
+    return;
+  }
   const detailsContainer = document.getElementById("book-details");
 
   if (!detailsContainer) {
@@ -701,6 +709,10 @@ function handleMemberClick(event) {
 }
 
 function showEditMemberForm(id) {
+  if (!id || typeof id !== "string") {
+    console.error("Invalid member ID provided.");
+    return;
+  }
   const member = findMemberById(id);
 
   if (!member) {
