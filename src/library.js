@@ -186,48 +186,6 @@ function findOverdueBooks() {
   }, []);
 }
 
-// Function with while loop error
-// fix
-function processReturnQueue(queue) {
-  if (!Array.isArray(queue)) {
-    return;
-  }
-
-  let index = 0;
-
-  while (index < queue.length) {
-    const item = queue[index];
-
-    if (!item || typeof item !== "object") {
-      index++;
-      continue;
-    }
-
-    if (typeof item.isbn !== "string" || typeof item.memberId !== "string") {
-      index++;
-      continue;
-    }
-
-    const book = findBookByISBN(item.isbn);
-
-    const member = findMemberById(item.memberId);
-
-    if (book && member) {
-      book.availableCopies++;
-
-      book.checkedOut = book.checkedOut.filter(
-        (checkout) => checkout.memberId !== item.memberId,
-      );
-
-      member.borrowedBooks = member.borrowedBooks.filter(
-        (isbn) => isbn !== item.isbn,
-      );
-    }
-
-    index++;
-  }
-}
-
 // Recursive function with multiple errors
 function searchBooksByCategory(bookList, category, index = 0) {
   if (!Array.isArray(bookList)) {
@@ -319,12 +277,8 @@ function borrowBook(isbn, memberId) {
     const book = findBookByISBN(isbn);
 
     const { type } = book;
-    const { borrowedBooks, id } = member;
+    const { borrowedBooks, id ,name} = member;
 
-    console.log(type)
-    console.log(borrowedBooks, id)
-
-  
     if (!member) {
       throw new Error("Member not found");
     }
@@ -541,7 +495,6 @@ export {
   updateMemberInfo,
   calculateFineAmount,
   calculateTotalLateFees,
-  processReturnQueue,
   findOverdueBooks,
   formatBookInfo,
   LibraryStats,

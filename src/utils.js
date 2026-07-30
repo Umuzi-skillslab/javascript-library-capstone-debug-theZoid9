@@ -160,19 +160,23 @@ export function processReturnQueue(queue) {
   let index = 0;
 
   while (index < queue.length) {
+    console.log(queue[index])
     const { isbn, memberId } = queue[index];
 
     if (
       !item ||
       typeof item !== "object" ||
-      typeof item.isbn !== "string" ||
-      typeof item.memberId !== "string"
+      typeof isbn !== "string" ||
+      typeof memberId !== "string"
     ) {
       throw new TypeError("Invalid queue item.");
     }
 
     const book = findBookByISBN(isbn);
     const member = findMemberById(memberId);
+
+    const { type } = book;
+    const { borrowedBooks, id ,name} = member;
 
     if (!book) {
       throw new Error("Book not found.");
