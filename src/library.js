@@ -189,10 +189,24 @@ function findOverdueBooks() {
 // Function with while loop error
 // fix
 function processReturnQueue(queue) {
+  if (!Array.isArray(queue)) {
+    return;
+  }
+
   let index = 0;
 
   while (index < queue.length) {
     const item = queue[index];
+
+    if (!item || typeof item !== "object") {
+      index++;
+      continue;
+    }
+
+    if (typeof item.isbn !== "string" || typeof item.memberId !== "string") {
+      index++;
+      continue;
+    }
 
     const book = findBookByISBN(item.isbn);
 
@@ -246,18 +260,39 @@ function calculateTotalLateFees(memberRecord) {
 
 // fix - spread operator
 function combineBookCollections(fiction, nonFiction, reference) {
+  if (
+    !Array.isArray(fiction) ||
+    !Array.isArray(nonFiction) ||
+    !Array.isArray(reference)
+    ) {
+      return [];
+    }
   return [...fiction, ...nonFiction, ...reference];
 }
 
 // fix - spread operator
 function addMultipleBooks(...newBooks) {
-  // Should use rest parameters to accept unlimited books
-  books.push(...newBooks);
+  const validBooks = newBooks.filter(
+    (book) =>
+      book &&
+      typeof book === "object" &&
+      typeof book.isbn === "string"
+  );
+
+  books.push(...validBooks);
 }
 
 // Function missing destructuring
 // fix - destructuring
 function updateMemberInfo(member, updates) {
+  if (!member || typeof member !== "object") {
+    return null;
+  }
+
+  if (!updates || typeof updates !== "object") {
+    return member;
+  }
+
   const { name, email, membershipType } = updates;
 
   if (name) member.name = name;

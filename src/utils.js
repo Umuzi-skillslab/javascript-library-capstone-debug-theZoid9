@@ -6,6 +6,7 @@ import {
   DigitalBook,
   findBookByISBN,
   findMemberById,
+  addMultipleBooks
 } from "../src/library.js";
 
 // Pre Loaded data
@@ -89,7 +90,7 @@ export function initializeLibrary() {
     )
   );
 
-  members.push(
+  addMultipleBooks(
     ...[
       new Member("M001", "John Smith", "john@gmail.com", "standard"),
       new Member("M002", "Jane Doe", "jane@gmail.com", "premium"),
