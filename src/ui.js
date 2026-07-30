@@ -322,23 +322,24 @@ function handleBookClick(event) {
 
 
 function populateDownloadMembers() {
-
   const select = document.getElementById("download-member");
   if (!select) return;
 
-  select.innerHTML = `
+  let html = `
     <option value="">Select Member</option>
   `;
 
   members.forEach(member => {
-    select.innerHTML += `
-      <option value="${member.memberId}">
+   
+    html += `
+      <option value="${member.id}">
         ${member.name}
       </option>
     `;
   });
-}
 
+  select.innerHTML = html;
+}
 // Displaying book information book using isbn string value to find info
 function displayBookDetails(isbn) {
   const detailsContainer = document.getElementById("book-details");
