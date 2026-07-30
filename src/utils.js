@@ -160,12 +160,12 @@ export function processReturnQueue(queue) {
   let index = 0;
 
   while (index < queue.length) {
-    console.log(queue[index])
+
     const { isbn, memberId } = queue[index];
 
     if (
-      !item ||
-      typeof item !== "object" ||
+      !queue[index] ||
+      typeof queue[index] !== "object" ||
       typeof isbn !== "string" ||
       typeof memberId !== "string"
     ) {
@@ -187,7 +187,7 @@ export function processReturnQueue(queue) {
     }
 
     const checkoutIndex = book.checkedOut.findIndex(
-      (checkout) => checkout.memberId === item.memberId,
+      (checkout) => checkout.memberId === memberId,
     );
 
     if (checkoutIndex === -1) {
@@ -199,7 +199,7 @@ export function processReturnQueue(queue) {
     book.checkedOut.splice(checkoutIndex, 1);
 
     member.borrowedBooks = member.borrowedBooks.filter(
-      (borrowedIsbn) => borrowedIsbn !== item.isbn,
+      (borrowedIsbn) => borrowedIsbn !== isbn,
     );
 
     index++;

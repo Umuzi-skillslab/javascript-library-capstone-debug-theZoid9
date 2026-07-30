@@ -362,6 +362,8 @@ function displayBookDetails(isbn) {
 
   const book = findBookByISBN(isbn);
 
+  const { type } = book;
+
   if (!book) {
     document.getElementById("book-details");
     return;
@@ -371,7 +373,7 @@ function displayBookDetails(isbn) {
   const borrowSection = document.getElementById("borrow-section");
   const returnSection = document.getElementById("return-section");
 
-  if (book.type === "digital") {
+  if (type === "digital") {
       borrowSection.style.display = "none";
       returnSection.style.display = "none";
 
