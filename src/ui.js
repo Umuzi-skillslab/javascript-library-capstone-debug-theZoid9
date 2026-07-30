@@ -658,6 +658,9 @@ members.forEach((member) => {
 }
 
 function handleMemberSubmit(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
   event.preventDefault();
 
   const form = event.target;
@@ -697,6 +700,9 @@ function handleMemberSubmit(event) {
 }
 
 function handleMemberClick(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
   const button = event.target.closest(".edit-member");
 
   if (!button) {
@@ -801,6 +807,14 @@ function showEditMemberForm(id) {
 }
 
 function handleEditMemberSubmit(event, id) {
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const membershipTypeInput = document.getElementById("membership-type");
+
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
+
   event.preventDefault();
   const member = findMemberById(editingMemberId);
 
@@ -809,11 +823,18 @@ function handleEditMemberSubmit(event, id) {
     return false;
   }
 
+
+  if (!nameInput || !emailInput || !membershipTypeInput) {
+    renderMemberMessage("member-message", "Form elements not found.", "error");
+    return false;
+  }
+
   const updates = {
-    name: document.getElementById("name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    membershipType: document.getElementById("membership-type").value,
+  name: nameInput.value.trim(),
+  email: emailInput.value.trim(),
+  membershipType: membershipTypeInput.value,
   };
+
 
   updateMemberInfo(member, updates);
 
@@ -829,10 +850,19 @@ function handleCancelEdit() {
 }
 
 function handleDeleteMember(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
+
   event.preventDefault();
   event.stopPropagation();
 
   const member = findMemberById(editingMemberId);
+
+  if (!Array.isArray(member.borrowedBooks)) {
+    renderMemberMessage("member-message", "Invalid member data.", "error");
+    return;
+  }
 
   if (!member) {
     renderMemberMessage("member-message", "Member not found.", "error");
