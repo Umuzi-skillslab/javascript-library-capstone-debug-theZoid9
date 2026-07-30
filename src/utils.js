@@ -160,7 +160,8 @@ export function processReturnQueue(queue) {
   let index = 0;
 
   while (index < queue.length) {
-    const item = queue[index];
+    const { isbn, memberId } = queue[index];
+
     if (
       !item ||
       typeof item !== "object" ||
@@ -170,8 +171,8 @@ export function processReturnQueue(queue) {
       throw new TypeError("Invalid queue item.");
     }
 
-    const book = findBookByISBN(item.isbn);
-    const member = findMemberById(item.memberId);
+    const book = findBookByISBN(isbn);
+    const member = findMemberById(memberId);
 
     if (!book) {
       throw new Error("Book not found.");
