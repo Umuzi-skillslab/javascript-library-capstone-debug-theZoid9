@@ -103,16 +103,31 @@ export function initializeLibrary() {
 // Pure function
 // filter()
 export function searchBooks(books, searchValue) {
-  return books.filter(
-    (book) =>
+  if (!Array.isArray(books) || typeof searchValue !== "string") {
+    return [];
+  }
+  return books.filter(book => {
+    if (
+      !book ||
+      typeof book.title !== "string" ||
+      typeof book.author !== "string"
+    ) {
+      return false;
+    }
+
+    return (
       book.title.toLowerCase().includes(searchValue) ||
-      book.author.toLowerCase().includes(searchValue),
-  );
-}
+      book.author.toLowerCase().includes(searchValue)
+    );
+  });
+  }
 
 // Pure function
 // Filter()
 export function filterBooksByCategory(books, category) {
+  if (!Array.isArray(books) || typeof category !== "string") {
+    return [];
+  }
   if (category === "all") {
     return books;
   }
@@ -122,6 +137,14 @@ export function filterBooksByCategory(books, category) {
 // Pure function
 // reduce() X2
 export function getLibraryStatistics(books, members) {
+  if (!Array.isArray(books) || !Array.isArray(members)) {
+    return {
+      totalBooks: 0,
+      totalMembers: 0,
+      availableBooks: 0,
+      borrowedBooks: 0,
+    };
+  }
   return {
     totalBooks: books.length,
     totalMembers: members.length,
