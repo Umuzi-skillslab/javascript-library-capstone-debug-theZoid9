@@ -421,6 +421,18 @@ function formatBookInfo(book) {
     return "<p>No book selected.</p>";
   }
 
+  if (!Array.isArray(book.checkedOut)) {
+    return "<p>Invalid book data.</p>";
+  }
+
+  if (
+    typeof book.title !== "string" ||
+    typeof book.author !== "string" ||
+    typeof book.isbn !== "string"
+  ) {
+    return "<p>Invalid book data.</p>";
+  }
+
   const isDigital = book.type === "digital";
 
   return `
