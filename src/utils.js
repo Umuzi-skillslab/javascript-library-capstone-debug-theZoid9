@@ -13,7 +13,7 @@ import {
 export function initializeLibrary() {
   if (books.length > 0) return;
 
-  books.push(
+  addMultipleBooks(
     new DigitalBook(
       "9780134685991",
       "PARALLEL WORLDS",
@@ -90,7 +90,7 @@ export function initializeLibrary() {
     )
   );
 
-  addMultipleBooks(
+  members.push(
     ...[
       new Member("M001", "John Smith", "john@gmail.com", "standard"),
       new Member("M002", "Jane Doe", "jane@gmail.com", "premium"),
@@ -106,18 +106,17 @@ export function searchBooks(books, searchValue) {
   if (!Array.isArray(books) || typeof searchValue !== "string") {
     return [];
   }
-  return books.filter(book => {
+  return books.filter(({ title, author }) => {
     if (
-      !book ||
-      typeof book.title !== "string" ||
-      typeof book.author !== "string"
+      typeof title !== "string" ||
+      typeof author !== "string"
     ) {
       return false;
     }
 
     return (
-      book.title.toLowerCase().includes(searchValue) ||
-      book.author.toLowerCase().includes(searchValue)
+      title.toLowerCase().includes(searchValue) ||
+      author.toLowerCase().includes(searchValue)
     );
   });
   }
