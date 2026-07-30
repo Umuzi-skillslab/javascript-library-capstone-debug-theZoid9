@@ -448,7 +448,7 @@ function handleBorrowSubmit(event) {
   }
 
   try {
-    const success = borrowBook(memberId, isbn);
+    const success = borrowBook(isbn, memberId);
 
     if (success) {
       saveToLocalStorage();

@@ -306,7 +306,7 @@ function updateMemberInfo(member, updates) {
 
 // using findMemberById, findBookByISBN function to push book into borrow book array for member using memberId 
 
-function borrowBook(memberId, isbn) {
+function borrowBook(isbn, memberId) {
   try {
     if (!memberId || !isbn) {
       throw new Error("Member ID and ISBN are required");
@@ -317,8 +317,14 @@ function borrowBook(memberId, isbn) {
 
     const member = findMemberById(memberId);
     const book = findBookByISBN(isbn);
-    // No check if member or book exists  // fix
 
+    const { type } = book;
+    const { borrowedBooks, id } = member;
+
+    console.log(type)
+    console.log(borrowedBooks, id)
+
+  
     if (!member) {
       throw new Error("Member not found");
     }
@@ -327,7 +333,7 @@ function borrowBook(memberId, isbn) {
       throw new Error("Book not found");
     }
 
-    if (book.type === "digital") {
+    if (type === "digital") {
     throw new Error(
         "Digital books cannot be borrowed. Please download them instead."
     );
@@ -345,20 +351,21 @@ function borrowBook(memberId, isbn) {
       throw new Error("Member has already borrowed this book.");
     }
 
-    book.checkOut(member.id);
+    book.checkOut(id);
 
-    if (!Array.isArray(member.borrowedBooks)) {
+    if (!Array.isArray(borrowedBooks)) {
       member.borrowedBooks = [];
     }
 
-    member.borrowedBooks.push( 
+    borrowedBooks.push( 
         isbn
     );
-
+     
     return true;
+   
 
   } catch (error) {
-    throw error;
+     throw error;
   }
 }
 
