@@ -439,7 +439,7 @@ function handleBorrowSubmit(event) {
 
   const memberId = memberIdInput.value.trim();
   const isbn = isbnInput.value.trim();
-  const book = findBookByISBN(isbn);
+
   if (!memberId || !isbn) {
     renderMemberMessage(
       "borrow-message",
@@ -449,6 +449,16 @@ function handleBorrowSubmit(event) {
     return;
   }
 
+  const book = findBookByISBN(isbn);
+ 
+  if (!book) {
+      return;
+  }
+
+  const { title } = book;
+
+
+
   try {
     const success = borrowBook(isbn, memberId);
 
@@ -457,7 +467,7 @@ function handleBorrowSubmit(event) {
       loadCatalogue();
       displayBookDetails(isbn);
       updateStatisticsDisplay();
-      renderMemberMessage("borrow-message",  `<span class="book-title">${book.title}</span> borrowed successfully.`);
+      renderMemberMessage("borrow-message",  `<span class="book-title">${title}</span> borrowed successfully.`);
       event.target.reset();
     }
   } catch (error) {
@@ -870,13 +880,13 @@ function handleDeleteMember(event) {
 
   const member = findMemberById(editingMemberId);
 
-  if (!Array.isArray(member.borrowedBooks)) {
-    renderMemberMessage("member-message", "Invalid member data.", "error");
+  if (!member) {
+    renderMemberMessage("member-message", "Member not found.", "error");
     return;
   }
 
-  if (!member) {
-    renderMemberMessage("member-message", "Member not found.", "error");
+  if (!Array.isArray(member.borrowedBooks)) {
+    renderMemberMessage("member-message", "Invalid member data.", "error");
     return;
   }
 

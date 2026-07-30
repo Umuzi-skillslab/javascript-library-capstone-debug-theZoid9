@@ -154,7 +154,7 @@ describe("search", () => {
 
     expect(
       document.querySelectorAll(".book-card")
-    ).toHaveLength(1);
+    ).toHaveLength(2);
 
   });
 

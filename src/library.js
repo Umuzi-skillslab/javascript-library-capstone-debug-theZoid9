@@ -265,7 +265,7 @@ function updateMemberInfo(member, updates) {
 // using findMemberById, findBookByISBN function to push book into borrow book array for member using memberId 
 
 function borrowBook(isbn, memberId) {
-  try {
+
     if (!memberId || !isbn) {
       throw new Error("Member ID and ISBN are required");
     }
@@ -276,9 +276,6 @@ function borrowBook(isbn, memberId) {
     const member = findMemberById(memberId);
     const book = findBookByISBN(isbn);
 
-    const { type } = book;
-    const { borrowedBooks, id ,name} = member;
-
     if (!member) {
       throw new Error("Member not found");
     }
@@ -286,6 +283,9 @@ function borrowBook(isbn, memberId) {
     if (!book) {
       throw new Error("Book not found");
     }
+
+    const { type } = book;
+    const { borrowedBooks, id } = member;
 
     if (type === "digital") {
     throw new Error(
@@ -301,7 +301,7 @@ function borrowBook(isbn, memberId) {
       throw new Error("Member has reached the borrowing limit.");
     }
 
-    if (member.borrowedBooks.includes(book.isbn)) {
+    if (member.borrowedBooks.includes(isbn)) {
       throw new Error("Member has already borrowed this book.");
     }
 
@@ -317,15 +317,13 @@ function borrowBook(isbn, memberId) {
      
     return true;
    
-
-  } catch (error) {
-     throw error;
-  }
+ 
 }
 
 // fix - Find()
 // Pure
 function findMemberById(id) {
+  
   return members.find((member) => member.id === id);
 }
 

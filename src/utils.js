@@ -175,8 +175,6 @@ export function processReturnQueue(queue) {
     const book = findBookByISBN(isbn);
     const member = findMemberById(memberId);
 
-    const { type } = book;
-    const { borrowedBooks, id ,name} = member;
 
     if (!book) {
       throw new Error("Book not found.");
@@ -185,6 +183,10 @@ export function processReturnQueue(queue) {
     if (!member) {
       throw new Error("Member not found.");
     }
+
+    
+    const { type } = book;
+    const { borrowedBooks, id ,name} = member;
 
     const checkoutIndex = book.checkedOut.findIndex(
       (checkout) => checkout.memberId === memberId,

@@ -454,13 +454,13 @@ describe("Additional Library Functions", () => {
     members.push(member);
     books.push(book);
 
-    expect(borrowBook("M001", "123")).toBe(true);
+    expect(borrowBook("123","M001")).toBe(true);
 
     expect(member.borrowedBooks).toContain("123");
     expect(book.availableCopies).toBe(0);
 
-    expect(() => borrowBook("BAD", "123")).toThrow("Member not found");
-    expect(() => borrowBook("M001", "BAD")).toThrow("Book not found");
+    expect(() => borrowBook("123","BADUSER")).toThrow("Member not found");
+    expect(() => borrowBook("BADBOOK18+","M001")).toThrow("Book not found");
   });
 
   test("searchBooksByCategory", () => {
