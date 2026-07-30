@@ -463,7 +463,7 @@ function calculateFineAmount(daysLate) {
 function deleteMember(id) {
   const index = members.findIndex((member) => member.id === id);
 
-  if (index === "null") {
+  if (index === -1) {
     return false;
   }
 
