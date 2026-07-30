@@ -173,7 +173,10 @@ function setupEventListeners() {
 }
 
 function handleDownloadClick(event) {
-      const detailsContainer = document.getElementById("book-details");
+    if (!event || typeof event.preventDefault !== "function") {
+      return false;
+    }
+    const detailsContainer = document.getElementById("book-details");
     const button = event.target.closest(".download-btn");
 
     if (!button) return;
@@ -212,8 +215,6 @@ function handleDownloadClick(event) {
         return;
     }
 }
-
-
 
 function setupEditMemberEventListeners() {
   editMemberForm?.addEventListener("submit", handleEditMemberSubmit);
@@ -314,6 +315,9 @@ function renderBookCatalogue(bookList) {
 
 // Action when clicking book 
 function handleBookClick(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
   const bookCard = event.target.closest(".book-card");
 
   if (!bookCard) {
@@ -323,7 +327,6 @@ function handleBookClick(event) {
 
   displayBookDetails(isbn);
 }
-
 
 function populateDownloadMembers() {
   const select = document.getElementById("download-member");
@@ -399,6 +402,9 @@ function displayBookDetails(isbn) {
 
 // Search features up top
 function handleSearch(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
   const searchValue = event.target.value.trim().toLowerCase();
   const filteredBooks = searchBooks(books, searchValue);
   renderBookCatalogue(filteredBooks);
@@ -421,6 +427,9 @@ function handleFilterChange() {
 // ======================================================
 
 function handleBorrowSubmit(event) {
+  if (!event || typeof event.preventDefault !== "function") {
+    return false;
+  }
   event.preventDefault();
 
   const memberIdInput = document.getElementById("member-id");
