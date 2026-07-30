@@ -168,27 +168,22 @@ class PremiumMember extends Member {
 // Complex function with nested loops and errors
 // fix - Redo Maybe
 function findOverdueBooks() {
-  const overdue = [];
   const today = new Date();
 
-  for (const book of books) {
-    
-    for (const record of book.checkedOut) {
-   
-      if (today >= new Date(record.dueDate)) {
-        const daysLate = Math.floor( (today - new Date(record.dueDate)) / (1000 * 60 * 60 * 24),
-        );
+  return books.reduce((overdue, book) => {
+    const overdueRecords = book.checkedOut
+      .filter(record => today >= new Date(record.dueDate))
+      .map(record => ({
+        memberId: record.memberId,
+        isbn: book.isbn,
+        title: book.title,
+        daysLate: Math.floor(
+          (today - new Date(record.dueDate)) / (1000 * 60 * 60 * 24)
+        ),
+      }));
 
-        overdue.push({
-          memberId: record.memberId,
-          isbn: book.isbn,
-          title: book.title,
-          daysLate,
-        });
-      }
-    }
-  }
-  return overdue;
+    return overdue.concat(overdueRecords);
+  }, []);
 }
 
 // Function with while loop error
