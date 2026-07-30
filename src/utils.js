@@ -112,7 +112,7 @@ export function searchBooks(books, searchValue) {
 // Pure function
 // Filter()
 export function filterBooksByCategory(books, category) {
-  if (category == "all") {
+  if (category === "all") {
     return books;
   }
   return books.filter((book) => book.category === category);
