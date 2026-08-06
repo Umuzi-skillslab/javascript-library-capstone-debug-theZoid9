@@ -378,8 +378,5 @@ describe("member ui", () => {
       document.getElementById("member-registration-form")
     ).not.toBeNull();
   });
-
-
-  
 });
 

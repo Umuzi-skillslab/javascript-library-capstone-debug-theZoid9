@@ -178,11 +178,11 @@ nav button {
   font-family: var(--font-ui);
   font-size: 0.88rem;
   font-weight: 500;
-  color: var(--fg-dim);
+  color:rgb(0, 0, 0);
   background: transparent;
   border: 1px solid transparent;
   padding: 10px 22px;
-  border-radius: 100px;
+  border-radius: 10px;
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -190,8 +190,8 @@ nav button {
 }
 
 nav button:hover {
-  color: var(--fg);
-  background: var(--accent-glow);
+  color: white;
+  background: rgb(0, 0, 0);
   border-color: var(--border);
 }
 
@@ -698,8 +698,8 @@ button.btn-danger:hover {
 
 /* Member card */
 .member-card{
-    background: var(--card);
-    border:1px solid var(--border);
+    background: white;
+    border:1px solid black;
     border-radius:18px;
     padding:22px;
     display:flex;
