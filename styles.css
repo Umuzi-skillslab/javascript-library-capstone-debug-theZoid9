@@ -4,7 +4,7 @@
   --bg-subtle: #777777;
   --surface: rgba(231, 231, 231, 0.72);
   --surface-hover: rgba(20, 44, 30, 0.85);
-  --card: rgba(231, 231, 231, 0.72);
+  --card: rgba(96, 121, 107, 0.65);
   --card-hover:  rgba(78, 100, 88, 0.8);;
   --accent: #c9a84c;
   --accent-dim: #a08436;
@@ -666,7 +666,6 @@ button.btn-danger:hover {
   background: rgba(194, 122, 74, 0.16);
   border-color: rgba(194, 122, 74, 0.35);
 }
-
 /* --- Member Section --- */
 #member-form {
   background: var(--surface);
@@ -687,116 +686,142 @@ button.btn-danger:hover {
 #member-form input {
   flex: 1;
   min-width: 160px;
- 
 }
 
 #member-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  align-items: start;
 }
 
-/* Member card */
-.member-card{
-    background: white;
-    border:1px solid black;
-    border-radius:18px;
-    padding:22px;
-    display:flex;
-    flex-direction:column;
-    gap:18px;
+/* Compact member card */
+.member-card {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #ddd);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.member-header{
-    display:flex;
-    align-items:center;
-    gap:16px;
+.member-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-.member-avatar{
-    width:58px;
-    height:58px;
-    border-radius:50%;
-    background:var(--accent);
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:1.2rem;
-    font-weight:700;
-    flex-shrink:0;
+.member-summary {
+  width: 100%;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
 }
 
-.member-info h3{
-    margin:0;
-    font-size:1.2rem;
+.member-summary:hover {
+  background: rgba(127, 127, 127, 0.08);
 }
 
-.member-id{
-    color:var(--muted);
-    font-size:.8rem;
-    font-family:monospace;
+.member-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.member-body{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+.member-summary-info {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.member-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 0;
-    border-bottom:1px solid rgba(255,255,255,.08);
+.member-summary-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.member-row:last-child{
-    border-bottom:none;
-}
-
-.member-row span{
-    color:var(--muted);
-    font-size:.9rem;
-}
-
-.member-row strong{
-    font-weight:600;
-}
-
-.member-actions{
-    margin-top:auto;
-}
-
-.member-actions .edit-member{
-    width:100%;
-}
-
-
-#member-list h4 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-#member-list .member-id {
-  font-size: 0.78rem;
+.member-summary-info small {
   color: var(--muted);
   font-family: "Courier New", monospace;
-  margin-bottom: 12px;
+  font-size: 0.72rem;
 }
 
-#member-list .member-books {
-  font-size: 0.84rem;
-  color: var(--fg-dim);
-}
-
-#member-list .member-actions {
+.member-counts {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-end;
+  color: var(--muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.member-counts .overdue {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+/* Information shown only after clicking a member */
+.member-details {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border, #ddd);
+}
+
+.member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border, #ddd);
+}
+
+.member-row span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.member-row strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.member-overdue-list {
+  margin: 12px 0;
+  padding: 10px 12px 10px 28px;
+  border-radius: 8px;
+  background: rgba(211, 47, 47, 0.08);
+  color: #b71c1c;
+  font-size: 0.82rem;
+}
+
+.member-overdue-list li + li {
+  margin-top: 6px;
+}
+
+/* Keeps your Edit button */
+.member-actions {
+  display: flex;
   margin-top: 14px;
+}
+
+.member-actions .edit-member {
+  width: 100%;
 }
 
 /* --- Statistics --- */

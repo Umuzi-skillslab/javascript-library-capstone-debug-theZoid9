@@ -611,71 +611,125 @@ function createMemberForm() {
     .getElementById("member-registration-form")
     .addEventListener("submit", handleMemberSubmit);
 }
+let selectedMemberId = null;
 
 function renderMemberList() {
-  const container = document.getElementById("member-list");
+    const container = document.getElementById("member-list");
+  const overdueBooks = findOverdueBooks();
 
   container.innerHTML = "";
+
   if (members.length === 0) {
     container.innerHTML = `
-            <div class="empty-state">
-                <p>No members found.</p>
-            </div>
-        `;
+      <div class="empty-state"><p>No members found.</p></div>
+    `;
     return;
   }
 
-members.forEach((member) => {
-    const card = document.createElement("div");
-    card.className = "member-card";
+  members.forEach((member) => {
+    const card = document.createElement("article");
+    const isSelected = selectedMemberId === member.id;
+    const memberOverdues = overdueBooks.filter(
+      (book) => book.memberId === member.id,
+    );
 
     const initials = member.name
-        .split(" ")
-        .map(word => word[0])
-        .join("")
-        .toUpperCase();
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+
+    card.className = `member-card member-card--compact ${
+      isSelected ? "is-selected" : ""
+    }`;
+    card.dataset.id = member.id;
 
     card.innerHTML = `
-        <div class="member-header">
-            <div class="member-avatar">${initials}</div>
+      <button type="button" class="member-summary" aria-expanded="${isSelected}">
+        <span class="member-avatar">${initials}</span>
 
-            <div class="member-info">
-                <h3>${member.name}</h3>
-                <span class="member-id">Member id: ${member.id}</span>
-            </div>
-        </div>
+        <span class="member-summary-info">
+          <strong>${member.name}</strong>
+          <small>Member ID: ${member.id}</small>
+        </span>
 
-        <div class="member-body">
+        <span class="member-counts">
+          <span>${member.borrowedBooks.length} borrowed</span>
+          <span class="${memberOverdues.length ? "overdue" : ""}">
+            ${memberOverdues.length} overdue
+          </span>
+        </span>
+      </button>
 
-            <div class="member-row">
+      ${
+        isSelected
+          ? `
+            <div class="member-details">
+              <div class="member-row">
                 <span>Email</span>
                 <strong>${member.email}</strong>
-            </div>
-
-            <div class="member-row">
+              </div>
+              <div class="member-row">
                 <span>Membership</span>
                 <strong>${member.membershipType}</strong>
+              </div>
+              <div class="member-row">
+                <span>Overdue books</span>
+                <strong>${memberOverdues.length}</strong>
+              </div>
+
+              ${
+                memberOverdues.length
+                  ? `
+                    <ul class="member-overdue-list">
+                      ${memberOverdues
+                        .map(
+                          (book) => `
+                            <li>
+                              ${book.title} — ${book.daysLate} days late
+                              (R${calculateFineAmount(book.daysLate).toFixed(2)})
+                            </li>
+                          `,
+                        )
+                        .join("")}
+                    </ul>
+                  `
+                  : ""
+              }
+
+              <div class="member-actions">
+                <button type="button" class="edit-member" data-id="${member.id}">
+                  Edit
+                </button>
+              </div>
             </div>
-
-            <div class="member-row">
-                <span>Borrowed Books</span>
-                <strong>${member.borrowedBooks.length}</strong>
-            </div>
-
-        </div>
-
-        <div class="member-actions">
-            <button
-                type="submit"
-                class="edit-member"
-                data-id="${member.id}">
-                Edit
-            </button>
-        </div>
+          `
+          : ""
+      }
     `;
 
     container.appendChild(card);
-});
+  });
+
+}
+
+function handleMemberClick(event) {
+  const editButton = event.target.closest(".edit-member");
+
+  if (editButton) {
+    showEditMemberForm(editButton.dataset.id);
+    return;
+  }
+
+  const summary = event.target.closest(".member-summary");
+
+  if (summary) {
+    const card = summary.closest(".member-card");
+    selectedMemberId =
+      selectedMemberId === card.dataset.id ? null : card.dataset.id;
+
+    renderMemberList();
+  }
 }
 
 function handleMemberSubmit(event) {
@@ -718,21 +772,6 @@ function handleMemberSubmit(event) {
     "success",
   );
   event.target.reset();
-}
-
-function handleMemberClick(event) {
-  if (!event || typeof event.preventDefault !== "function") {
-    return false;
-  }
-  const button = event.target.closest(".edit-member");
-
-  if (!button) {
-    return;
-  }
-
-  const id = button.dataset.id;
-
-  showEditMemberForm(id);
 }
 
 function showEditMemberForm(id) {
