@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -28,16 +30,19 @@
                         <option value="reference">Reference</option>
                     </select>
                 </div>
-                
+                <h2>Books Catalogue</h2>
                 <div id="catalogue-list" class="book-grid">
                     <!-- Books rendered here -->
                 </div>
-                
-                <div id="book-details">
+                <div id="return-message2"></div>
+                <div id="book-details" >
+                         
                     <!-- Selected book details -->
                 </div>
+               
             </section>
-            
+            <div id="borrow-message"></div>
+
             <section id="borrow-section">
                 <h2>Borrow a Book</h2>
                 <form id="borrow-form">
@@ -46,15 +51,25 @@
                     <button type="submit">Borrow Book</button>
                 </form>
             </section>
+
+            <div id="return-message"></div>
+
+             <section id="return-section">
+                
+                      <!-- Return form rendered here -->
+            </section>
             
             <section id="member-section" style="display: none;">
                 <h2>Member Management</h2>
+                <div id="member-message"></div>
                 <div id="member-form">
                     <!-- Member form rendered here -->
                 </div>
+                <h2>Current Members</h2>
                 <div id="member-list">
                     <!-- Members list -->
                 </div>
+
             </section>
             
             <section id="statistics-section" style="display: none;">
@@ -72,14 +87,27 @@
                         <h3>Books Borrowed</h3>
                         <p class="books-borrowed">0</p>
                     </div>
-                </div>
+                    <div class="stat-card">
+                        <h3>Overdue Books</h3>
+                        <p id="overdue-count">0</p>
+                    </div>
+                    <div class="overdue-section">
+                        <h2>Overdue List</h2>
+
+                        <div id="overdue-list">
+                            <p>No overdue books.</p>
+                        </div>
+                    </div>
+
             </section>
         </main>
     </div>
     
     <!-- Scripts in wrong order -->
-    <script src="ui.js"></script>
-    <script src="library.js"></script>
+    <script type="module" src="./src/library.js"></script>
+    <script type="module" src="./src/ui.js"></script>
+     <script type="module" src="./src/storage.js"></script>
+    
     <!-- Missing: modules setup -->
 </body>
 </html>

@@ -1,0 +1,94 @@
+Library Management System – Issues Analysis Document
+
+Class Relationships
+
+* Book → Base class representing physical books.
+* DigitalBook extends Book (inheritance), adding fileSize, format, and downloads.
+* Member → Base class representing library members.
+* PremiumMember extends Member (inheritance), intended to provide enhanced borrowing privileges.
+
+Critical Errors (Break Functionality)
+
+1. DigitalBook constructor missing super() call (runtime error).
+2. DigitalBook accesses this before super() (runtime error).
+3. Member.canBorrow() uses assignment (=) instead of comparison.
+4. findMemberById() uses assignment (=) instead of comparison.
+5. handleFilterChange() uses assignment (=) instead of comparison.
+6. searchBooksByCategory() uses assignment (=) instead of comparison.
+7. searchBooksByCategory() missing recursion base case (stack overflow).
+8. processReturnQueue() never increments index (infinite loop).
+9. initializeUI() runs before DOM is loaded.
+10. filterDropdown selector missing “#”, causing null reference.
+11. handleBorrowSubmit() missing preventDefault(), causing page reload.
+12. borrowBook() does not validate member existence.
+13. borrowBook() does not validate book existence.
+14. displayBookDetails() lacks null check on returned book.
+15. importLibraryData() lacks JSON.parse error handling.
+16. saveToLocalStorage() stores arrays without JSON.stringify.
+17. loadFromLocalStorage() loads strings instead of objects.
+18. Book constructor ignores copies parameter entirely.
+
+Impact: These issues cause application crashes, infinite loops, failed borrowing operations, broken filtering, invalid data persistence, and recursive failures.
+
+Major Issues by JavaScript Concept
+
+Inheritance & OOP
+
+* Missing Book.availableCopies and totalCopies.
+* Missing Book availability method.
+* Missing Book info method using template literals.
+* PremiumMember does not override canBorrow().
+* Missing PremiumMember benefit properties.
+* Missing Member.joinDate.
+* Missing membership duration method.
+
+Scoping & Variables
+
+* Extensive use of var instead of let/const.
+* Function-scoped variables inside loops.
+* Global mutable state (books, members).
+
+Loops & Conditionals
+
+* Inefficient nested loops in findOverdueBooks().
+* Wrong loop choice in findBookByISBN().
+* Manual filtering instead of Array.filter().
+* Manual aggregation instead of Array.reduce().
+
+DOM & Events
+
+* Missing null checks after DOM selection.
+* Missing search event listener.
+* Incorrect filter event type.
+* Missing event delegation.
+* Excessive innerHTML concatenation.
+
+Modern JavaScript Standards
+
+* Missing destructuring.
+* Missing spread operator.
+* Missing rest parameters.
+* Missing template literals.
+* Missing Map/Set usage for ISBN lookup.
+* Missing module exports.
+
+Missing Features
+
+* Overdue date checking logic.
+* Book availability validation.
+* Search input functionality hookup.
+* Borrow form validation.
+* JSON export formatting.
+* Statistics calculations.
+* Local storage recovery handling.
+
+Systematic Fix Strategy
+
+1. Resolve runtime-breaking errors (super(), recursion, loops).
+2. Correct all assignment/comparison mistakes.
+3. Implement missing Book/Member functionality.
+4. Add validation and error handling.
+5. Refactor loops using filter(), find(), reduce().
+6. Modernize code with let/const, destructuring, spread, template literals.
+7. Improve DOM initialization and event delegation.
+8. Add persistence, exports, and data structures (Map/Set).
