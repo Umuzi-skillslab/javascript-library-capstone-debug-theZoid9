@@ -454,37 +454,15 @@ form input::placeholder {
    ========================================================= */
 
 .book-card {
-  position: relative;
-
-  display: flex;
-
-  flex-direction: column;
-  align-items: center;
-
-  padding: 20px;
-
-  background: var(--surface-solid);
-
-  border: 1px solid var(--border);
-
-  border-radius: var(--radius);
-
-  box-shadow: var(--shadow-sm);
-
-  cursor: pointer;
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .book-card:hover {
   transform: translateY(-6px);
-
-  border-color: var(--border-hover);
-
-  box-shadow: var(--shadow-lg);
 }
 
 
